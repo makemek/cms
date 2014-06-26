@@ -1,33 +1,43 @@
 <title>Add new content</title>
-<?php include('../includes/layout/header.php'); ?>
-<?php include('../includes/navigation.php'); ?>
+
+<?php 
+require_once('../includes/layout/header.php');
+require_once('../includes/navigation.php');
+require_once('../includes/form.php');
+?>
 
 
 
 <div id="main">
-	<?php echo Navigation::getInstance()->getHTML(); ?>	
+	<?php echo Navigation::getInstance()->getContent(); ?>	
 
-<?php if(!isset($_GET['add'])) { ?>
 	<div id="page">
-		<form action="add_content.php" method="post">
-			Add: 
-			<select name="add">
-				<option value="tenant">Tenant</option>
-				<option value="priv">Privilage</option>
-				<option value="Branch">Branch</option>
-			</select>
-		<input type="submit" name="submit" value="GO"/>
-		</form>
-		<hr />
+	<?php
+		$select = $_GET['add'];
+		
+		switch ($select) {
+			case Navigation::TENANT:
+				$tenant = new Tenant();
+				$tenant->form();
+				break;
+			
+			case Navigation::PRIV:
+				$priv = new Privilage();
+				$priv->form();
+				break;
+
+			case Navigation::BRANCH:
+				$branch = new BRANCH();
+				$branch->form();
+				break;
+
+			default:
+				# code...
+				break;
+		}
+		
+	?>
 	</div>
-
-<?php } else { 
-
-
-}
-
-?>
-
 </div>
 
 <?php include('../includes/layout/footer.php'); ?>
