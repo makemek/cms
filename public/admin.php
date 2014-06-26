@@ -1,14 +1,4 @@
-<!DOCTYPE html>
+<?php include('../includes/layout/header.php'); ?>
 
-<html>
 
-	<head>
-		<title>Admin Area</title>
-	</head>
-	
-	<body>
-	
-	
-	</body>
-
-</html>
+<?php include('../includes/layout/footer.php'); ?>
