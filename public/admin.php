@@ -2,9 +2,17 @@
 <?php include('../includes/layout/header.php'); ?>
 <?php include('../includes/navigation.php'); ?>
 
-<?php
-	$nav = new Navigation('navigation');
-	echo $nav->getHTML();
-?>
+
+<div id="main">
+	<div id="navigation">
+		&nbsp;
+		<?php echo $nav = Navigation::getInstance()->getHTML(); ?>
+	</div>
+
+	<div id="page">
+		<p>Welcome to Admin page</p>
+	</div>
+</div>
+
 
 <?php include('../includes/layout/footer.php'); ?>

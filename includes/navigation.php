@@ -1,29 +1,39 @@
-<?php include_once('../includes/page.php'); ?>
-
+<?php include('../includes/page.php'); ?>
 <?php
-	class Navigation extends Div {
-		
-		public static $TENANT = 0;
-		
-		public function __construct($name='') {
-			parent::__construct($name);
+	class Navigation implements Pageable {
+
+		private $menu;
+
+		private function __construct() {
+
 		}
-		
-		public function content() {
-			$parent_menu = array();
-			$parent_menu[] = "<li class=\"parent\"><a href=\"../public/add_content.php\">Add content</a></li>";
-			
-			return
-			"
-			<li class=\"parent\"><a href=\"../public/add_content.php\">Add content</a></li>
-				<ul class=\"sub\">
-				<li><a href=\"../public/add_content.php?new=tenant\">Tenant</a><br /></li>
-				<li><a href=\"../public/add_content.php?new=priv\">Privilege</a><br /></li>
-				<li><a href=\"../public/add_content.php?new=branch\">Branch</a><br /></li>
-				</ul>	
-			<li class=\"parent\"><a href=\"../public/browse.php\">Browse</a></li>
-			";
+
+		public static function getInstance() {
+			static $inst = null;
+			if($inst === null) {
+				$inst = new Navigation();
+			}
+				
+			return $inst;
 		}
-		
+
+		public function set_selected($id) {
+
+		}
+
+		public function getHTML() {
+			$output = '
+				<div class="navigation">
+					<a href="add_content.php">Add Content</a>
+						<ul>
+							<li><a href="add_content.php?menu=0">Tenant</a></li>
+							<li><a href="add_content.php?menu=1">Privilage</a></li>
+							<li><a href="add_content.php?menu=2">Branch</a></li>
+						</ul>
+					<a href=\"browse.php\">Browse</a>
+				</div>
+			';
+			return $output;
+		}
 	}
 ?>

@@ -4,6 +4,6 @@
 	</head>
 	
 	<body>
-		<div class="header">
+		<div id="header">
 		<h1>Makemek</h1>
 		</div>

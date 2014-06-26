@@ -3,38 +3,38 @@ interface Pageable {
 	public function getHTML();
 }
 
-abstract class Div implements Pageable {
-	private $id;
-	private $subpage;
+// abstract class Div implements Pageable {
+// 	private $id;
+// 	private $subpage;
 	
-	public function __construct ($name='') {
-		$this->subpage = array();
-		$this->id = $name;
-	}
+// 	public function __construct ($name='') {
+// 		$this->subpage = array();
+// 		$this->id = $name;
+// 	}
 	
-	abstract protected function content();
+// 	abstract protected function content();
 	
-	public function getHTML() {
-		if (empty($this->id))
-			$output = '<div>';
-		else
-			$output = "<div class=\"{$this->id}\">";
+// 	public function getHTML() {
+// 		if (empty($this->id))
+// 			$output = '<div>';
+// 		else
+// 			$output = "<div class=\"{$this->id}\">";
 		
-		$output .= $this->content();
-		foreach($this->subpage as $page)
-			$output .= $page->content();
+// 		$output .= $this->content();
+// 		foreach($this->subpage as $page)
+// 			$output .= $page->content();
 		
-		$output .= '</div>';
+// 		$output .= '</div>';
 		
-		return $output;
-	}
+// 		return $output;
+// 	}
 	
-	public function addSubpage($page) {
-		$this->subpage[] = $page;
-	}
+// 	public function addSubpage($page) {
+// 		$this->subpage[] = $page;
+// 	}
 	
-	public function getId() {
-		return $id;
-	}
-}
+// 	public function getId() {
+// 		return $id;
+// 	}
+// }
 ?>
