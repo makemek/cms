@@ -1,13 +1,11 @@
 <?php 
-include('../includes/page.php');
+require_once('../includes/page.php');
 
 class Navigation implements Pageable {
 
-	private $menu;
-
-	private function __construct() {
-
-	}
+	const TENANT = 0;
+	const PRIV = 1;
+	const BRANCH = 2;
 
 	public static function getInstance() {
 		static $inst = null;
@@ -22,19 +20,22 @@ class Navigation implements Pageable {
 
 	}
 
+	public function getContent() { ?>
+
+		<div id="navigation">
+			Add Content
+				<ul>
+					<li><a href="add_content.php?add=<?php echo Navigation::TENANT; ?>">Tenant</a></li>
+					<li><a href="add_content.php?add=<?php echo Navigation::PRIV; ?>">Privilage</a></li>
+					<li><a href="add_content.php?add=<?php echo Navigation::BRANCH; ?>">Branch</a></li>
+				</ul>
+			<a href="browser.php">Browse</a>
+		</div>
+
+	<?php }
+
 	public function getHTML() {
-		$output = '
-			<div id="navigation">
-				<a href="add_content.php">Add Content</a>
-					<ul>
-						<li><a href="add_content.php?add=tenant">Tenant</a></li>
-						<li><a href="add_content.php?add=priv">Privilage</a></li>
-						<li><a href="add_content.php?add=branch">Branch</a></li>
-					</ul>
-				<a href=\"browse.php\">Browse</a>
-			</div>
-		';
-		return $output;
+		
 	}
 }
 ?>
