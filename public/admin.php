@@ -1,3 +1,4 @@
+<title>Makemek</title>
 <?php include('../includes/layout/header.php'); ?>
 
 <?php
