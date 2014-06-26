@@ -18,3 +18,18 @@ div.header {
 
 div.header h1 { padding: 1em; margin: 0; }
 
+div.navigation {
+	float: left;
+	width: 150px; height: 100%;
+	margin: 0; padding: 0 2em;
+	color: #D4E6F4; background: #8D0D19;
+}
+div.navigation a { color: #D4E6F4; text-decoration: none; }
+div.navigation a:hover {color: #FFFFFF; }
+
+ul.parent {
+	margin: 1em 0; padding-left: 0; list-style:none;
+}
+ul.sub { padding-left: 2em; list-style: square; font-weight: normal;}
+.selected { font-weight: bold; }
+
