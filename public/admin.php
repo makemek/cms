@@ -2,12 +2,8 @@
 <?php include('../includes/layout/header.php'); ?>
 <?php include('../includes/navigation.php'); ?>
 
-
 <div id="main">
-	<div id="navigation">
-		&nbsp;
-		<?php echo $nav = Navigation::getInstance()->getHTML(); ?>
-	</div>
+	<?php echo Navigation::getInstance()->getHTML(); ?>	
 
 	<div id="page">
 		<p>Welcome to Admin page</p>
