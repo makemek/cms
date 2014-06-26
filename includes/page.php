@@ -15,7 +15,7 @@ abstract class Div implements Pageable {
 	abstract protected function content();
 	
 	public function getHTML() {
-		$output = "<div id=\"{$this->id}\">";
+		$output = "<div class=\"{$this->id}\">";
 		$output .= $this->content();
 		foreach($this->subpage as $page)
 			$output .= $page->content();
