@@ -1,6 +1,6 @@
 <?php
 interface Pageable {
-	public getHTML();
+	public function getHTML();
 }
 
 abstract class Div implements Pageable {
@@ -8,26 +8,27 @@ abstract class Div implements Pageable {
 	private $id;
 	private $subpage;
 	
-	public Div($id, $stylesheet) {
+	public function __construct ($id, $stylesheet='') {
 		$this->subpage = array();
+		$this->cssFile = $stylesheet;
+		$this->id = $id;
 	}
 	
-	abstract protected content();
+	abstract protected function content();
 	
-	public getHTML() {
-		$output = "<div id=\"{$this->id}\">";
+	public function getHTML() {
+		$output = '';
 		foreach($this->subpage as $page)
 			$output .= $page->content();
-		$output .= '</div>';
 		
 		return $output;
 	}
 	
-	public addSubpage($page) {
+	public function addSubpage($page) {
 		$this->subpage[] = $page;
 	}
 	
-	public getId() {
+	public function getId() {
 		return $id;
 	}
 }
