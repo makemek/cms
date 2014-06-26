@@ -1,13 +1,31 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-	"http://www.w3.org/TR/html4/loose.dtd">
-	
-<html lang="en">
-	<head>
-		<title>Makemek</title>
-		<link href="stylesheets/public.css" media="all" rel="stylesheet" type="text/css" />
+<?php include_once('../includes/page.php'); ?>
+
+<?php
+	class Header extends Div {
+		private $cssFile;
+		
+		public function __construct ($stylesheet='') {
+			parent::__construct('header');
+			$this->cssFile = $stylesheet;
+		}
+		
+		protected function content() {
+			$output = '<h1>Makemek</h1>';
+			return $output;
+		}
+		
+		public function getCSS() {
+			return $this->cssFile;
+		}
+	}	
+?>
+
+<?php $header = new Header(); ?>
+
+<html>
+	<head lang="en">
+		<link href="<?php echo $header->getCSS(); ?>" media="all" rel="stylesheet" type="text/css" />
 	</head>
 	
 	<body>
-		<div id="header">
-			<h1>Makemek</h1>
-		</div>
+		<?php echo $header->getHTML(); ?>

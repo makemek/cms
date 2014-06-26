@@ -4,22 +4,23 @@ interface Pageable {
 }
 
 abstract class Div implements Pageable {
-	private $cssFile;
 	private $id;
 	private $subpage;
 	
-	public function __construct ($id, $stylesheet='') {
+	public function __construct ($id) {
 		$this->subpage = array();
-		$this->cssFile = $stylesheet;
 		$this->id = $id;
 	}
 	
 	abstract protected function content();
 	
 	public function getHTML() {
-		$output = '';
+		$output = "<div id=\"{$this->id}\">";
+		$output .= $this->content();
 		foreach($this->subpage as $page)
 			$output .= $page->content();
+		
+		$output .= '</div>';
 		
 		return $output;
 	}
