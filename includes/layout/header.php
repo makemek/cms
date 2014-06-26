@@ -20,7 +20,7 @@
 	}	
 ?>
 
-<?php $header = new Header(); ?>
+<?php $header = new Header('../public/stylesheets/public.css'); ?>
 
 <html>
 	<head lang="en">
