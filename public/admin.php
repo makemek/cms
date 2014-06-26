@@ -3,7 +3,7 @@
 <?php include('../includes/navigation.php'); ?>
 
 <div id="main">
-	<?php echo Navigation::getInstance()->getHTML(); ?>	
+	<?php echo Navigation::getInstance()->getContent(); ?>	
 
 	<div id="page">
 		<p>Welcome to Admin page</p>
