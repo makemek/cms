@@ -55,6 +55,7 @@ class Menu
 	private $sub_menu = array();
 	private $name = '';
 	private $link = '';
+	private $selected = FALSE;
 
 	public function __construct($name) {
 		$this->name = $name;
@@ -93,11 +94,19 @@ class Menu
 
 	public function link_to($link) {
 		$this->link = "<a href=\"{$link}\">{$this->getName()}</a>";
+		$this->set_selected($this->selected);
+	}
+
+	public function set_selected($is_select) {
+		$this->selected = $is_select;
+		if(!empty($this->link))
+			$this->link = str_replace("<a ", "<a class=\"selected\" ", $this->link);
 	}
 }
 
 // $a = new Menu('head');
 // $b = new Menu('sub');
+// $b->set_selected(TRUE);
 // $b->link_to('asdf');
 // $b->add_sub_menu(new Menu('subsub'));
 // $b->add_sub_menu(new Menu('subsub2'));
