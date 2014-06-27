@@ -1,9 +1,9 @@
 <title>Makemek</title>
 <?php include('../includes/layout/header.php'); ?>
-<?php include('../includes/navigation.php'); ?>
+<?php require_once('../includes/functions.php'); ?>
 
 <div id="main">
-	<?php echo Navigation::getInstance()->getContent(); ?>	
+	<?php echo navigation(); ?>	
 
 	<div id="page">
 		<p>Welcome to Admin page</p>

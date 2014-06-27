@@ -2,7 +2,7 @@
 
 <?php 
 require_once('../includes/layout/header.php');
-require_once('../includes/navigation.php');
+require_once('../includes/functions.php');
 require_once('../includes/form.php');
 ?>
 
@@ -10,18 +10,13 @@ require_once('../includes/form.php');
 
 <div id="main">
 	<?php 
-		$nav = Navigation::getInstance();
-
+		echo navigation();
+		$nav = Navigation::getinstance();
 		$select = $_GET['add'];
-		$nav->set_selected($select);
-
-		echo $nav->getContent();
 	?>
 
 	<div id="page">
 	<?php
-
-		
 		switch ($select) {
 			case $nav->getMenu()['TENANT']:
 				$tenant = new Tenant();
