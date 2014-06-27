@@ -4,7 +4,6 @@ require_once('../includes/navigation.php');
 interface Form
 {
 	public function form();
-	//public function fetch(); // fetch entered form
 }
 
 class Tenant implements Form
@@ -66,9 +65,5 @@ class Branch implements Form
 			<input type="submit" name="submit" value="submit">
 		</form>
 	<?php }
-
-	public function fetch() {
-		
-	}
 }
 ?>
