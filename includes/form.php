@@ -55,19 +55,14 @@ class Privilage implements Form
 class Branch implements Form
 {
 	// constants for calling outside the class
-	const BRANCH = 'branch';
-	const LAT = 'lat';
-	const LONG = 'long';
-	const FLOOR1 = 'floor1';
-	const FLOOR2 = 'floor2';
 
 	public function form() { ?>
-		<form action="new_content.php?form=<?php echo Navigation::BRANCH; ?>" method="post">
-			Branch Name: <input type="text" name="<?php BRANCH ?>" value=""></input><br />
-			Latitude: <input type="number" name="<?php LAT ?>" value=""></input><br />
-			Longtitude: <input type="number" name="<?php LONG ?>" value=""></input><br />
-			Floor (if provided): <input type="number" name="<?php FLOOR1 ?>" value=""></input><br />
-			Floor (if provided): <input type="number" name="<?php FLOOR2 ?>" value=""></input><br />
+		<form action="add_branch.php" method="post">
+			Branch Name: <input type="text" name="branch" value=""></input><br />
+			Latitude: <input type="number" name="lat" value=""></input><br />
+			Longtitude: <input type="number" name="long" value=""></input><br />
+			Floor (if provided): <input type="number" name="floor1" value=""></input><br />
+			Floor (if provided): <input type="number" name="floor2" value=""></input><br />
 			<input type="submit" name="submit" value="submit">
 		</form>
 	<?php }
