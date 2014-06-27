@@ -5,47 +5,42 @@ require_once('../includes/page.php');
 
 class Navigation implements Pageable {
 
-	const TENANT = 0;
-	const PRIV = 1;
-	const BRANCH = 2;
-	private $menu_list = array('TENANT' => 0, 'PRIV' => 1, 'BRANCH' => 2);
-	private $selected = -1;
+	private $main_menu;
 
-	public static function getInstance() {
-		static $inst = null;
-		if($inst === null) {
-			$inst = new Navigation();
-		}
-			
-		return $inst;
+	private function __construct() {
+		$this->main_menu = new Menu('');
+
+		// -------- Add Content -------- //
+		$add_content = new Menu('Add Content');
+		$branch = new Menu('Branch', '../public/add_branch.php');
+		$priv = new Menu('Privilage', '../public/add_priv.php');
+		$tenant = new Menu('Tenant', '../public/add_tenant.php');
+		$add_content->add_sub_menu($branch);
+		$add_content->add_sub_menu($priv);
+		$add_content->add_sub_menu($tenant);
+		// ---------------------------- //
+
+		// -------- Browse -------- //
+		$browse = new Menu('Browse', '../public/manage_content.php');
+		// ------------------------ //
+
+		$this->main_menu->add_sub_menu($add_content);
+		$this->main_menu->add_sub_menu($browse);
 	}
 
-	public function set_selected($menu_const) {
-		$this->selected = $menu_const;
+	public function getInstance() {
+		static $instance = null;
+		if(!$instance)
+			$instance = new Navigation();
+		return $instance;
 	}
 
-	public function getContent() { ?>
-
-		<div id="navigation">
-			Add Content
-				<ul>
-					<?php 
-						foreach($this->menu_list as $menu => $id) {
-							$link = '<li ';
-							if($id == $this->selected)
-								$link .= "class=\"selected\"";
-							$link .= "><a href=\"add_content.php?add={$id}\">{$menu}</a></li>";
-							echo $link;
-						}
-					?>
-				</ul>
-			<a href="browser.php">Browse</a>
-		</div>
-
-	<?php }
-
-	public function getMenu() {
-		return $this->menu_list;
+	public function getContent() {
+		$content = '';
+		// foreach($this->main_menu as $menu)
+		// 	$content .= $menu->display();
+		$content .= $this->main_menu->display();
+		return $content;
 	}
 }
 
@@ -57,8 +52,11 @@ class Menu
 	private $link = '';
 	private $selected = FALSE;
 
-	public function __construct($name) {
+	public function __construct($name, $link='') {
 		$this->name = $name;
+
+		if(!empty($link))
+			$this->link_to($link);
 	}
 
 	public function getName() {
@@ -103,13 +101,4 @@ class Menu
 			$this->link = str_replace("<a ", "<a class=\"selected\" ", $this->link);
 	}
 }
-
-// $a = new Menu('head');
-// $b = new Menu('sub');
-// $b->set_selected(TRUE);
-// $b->link_to('asdf');
-// $b->add_sub_menu(new Menu('subsub'));
-// $b->add_sub_menu(new Menu('subsub2'));
-// $a->add_sub_menu($b);
-// echo $a->display();
 ?>
