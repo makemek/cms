@@ -42,10 +42,6 @@ class Navigation implements Pageable {
 
 	<?php }
 
-	public function getHTML() {
-		
-	}
-
 	public function getMenu() {
 		return $this->menu_list;
 	}

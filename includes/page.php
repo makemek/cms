@@ -1,6 +1,6 @@
 <?php
 interface Pageable {
-	public function getHTML();
+	public function getContent();
 }
 
 ?>
