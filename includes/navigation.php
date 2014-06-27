@@ -6,6 +6,8 @@ class Navigation implements Pageable {
 	const TENANT = 0;
 	const PRIV = 1;
 	const BRANCH = 2;
+	private $menu_list = array('TENANT' => 0, 'PRIV' => 1, 'BRANCH' => 2);
+	private $selected = -1;
 
 	public static function getInstance() {
 		static $inst = null;
@@ -16,8 +18,8 @@ class Navigation implements Pageable {
 		return $inst;
 	}
 
-	public function set_selected($id) {
-
+	public function set_selected($menu_const) {
+		$this->selected = $menu_const;
 	}
 
 	public function getContent() { ?>
@@ -25,9 +27,15 @@ class Navigation implements Pageable {
 		<div id="navigation">
 			Add Content
 				<ul>
-					<li><a href="add_content.php?add=<?php echo Navigation::TENANT; ?>">Tenant</a></li>
-					<li><a href="add_content.php?add=<?php echo Navigation::PRIV; ?>">Privilage</a></li>
-					<li><a href="add_content.php?add=<?php echo Navigation::BRANCH; ?>">Branch</a></li>
+					<?php 
+						foreach($this->menu_list as $menu => $id) {
+							$link = '<li ';
+							if($id == $this->selected)
+								$link .= "class=\"selected\"";
+							$link .= "><a href=\"add_content.php?add={$id}\">{$menu}</a></li>";
+							echo $link;
+						}
+					?>
 				</ul>
 			<a href="browser.php">Browse</a>
 		</div>
@@ -36,6 +44,10 @@ class Navigation implements Pageable {
 
 	public function getHTML() {
 		
+	}
+
+	public function getMenu() {
+		return $this->menu_list;
 	}
 }
 ?>

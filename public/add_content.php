@@ -9,24 +9,31 @@ require_once('../includes/form.php');
 
 
 <div id="main">
-	<?php echo Navigation::getInstance()->getContent(); ?>	
+	<?php 
+		$nav = Navigation::getInstance();
+
+		$select = $_GET['add'];
+		$nav->set_selected($select);
+
+		echo $nav->getContent();
+	?>
 
 	<div id="page">
 	<?php
-		$select = $_GET['add'];
+
 		
 		switch ($select) {
-			case Navigation::TENANT:
+			case $nav->getMenu()['TENANT']:
 				$tenant = new Tenant();
 				$tenant->form();
 				break;
 			
-			case Navigation::PRIV:
+			case $nav->getMenu()['PRIV']:
 				$priv = new Privilage();
 				$priv->form();
 				break;
 
-			case Navigation::BRANCH:
+			case $nav->getMenu()['BRANCH']:
 				$branch = new BRANCH();
 				$branch->form();
 				break;
