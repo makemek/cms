@@ -50,4 +50,59 @@ class Navigation implements Pageable {
 		return $this->menu_list;
 	}
 }
+
+// will use this instead of navigation soon! ...
+class Menu
+{
+	private $sub_menu = array();
+	private $name = '';
+	private $link = '';
+
+	public function __construct($name) {
+		$this->name = $name;
+	}
+
+	public function getName() {
+		return $this->name;
+	}
+
+	public function add_sub_menu($sub_menu) {
+		$this->sub_menu[] = $sub_menu;
+	}
+
+	public function display() {
+		if(!empty($this->link))
+			$content = $this->link;
+		else
+			$content = $this->getName();
+
+		if($this->has_sub_menu()) {
+			$content .= '<ul>';
+			foreach($this->sub_menu as $sub) {
+				$content .= '<li>';
+				$content .= $sub->display();
+				$content .= '</li>';
+			}
+			$content .= '</ul>';
+		}
+
+		return $content;
+	}
+
+	private function has_sub_menu() {
+		return count($this->sub_menu) > 0;
+	}
+
+	public function link_to($link) {
+		$this->link = "<a href=\"{$link}\">{$this->getName()}</a>";
+	}
+}
+
+// $a = new Menu('head');
+// $b = new Menu('sub');
+// $b->link_to('asdf');
+// $b->add_sub_menu(new Menu('subsub'));
+// $b->add_sub_menu(new Menu('subsub2'));
+// $a->add_sub_menu($b);
+// echo $a->display();
 ?>
