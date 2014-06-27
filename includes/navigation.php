@@ -1,6 +1,8 @@
 <?php 
 require_once('../includes/page.php');
 
+// TODO: add sticky form functionality
+
 class Navigation implements Pageable {
 
 	const TENANT = 0;

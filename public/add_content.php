@@ -21,6 +21,7 @@ require_once('../includes/form.php');
 			case $nav->getMenu()['TENANT']:
 				$tenant = new Tenant();
 				$tenant->form();
+				// $tenant->evaluate();
 				break;
 			
 			case $nav->getMenu()['PRIV']:
