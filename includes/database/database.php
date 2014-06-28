@@ -4,11 +4,16 @@ require_once('config.php');
 class MySQLDatabase
 {
     private $db;
+    private $db_name;
+
+    public function __construct ($db_name) {
+        $this->$db_name = $db_name;
+    }
 
     public function open_connection()
     {
         try {
-            $this->db = new PDO('mysql:' . DB_HOST . ';dbname=' . DB_NAME . ';',
+            $this->db = new PDO('mysql:' . DB_HOST . ';dbname=' . $this->db_name . ';',
             DB_USER, DB_PASSWORD);
 
         } catch (PDOException $e) {
@@ -53,4 +58,4 @@ class MySQLDatabase
     }
 }
 
-$db = new MySQLDatabase();
+$db = new MySQLDatabase(DB_NAME);
