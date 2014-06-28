@@ -9,4 +9,3 @@ function navigation()
 	$content .= '</div>';
 	return $content;
 }
-?>

@@ -3,4 +3,3 @@ interface Pageable {
 	public function getContent();
 }
 
-?>
