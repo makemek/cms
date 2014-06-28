@@ -3,43 +3,47 @@ require_once('../includes/navigation.php');
 
 abstract class Form
 {
-    private $fields; // assoc array of name => value
-    protected $sticky = false;
+    protected $fields; // assoc array of name => value
+    private $sticky = false;
 
-    public function __construct() {
-        $this->fields = $this->form_values($this->fields);
+    public function __construct($sticky=false) {
+        $this->sticky = $sticky;
+        $all_form_elem = $this->get_all_fields_name();
+        foreach($all_form_elem as $elem_name) {
+            if($this->is_submitted() && $this->is_sticky()) {
+                $this->fields[$elem_name] = $_POST[$elem_name];
+            }
+            else
+                $this->fields[$elem_name] = '';
+        }
     }
 
     public abstract function form();
-    protected abstract function form_values($fields);
+    protected abstract function get_all_fields_name();
 
     public function fetch() {
-        if(!isset($_POST['submit']))
+        if(!$this->is_submitted())
             return null;
 
         $result = array();
 
         foreach($this->fields as $name => $value) {
-            $input = $_POST[$name];
-            $result[$name] = $input;
-
-            if($this->sticky)
-                $this->fields[$name] = $input;
+            $result[$name] = $_POST[$name];
         }
 
         return $result;
     }
 
     protected function submit_bt($name) {
-        return "<input type=\"submit\" name=\"submit\" value=\"{$name}\"";
+        return "<input type=\"submit\" name=\"submit\" value=\"{$name}\" >";
     }
 
-    public function setStickyForm($is_sticky) {
-        $this->sticky = $is_sticky;
+    public function is_submitted() {
+        return isset($_POST['submit']);
     }
 
-    protected function getValue($key) {
-        return $this->fields[$key];
+    public function is_sticky() {
+        return $this->sticky;
     }
 }
 
@@ -57,9 +61,14 @@ class Tenant extends Form
     {
         // TODO: Implement form_values() method.
     }
+
+    protected function get_all_fields_name()
+    {
+        // TODO: Implement get_all_fields_name() method.
+    }
 }
 
-class Privilage extends Form
+class Privilege extends Form
 {
     private function code() { ?>
         Campaign Code: <input type="text" name="camp_code" value=""><br />
@@ -96,6 +105,11 @@ class Privilage extends Form
     {
         $fields['branch'] = '';
     }
+
+    protected function get_all_fields_name()
+    {
+        // TODO: Implement get_all_fields_name() method.
+    }
 }
 
 class Branch extends Form
@@ -109,28 +123,26 @@ class Branch extends Form
     public function form() { ?>
         <form action="../public/add_branch.php" method="post">
             Branch: <input type="text" name="<?php echo self::BRANCH ?>"
-                           value="<?php $this->getValue(self::BRANCH)?>"><br />
+                           value="<?php echo $this->fields[self::BRANCH] ?>">
+            <br />
+
             Latitude: <input type="number" name="<?php echo self::LAT ?>"
-                             value="<?php $this->getValue(self::LAT)?>"><br />
+                             value="<?php echo $this->fields[self::LAT]?>">
             Longitude: <input type="number" name="<?php echo self::LONG ?>"
-                              value="<?php $this->getValue(self::LONG)?>"><br />
+                              value="<?php echo $this->fields[self::LONG]?>">
+            <br />
+
             Floor (if provided): <input type="number" name="<?php echo self::FLOOR1 ?>"
-                                        value="<?php $this->getValue(self::FLOOR1)?>"><br />
+                                        value="<?php echo $this->fields[self::FLOOR1]?>">
             Floor (if provided): <input type="number" name="<?php echo self::FLOOR2 ?>"
-                                        value="<?php $this->getValue(self::FLOOR2)?>"><br />
-            <input type="submit" name="submit" value="submit">
+                                        value="<?php echo $this->fields[self::FLOOR2]?>">
+            <br />
+            <?php echo $this->submit_bt('Add New Branch') ?>
         </form>
     <?php }
 
-    public function form_values($fields)
-    {
-        $fields[self::BRANCH] = '';
-        $fields[self::LAT] = '';
-        $fields[self::LONG] = '';
-        $fields[self::FLOOR1] = '';
-        $fields[self::FLOOR2] = '';
-
-        return $fields;
+    protected function get_all_fields_name() {
+        return array(self::BRANCH, self::LAT, self::LONG, self::FLOOR1, self::FLOOR2);
     }
 }
 ?>
