@@ -28,7 +28,7 @@ class Navigation implements Pageable {
 		$this->main_menu->add_sub_menu($browse);
 	}
 
-	public function getInstance() {
+	public static function getInstance() {
 		static $instance = null;
 		if(!$instance)
 			$instance = new Navigation();
@@ -101,4 +101,4 @@ class Menu
 			$this->link = str_replace("<a ", "<a class=\"selected\" ", $this->link);
 	}
 }
-?>
+
