@@ -18,26 +18,11 @@ require_once('../includes/functions.php');
 		<?php
 
 		$branch = new Branch();
-
-		if (!isset($_POST['submit']))
-		{
-			// display a form
-			$branch->form();
-		}
-		else 
-		{
-			$branch = $_POST['branch'];
-			$lat = $_POST['lat'];
-			$long = $_POST['long'];
-			$floor1 = $_POST['floor1'];
-			$floor2 = $_POST['floor2'];
-
-		}
-
-
+        $branch->setStickyForm(true);
+        $branch->form();
 
 		// get data
-
+        $input = $branch->fetch();
 
 		// issue a query
 
