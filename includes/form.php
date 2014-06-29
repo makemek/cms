@@ -123,19 +123,23 @@ class Branch extends Form
     public function form() { ?>
         <form action="../public/add_branch.php" method="post">
             Branch: <input type="text" name="<?php echo self::BRANCH ?>"
-                           value="<?php echo $this->fields[self::BRANCH] ?>">
+                           value="<?php echo $this->fields[self::BRANCH] ?>" maxlength="255">
             <br />
 
             Latitude: <input type="number" name="<?php echo self::LAT ?>"
-                             value="<?php echo $this->fields[self::LAT]?>">
+                             value="<?php echo $this->fields[self::LAT]?>"
+                             min="0" max="90" step="0.0001">
             Longitude: <input type="number" name="<?php echo self::LONG ?>"
-                              value="<?php echo $this->fields[self::LONG]?>">
+                             value="<?php echo $this->fields[self::LONG]?>"
+                             min="0" max="90" step="0.0001">
             <br />
 
             Floor (if provided): <input type="number" name="<?php echo self::FLOOR1 ?>"
-                                        value="<?php echo $this->fields[self::FLOOR1]?>">
+                                        value="<?php echo $this->fields[self::FLOOR1]?>"
+                                        min="0" max="999">
             Floor (if provided): <input type="number" name="<?php echo self::FLOOR2 ?>"
-                                        value="<?php echo $this->fields[self::FLOOR2]?>">
+                                        value="<?php echo $this->fields[self::FLOOR2]?>"
+                                        min="0" max="999">
             <br />
             <?php echo $this->submit_bt('Add New Branch') ?>
         </form>
