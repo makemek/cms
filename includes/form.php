@@ -14,7 +14,7 @@ abstract class Form
             return;
         }
         foreach($all_form_elem as $elem_name) {
-            if($this->is_submitted() && $this->is_sticky()) {
+            if($this->is_submitted() && $this->is_sticky() && isset($_POST[$elem_name])) {
                 $this->fields[$elem_name] = $_POST[$elem_name];
             }
             else
