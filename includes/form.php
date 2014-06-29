@@ -9,6 +9,10 @@ abstract class Form
     public function __construct($sticky=false) {
         $this->sticky = $sticky;
         $all_form_elem = $this->get_all_fields_name();
+        if(!$all_form_elem) {
+            echo "<strong>Warning: Please define field's name for this form.</strong>";
+            return;
+        }
         foreach($all_form_elem as $elem_name) {
             if($this->is_submitted() && $this->is_sticky()) {
                 $this->fields[$elem_name] = $_POST[$elem_name];
@@ -57,11 +61,6 @@ class Tenant extends Form
         </form>
     <?php }
 
-    public function form_values($fields)
-    {
-        // TODO: Implement form_values() method.
-    }
-
     protected function get_all_fields_name()
     {
         // TODO: Implement get_all_fields_name() method.
@@ -70,30 +69,91 @@ class Tenant extends Form
 
 class Privilege extends Form
 {
+    // --- Code Region --- //
+    const CAMP_CODE = 'camp_code';
+    const USSD = 'ussd';
+    const SMS = 'sms';
+    // ------------------- //
+
+    // --- Card Region --- //
+    const CARD = 'card';
+    // ------------------- //
+
+    // --- Date Region --- //
+    const START_DATE = 'start_date';
+    const EXPIRE_DATE = 'exp_date';
+    // ------------------- //
+
+    // --- Privilege Region --- //
+    const INFO = 'info';
+    // ------------------------ //
+
     private function code() { ?>
-        Campaign Code: <input type="text" name="camp_code" value=""><br />
-        USSD: <input type="text" name="ussd" value=""><br />
-        SMS: <input type="text" name="sms" value=""><br />
+        Campaign Code: <input type="text" name="<?php echo self::CAMP_CODE ?>"
+                              value="<?php echo $this->fields[self::CAMP_CODE]; ?>">
+        <br />
+
+        USSD: <input type="text" name="<?php echo self::USSD; ?>"
+                     value="<?php echo $this->fields[self::USSD]; ?>">
+        <br />
+
+        SMS: <input type="text" name="<?php echo self::SMS ?>"
+                     value="<?php echo $this->fields[self::SMS]; ?>">
+        <br />
 
     <?php }
 
-    private function card() { ?>
-        Card: <br />
-        <input type="checkbox" name="card" value="">No Card<br />
-        <input type="checkbox" name="card" value="">Red Card<br />
-        <input type="checkbox" name="card" value="">Black Card<br />
+    private function box_is_checked($checkbox) {
+        $card = $this->fields[self::CARD];
+        if(isset($card) && !empty($card))
+            if(in_array($checkbox, $this->fields[self::CARD]))
+                return "checked=\"checked\"";
 
+        return '';
+    }
+
+    private function card() { ?>
+        <?php
+        // value must match what is defined in a db's table
+        $no_card = 'no card';
+        $red_card = 'red card';
+        $black_card = 'black card';
+
+        ?>
+        Card: <br />
+        <input type="checkbox" name="<?php echo self::CARD . '[]'; ?>"
+               value="<?php echo $no_card ?>"
+               <?php echo $this->box_is_checked($no_card)?> >No Card
+        <br />
+
+        <input type="checkbox" name="<?php echo self::CARD . '[]'; ?>"
+               value="<?php echo $red_card ?>"
+               <?php echo $this->box_is_checked($red_card)?> >Red Card
+        <br />
+
+        <input type="checkbox" name="<?php echo self::CARD . '[]'; ?>"
+               value="<?php echo $black_card ?>"
+               <?php echo $this->box_is_checked($black_card)?> >Black Card
+        <br />
     <?php }
 
     private function date() { ?>
-        Start date: <input type="date" name="start_date" value=""><br />
-        Expire date: <input type="date" name="exp_date" value=""><br />
+        Start date: <input type="date" name="<?php echo self::START_DATE; ?>"
+                           value="<?php echo $this->fields[self::START_DATE];?>">
+        <br />
+
+        Expire date: <input type="date" name="<?php echo self::EXPIRE_DATE; ?>"
+                           value="<?php echo $this->fields[self::EXPIRE_DATE]?>">
+        <br />
 
     <?php }
 
     public function form() { ?>
-        <form action="../public/add_priv.php; ?>" method="post">
-            <label for="info">Privilage Information:</label> <input type="text" name="info" value=""><br />
+
+        <form action="../public/add_branch.php" method="post">
+           Privilege Information: <input type="text" name="<?php echo self::INFO; ?>"
+                                         value="<?php echo $this->fields[self::INFO]; ?>">
+            <br />
             <?php $this->code(); ?>
             <?php $this->date(); ?>
             <?php $this->card(); ?>
@@ -101,14 +161,20 @@ class Privilege extends Form
         </form>
     <?php }
 
-    public function form_values($fields)
-    {
-        $fields['branch'] = '';
-    }
-
     protected function get_all_fields_name()
     {
-        // TODO: Implement get_all_fields_name() method.
+        return array(
+            self::CAMP_CODE, self::USSD, self::SMS,
+            self::CARD,
+            self::START_DATE, self::EXPIRE_DATE,
+            self::INFO);
+    }
+
+    public function fetch() {
+        if(!isset($_POST[self::CARD]))
+            unset($this->fields[self::CARD]);
+
+        return parent::fetch();
     }
 }
 
