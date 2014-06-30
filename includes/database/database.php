@@ -1,44 +1,15 @@
 <?php
 require_once('config.php');
 
-class MySQLDatabase
+class MySQLDatabase extends PDO
 {
-    private $db;
-    private $db_name;
-
     public function __construct ($db_name) {
-        $this->$db_name = $db_name;
-    }
-
-    public function open_connection()
-    {
-        try {
-            $this->db = new PDO('mysql:' . DB_HOST . ';dbname=' . $this->db_name . ';',
-            DB_USER, DB_PASSWORD);
+        try{
+            parent::__construct('mysql:host=' . DB_HOST . ';dbname=' . $db_name . ';',
+                DB_USER, DB_PASSWORD);
 
         } catch (PDOException $e) {
-            echo $e->getMessage();
-        }
-    }
-
-    public function close_connection()
-    {
-        try {
-        $this->db = null;
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-        }
-    }
-
-    public function query($sql) {
-        $result = $this->db->fetch(PDO::FETCH_ASSOC);
-        $this->confirm_query($result);
-        return $result;
-    }
-
-    private function confirm_query($result) {
-        if (!$result) {
-            die("Database query failed: " . mysql_error());
+            die($e->getMessage());
         }
     }
 
@@ -58,4 +29,3 @@ class MySQLDatabase
     }
 }
 
-$db = new MySQLDatabase(DB_NAME);
