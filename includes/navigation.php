@@ -1,14 +1,15 @@
 <?php 
 require_once('../includes/page.php');
 
-// TODO: add sticky form functionality
-
 class Navigation implements Pageable {
 
 	private $main_menu;
 
 	private function __construct() {
 		$this->main_menu = new Menu('');
+
+        // -------- Home Page ---------- //
+        $home_page = new Menu('Home', '../public/admin.php');
 
 		// -------- Add Content -------- //
 		$add_content = new Menu('Add Content');
@@ -24,6 +25,7 @@ class Navigation implements Pageable {
 		$browse = new Menu('Browse', '../public/manage_content.php');
 		// ------------------------ //
 
+        $this->main_menu->add_sub_menu($home_page);
 		$this->main_menu->add_sub_menu($add_content);
 		$this->main_menu->add_sub_menu($browse);
 	}
@@ -63,7 +65,7 @@ class Menu
 		return $this->name;
 	}
 
-	public function add_sub_menu($sub_menu) {
+	public function add_sub_menu(Menu $sub_menu) {
 		$this->sub_menu[] = $sub_menu;
 	}
 
