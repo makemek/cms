@@ -32,7 +32,10 @@ abstract class Form
         $result = array();
 
         foreach($this->fields as $name => $value) {
-            $result[$name] = $_POST[$name];
+            if(!empty($_POST[$name]))
+                $result[$name] = $_POST[$name];
+            else
+                $result[$name] = null;
         }
 
         return $result;
