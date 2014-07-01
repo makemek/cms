@@ -54,7 +54,12 @@ abstract class Form
     }
 }
 
-class Tenant extends Form
+interface Record {
+    public function get_associate_db_table();
+    public function fetch();
+}
+
+class Tenant extends Form implements Record
 {
     public function form() { ?>
         <form action="..public/add_tenant.php" method="post">
@@ -68,9 +73,14 @@ class Tenant extends Form
     {
         // TODO: Implement get_all_fields_name() method.
     }
+
+    public function get_associate_db_table()
+    {
+        return TrueYouDB::TENANT_TBL;
+    }
 }
 
-class Privilege extends Form
+class Privilege extends Form implements Record
 {
     // --- Code Region --- //
     const CAMP_CODE = 'camp_code';
@@ -179,9 +189,14 @@ class Privilege extends Form
 
         return parent::fetch();
     }
+
+    public function get_associate_db_table()
+    {
+        return TrueYouDB::PRIVILEGE_TBL;
+    }
 }
 
-class Branch extends Form
+class Branch extends Form implements Record
 {
     const BRANCH = 'branch';
     const LAT = 'lat';
@@ -216,6 +231,11 @@ class Branch extends Form
 
     protected function get_all_fields_name() {
         return array(self::BRANCH, self::LAT, self::LONG, self::FLOOR1, self::FLOOR2);
+    }
+
+    public function get_associate_db_table()
+    {
+        return TrueYouDB::BRANCH_TBL;
     }
 }
 ?>

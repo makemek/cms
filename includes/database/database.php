@@ -13,6 +13,20 @@ class MySQLDatabase extends PDO
         }
     }
 
+    public function get_table_column_name($table) {
+        $query = "DESCRIBE ?";
+        $stmt = $this->prepare($query);
+        $stmt->bindParam(1, $table, PDO::PARAM_STR);
+
+        $fields = array();
+        while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $fields[] = $row['field'];
+        }
+
+        return $fields;
+    }
+
+
     public function mysql_prep($value) {
         $magic_quotes_active = get_magic_quotes_gpc(); // i.e PHP >= v4.3.0
         $new_enough_php = function_exists("mysql_real_escape_string");

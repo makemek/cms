@@ -8,12 +8,12 @@ class FormProcessor
     private $form;
     private $db;
 
-    public function __construct(Form $form, PDO $db) {
+    public function __construct(Record $form, PDO $db) {
         $this->form = $form;
         $this->db = $db;
     }
 
-    public static function get_table_column_name($table) {
+    public function execute() {
 
     }
 
