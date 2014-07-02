@@ -7,20 +7,21 @@ class MySQLDatabase extends PDO
         try{
             parent::__construct('mysql:host=' . DB_HOST . ';dbname=' . $db_name . ';',
                 DB_USER, DB_PASSWORD);
-
+            $this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
         } catch (PDOException $e) {
             die($e->getMessage());
         }
     }
 
     public function get_table_column_name($table) {
-        $query = "DESCRIBE ?";
+        $query = "DESCRIBE " . $table;
         $stmt = $this->prepare($query);
-        $stmt->bindParam(1, $table, PDO::PARAM_STR);
+        $stmt->execute();
 
         $fields = array();
         while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $fields[] = $row['field'];
+            $fields[] = $row['Field'];
         }
 
         return $fields;
