@@ -1,5 +1,4 @@
 <?php
-require_once('../includes/navigation.php');
 require_once('../includes/database/table_config.php');
 
 //TODO Find a way to integrate table name into class
@@ -86,23 +85,23 @@ class Tenant extends Form implements Record
 class Privilege extends Form implements Record
 {
     // --- Code Region --- //
-    const CAMP_CODE = 'camp_code';
-    const USSD = 'ussd';
-    const SMS = 'sms';
+    const CAMP_CODE = trueyou\Priv_tbl::CAMP_CODE;
+    const USSD = trueyou\Priv_tbl::USSD;
+    const SMS = trueyou\Priv_tbl::SMS;
     // ------------------- //
 
     // --- Card Region --- //
-    const CARD = 'card';
+    const CARD = trueyou\Priv_tbl::CARD;
     // ------------------- //
 
     // --- Date Region --- //
-    const START_DATE = 'start_date';
-    const EXPIRE_DATE = 'exp_date';
+    const START_DATE = trueyou\Priv_tbl::START_DATE;
+    const EXPIRE_DATE = trueyou\Priv_tbl::EXPIRE_DATE;
     // ------------------- //
 
     // --- Privilege Region --- //
-    const INFO = 'info';
-    const COND = 'cond';
+    const INFO = trueyou\Priv_tbl::TITLE;
+    const COND = trueyou\Priv_tbl::CONDITION;
     // ------------------------ //
 
     private function code() { ?>
@@ -207,7 +206,7 @@ class Privilege extends Form implements Record
 
     public function get_associate_db_table()
     {
-        return TrueYouDB::PRIVILEGE_TBL;
+        return trueyou\Priv_tbl::name();
     }
 }
 

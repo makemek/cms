@@ -24,6 +24,17 @@ namespace trueyou
 
     class Priv_tbl implements Table
     {
+        const TITLE = 'TITLE';
+        const CAMP_CODE = 'CAMP_CODE';
+        const USSD = 'USSD';
+        const SMS = 'SMS';
+        const START_DATE = 'START';
+        const EXPIRE_DATE = 'EXPIRE';
+        const CARD = 'CARD';
+        const CONDITION = 'COND';
+        const SHOW_CARD = 'SHOW_CARD';
+        const STORE = 'STORE';
+
         public static function name() {return 'Priv';}
     }
 }
