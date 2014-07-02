@@ -92,6 +92,7 @@ class Privilege extends Form implements Record
 
     // --- Card Region --- //
     const CARD = trueyou\Priv_tbl::CARD;
+    const SHOW_CARD = trueyou\Priv_tbl::SHOW_CARD;
     // ------------------- //
 
     // --- Date Region --- //
@@ -102,6 +103,7 @@ class Privilege extends Form implements Record
     // --- Privilege Region --- //
     const INFO = trueyou\Priv_tbl::TITLE;
     const COND = trueyou\Priv_tbl::CONDITION;
+    const OWNER = trueyou\Priv_tbl::STORE;
     // ------------------------ //
 
     private function code() { ?>
@@ -131,9 +133,9 @@ class Privilege extends Form implements Record
     private function card() { ?>
         <?php
         // value must match what is defined in a db's table
-        $no_card = 'no card';
-        $red_card = 'red card';
-        $black_card = 'black card';
+        $no_card = 'NO CARD';
+        $red_card = 'RED';
+        $black_card = 'BLACK';
 
         ?>
         Card: <br />
@@ -201,7 +203,13 @@ class Privilege extends Form implements Record
 //            unset($this->fields[self::CARD]);
             $_POST[self::CARD] = null;
 
-        return parent::fetch();
+//        return parent::fetch();
+
+        // for testing
+        $result = parent::fetch();
+        $result[self::SHOW_CARD] = 'NO';
+        $result[self::OWNER] = 'test';
+        return $result;
     }
 
     public function get_associate_db_table()
