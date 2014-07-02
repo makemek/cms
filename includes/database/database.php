@@ -14,6 +14,21 @@ class MySQLDatabase extends PDO
         }
     }
 
+    public function get_enum($table, $column)
+    {
+        $query = 'SHOW COLUMNS FROM ' . $table . ' LIKE ' . "'{$column}'";
+        $result = $this->query($query);
+        $type = $result->fetch(PDO::FETCH_ASSOC)['Type'];
+
+        preg_match('/^enum\((.*)\)$/', $type, $matches);
+        $enum = array();
+        foreach( explode(',', $matches[1]) as $value ) {
+            $enum[] = trim( $value, "'" );
+        }
+        return $enum;
+    }
+
+
     public function get_table_column_name($table) {
         $query = "DESCRIBE " . $table;
         $stmt = $this->prepare($query);
