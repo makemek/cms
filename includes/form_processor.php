@@ -35,19 +35,25 @@ class FormProcessor
         $param = $this->create_param_str(count($col_name));
 
 //        echo $col_name . '<br/>';
-        print_r($fields);
+        echo '<pre>'; print_r($fields); echo '</pre>';
 //        echo $param . '<br/>';
 
         try {
             $query = "INSERT INTO {$table_name} ({$col_name_str}) VALUES({$param})" ;
-            echo $query;
+            echo $query . '<br />';
             $stmt = $this->db->prepare($query);
 
 //            for($i = 1; $i <= count($fields); ++$i)
 //                $stmt->bindValue($i, $fields[$i-1]);
             $i = 1;
             foreach($col_name as $col) {
-                $stmt->bindValue($i, $fields[$col]);
+                $insert_val = $fields[$col];
+                if(is_array($fields[$col]))
+                    $insert_val = trim(implode(',', $insert_val), ',');
+
+                echo $insert_val . '<br/>';
+
+                $stmt->bindValue($i, $insert_val);
                 ++$i;
             }
         } catch (PDOException $e) {
