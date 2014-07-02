@@ -25,26 +25,31 @@ class FormProcessor
     }
 
     private function construct_query($table_name, $fields) {
-        $fields = array_values($fields);
+        //$fields = array_values($fields);
         $col_name = $this->db->get_table_column_name($table_name);
 
         if(count($fields) != count($col_name))
             echo 'Warning: Field may not be inserted correctly.' . '<br />';
 
-        $col_name = implode(',', $col_name);
-        $param = $this->create_param_str(count($fields));
+        $col_name_str = implode(',', $col_name);
+        $param = $this->create_param_str(count($col_name));
 
-        echo $col_name . '<br/>';
+//        echo $col_name . '<br/>';
         print_r($fields);
-        echo $param . '<br/>';
+//        echo $param . '<br/>';
 
         try {
-            $query = "INSERT INTO {$table_name} ({$col_name}) VALUES({$param})" ;
+            $query = "INSERT INTO {$table_name} ({$col_name_str}) VALUES({$param})" ;
             echo $query;
             $stmt = $this->db->prepare($query);
 
-            for($i = 1; $i <= count($fields); ++$i)
-                $stmt->bindValue($i, $fields[$i-1]);
+//            for($i = 1; $i <= count($fields); ++$i)
+//                $stmt->bindValue($i, $fields[$i-1]);
+            $i = 1;
+            foreach($col_name as $col) {
+                $stmt->bindValue($i, $fields[$col]);
+                ++$i;
+            }
         } catch (PDOException $e) {
             die($e->getMessage());
         }

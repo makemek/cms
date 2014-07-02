@@ -1,5 +1,8 @@
 <?php
 require_once('../includes/navigation.php');
+require_once('../includes/database/table_config.php');
+
+//TODO Find a way to integrate table name into class
 
 abstract class Form
 {
@@ -99,6 +102,7 @@ class Privilege extends Form implements Record
 
     // --- Privilege Region --- //
     const INFO = 'info';
+    const COND = 'cond';
     // ------------------------ //
 
     private function code() { ?>
@@ -164,9 +168,16 @@ class Privilege extends Form implements Record
     public function form() { ?>
 
         <form action="../public/add_branch.php" method="post">
-           Privilege Information: <input type="text" name="<?php echo self::INFO; ?>"
-                                         value="<?php echo $this->fields[self::INFO]; ?>">
+           Privilege Information:<br />
+            <textarea name="<?php echo self::INFO; ?>"
+                      rows="8" cols="30"><?php echo $this->fields[self::INFO]; ?></textarea>
             <br />
+
+           Condition:<br />
+            <textarea name="<?php echo self::COND; ?>"
+                      rows="8" cols="30"><?php echo $this->fields[self::COND]; ?></textarea>
+            <br />
+
             <?php $this->code(); ?>
             <?php $this->date(); ?>
             <?php $this->card(); ?>
@@ -177,15 +188,19 @@ class Privilege extends Form implements Record
     protected function get_all_fields_name()
     {
         return array(
+            self::INFO,
             self::CAMP_CODE, self::USSD, self::SMS,
-            self::CARD,
             self::START_DATE, self::EXPIRE_DATE,
-            self::INFO);
+            self::CARD, self::COND,
+//            self::SHOW_CARD,
+//            self::STORE
+            );
     }
 
     public function fetch() {
         if(!isset($_POST[self::CARD]))
-            unset($this->fields[self::CARD]);
+//            unset($this->fields[self::CARD]);
+            $_POST[self::CARD] = null;
 
         return parent::fetch();
     }
@@ -198,11 +213,11 @@ class Privilege extends Form implements Record
 
 class Branch extends Form implements Record
 {
-    const BRANCH = 'branch';
-    const LAT = 'lat';
-    const LONG = 'long';
-    const FLOOR1 = 'floor1';
-    const FLOOR2 = 'floor2';
+    const BRANCH = trueyou\Branch_tbl::BRANCH;
+    const LAT = trueyou\Branch_tbl::LATITUDE;
+    const LONG = trueyou\Branch_tbl::LONGITUDE;
+    const FLOOR1 = trueyou\Branch_tbl::FLOOR1;
+    const FLOOR2 = trueyou\Branch_tbl::FLOOR2;
 
     public function form() { ?>
         <form action="../public/add_branch.php" method="post">
@@ -235,7 +250,7 @@ class Branch extends Form implements Record
 
     public function get_associate_db_table()
     {
-        return TrueYouDB::BRANCH_TBL;
+        return trueyou\Branch_tbl::name();
     }
 }
 ?>
