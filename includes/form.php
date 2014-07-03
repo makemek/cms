@@ -67,7 +67,7 @@ interface Record {
 class Tenant extends Form implements Record
 {
     public function form() { ?>
-        <form action="..public/add_tenant.php" method="post">
+        <form action="../public/add_content.php?add=Tenant" method="post">
             Title: <input type="text" name="title" value=""><br />
             Description: <input type="text" name="description" value=""><br />
             <input type="submit" name="submit" value="submit">
@@ -198,7 +198,7 @@ class Privilege extends Form implements Record
 
     public function form() { ?>
 
-        <form action="../public/add_branch.php" method="post">
+        <form action="../public/add_content.php?add=Privilege" method="post">
            Privilege Information:<br />
             <textarea name="<?php echo self::INFO; ?>"
                       rows="8" cols="30"><?php echo $this->fields[self::INFO]; ?></textarea>
@@ -262,7 +262,7 @@ class Branch extends Form implements Record
     const FLOOR2 = trueyou\Branch_tbl::FLOOR2;
 
     public function form() { ?>
-        <form action="../public/add_branch.php" method="post">
+        <form action="../public/add_content.php?add=Branch" method="post">
             Branch: <input type="text" name="<?php echo self::BRANCH ?>"
                            value="<?php echo $this->fields[self::BRANCH] ?>" maxlength="255">
             <br />
