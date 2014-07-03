@@ -37,4 +37,26 @@ namespace trueyou
 
         public static function name() {return 'Priv';}
     }
+
+    class Tenant_tbl implements Table
+    {
+        const NAME_TH = 'NAME_TH';
+        const NAME_EN = 'NAME_EN';
+
+        const ACCESS_CH = 'ACCESS_CH';
+        const PRIORITY = 'PRIORITY';
+        const TUREYOU_CAT = 'TRUEYOU';
+
+        const INFO = 'INFO';
+        const WAP = 'WAP';
+
+        const THUMB1 = 'THUMB1';
+        const THUMB2 = 'THUMB2';
+        const THUMB3 = 'THUMB3';
+        const THUMB4 = 'THUMB4';
+        const THUMB5 = 'THUMB5';
+        const THUMB_HIGHLIGHT = 'THUMB_HILIGHT';
+
+        public static function name() {return 'Tenant';}
+    }
 }
