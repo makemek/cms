@@ -1,4 +1,4 @@
-<title>Add new content</title>
+<title><?php echo "Add New " . $_GET['add']; ?></title>
 
 <?php 
 require_once('../includes/layout/header.php');
