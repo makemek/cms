@@ -1,7 +1,7 @@
 <?php
 
 require_once('form.php');
-require_once('database/database.php');
+require_once('../includes/database/database.php');
 
 class FormProcessor
 {

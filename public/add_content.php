@@ -3,9 +3,9 @@
 <?php 
 require_once('../includes/layout/header.php');
 require_once('../includes/functions.php');
-require_once('../includes/form.php');
+require_once('../includes/form/form.php');
 require_once('../includes/database/database.php');
-require_once('../includes/form_processor.php');
+require_once('../includes/form/form_processor.php');
 ?>
 
 
