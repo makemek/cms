@@ -40,10 +40,9 @@ require_once('../includes/form_processor.php');
 //                $add_content['Branch']->set_selected(true);
 				break;
 
+            default:
+                die("{$select} did not match any menu");
 		}
-
-    if(!$form)
-        die("{$select} did not match any menu");
 
     $form->form();
 
