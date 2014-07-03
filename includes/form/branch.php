@@ -1,6 +1,6 @@
 <?php
 require_once('form.php');
-require_once('../includes/database/table_config.php');
+require_once(__DIR__ . '/../database/table_config.php');
 
 class Branch extends Form implements Record
 {
