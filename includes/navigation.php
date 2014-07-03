@@ -5,7 +5,7 @@ class Navigation implements Pageable {
 
 	private $main_menu;
 
-	private function __construct() {
+	public function __construct() {
 		$this->main_menu = new Menu('');
 
         // -------- Home Page ---------- //
@@ -13,9 +13,16 @@ class Navigation implements Pageable {
 
 		// -------- Add Content -------- //
 		$add_content = new Menu('Add Content');
-		$branch = new Menu('Branch', '../public/add_branch.php');
-		$priv = new Menu('Privilage', '../public/add_priv.php');
-		$tenant = new Menu('Tenant', '../public/add_tenant.php');
+		$branch = new Menu('Branch');
+		$priv = new Menu('Privilege');
+		$tenant = new Menu('Tenant');
+
+            // attach link
+        $link = '../public/add_content.php?add=';
+        $branch->link_to($link . $branch->getName());
+        $priv->link_to($link . $priv->getName());
+        $tenant->link_to($link . $tenant->getName());
+
 		$add_content->add_sub_menu($branch);
 		$add_content->add_sub_menu($priv);
 		$add_content->add_sub_menu($tenant);
@@ -30,12 +37,9 @@ class Navigation implements Pageable {
 		$this->main_menu->add_sub_menu($browse);
 	}
 
-	public static function getInstance() {
-		static $instance = null;
-		if(!$instance)
-			$instance = new Navigation();
-		return $instance;
-	}
+    public function getMenu() {
+        return $this->main_menu->get_sub_menu();
+    }
 
 	public function getContent() {
 		$content = '';
@@ -47,7 +51,7 @@ class Navigation implements Pageable {
 }
 
 // will use this instead of navigation soon! ...
-class Menu
+class Menu implements ArrayAccess
 {
 	private $sub_menu = array();
 	private $name = '';
@@ -66,7 +70,7 @@ class Menu
 	}
 
 	public function add_sub_menu(Menu $sub_menu) {
-		$this->sub_menu[] = $sub_menu;
+		$this->sub_menu[$sub_menu->getName()] = $sub_menu;
 	}
 
 	public function display() {
@@ -102,5 +106,71 @@ class Menu
 		if(!empty($this->link))
 			$this->link = str_replace("<a ", "<a class=\"selected\" ", $this->link);
 	}
+
+    public function get_sub_menu() {
+        return $this->sub_menu;
+    }
+
+    /**
+     * (PHP 5 &gt;= 5.0.0)<br/>
+     * Whether a offset exists
+     * @link http://php.net/manual/en/arrayaccess.offsetexists.php
+     * @param mixed $offset <p>
+     * An offset to check for.
+     * </p>
+     * @return boolean true on success or false on failure.
+     * </p>
+     * <p>
+     * The return value will be casted to boolean if non-boolean was returned.
+     */
+    public function offsetExists($offset)
+    {
+        return isset($this->sub_menu[$offset]);
+    }
+
+    /**
+     * (PHP 5 &gt;= 5.0.0)<br/>
+     * Offset to retrieve
+     * @link http://php.net/manual/en/arrayaccess.offsetget.php
+     * @param mixed $offset <p>
+     * The offset to retrieve.
+     * </p>
+     * @return mixed Can return all value types.
+     */
+    public function offsetGet($offset)
+    {
+        return $this->sub_menu[$offset];
+    }
+
+    /**
+     * (PHP 5 &gt;= 5.0.0)<br/>
+     * Offset to set
+     * @link http://php.net/manual/en/arrayaccess.offsetset.php
+     * @param mixed $offset <p>
+     * The offset to assign the value to.
+     * </p>
+     * @param mixed $value <p>
+     * The value to set.
+     * </p>
+     * @return void
+     */
+    public function offsetSet($offset, $value)
+    {
+        $this->sub_menu[$offset] = $value;
+    }
+
+    /**
+     * (PHP 5 &gt;= 5.0.0)<br/>
+     * Offset to unset
+     * @link http://php.net/manual/en/arrayaccess.offsetunset.php
+     * @param mixed $offset <p>
+     * The offset to unset.
+     * </p>
+     * @return void
+     */
+    public function offsetUnset($offset)
+    {
+        unset($this->sub_menu[$offset]);
+    }
 }
 

@@ -3,7 +3,7 @@
 <?php require_once('../includes/functions.php'); ?>
 
 <div id="main">
-	<?php echo navigation(); ?>	
+	<?php echo navigation(new Navigation()); ?>
 
 	<div id="page">
 		<p>Welcome to Admin page</p>

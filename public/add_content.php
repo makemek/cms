@@ -4,41 +4,55 @@
 require_once('../includes/layout/header.php');
 require_once('../includes/functions.php');
 require_once('../includes/form.php');
+require_once('../includes/database/database.php');
+require_once('../includes/form_processor.php');
 ?>
 
 
 
 <div id="main">
-	<?php 
-		echo navigation();
-		$nav = Navigation::getinstance();
+	<?php
+        $nav = new Navigation();
+		echo navigation($nav);
 		$select = $_GET['add'];
 	?>
 
 	<div id="page">
 	<?php
+
+        $add_content = $nav->getMenu()['Add Content'];
+        $db = new MySQLDatabase(DB_TRUEYOU);
+        $form = null;
+
 		switch ($select) {
-			case $nav->getMenu()['TENANT']:
-				$tenant = new Tenant();
-				$tenant->form();
-				// $tenant->evaluate();
-				break;
-			
-			case $nav->getMenu()['PRIV']:
-				$priv = new Privilage();
-				$priv->form();
+			case $add_content['Tenant']->getName():
+				$form = new Tenant(true);
+//                $add_content['Tenant']->set_selected(true);
 				break;
 
-			case $nav->getMenu()['BRANCH']:
-				$branch = new BRANCH();
-				$branch->form();
+			case $add_content['Privilege']->getName():
+				$form = new Privilege($db, true);
+//                $add_content['Privilege']->set_selected(true);
 				break;
 
-			default:
-				# code...
+			case $add_content['Branch']->getName():
+				$form = new Branch(true);
+//                $add_content['Branch']->set_selected(true);
 				break;
+
 		}
-		
+
+    if(!$form)
+        die("{$select} did not match any menu");
+
+    $form->form();
+
+    if($form->is_submitted()) {
+        $controller = new FormProcessor($form, $db);
+        $controller->execute();
+    }
+
+
 	?>
 	</div>
 </div>
