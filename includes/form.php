@@ -1,7 +1,7 @@
 <?php
 require_once('../includes/database/table_config.php');
 
-//TODO Find a way to integrate table name into class
+//TODO Add session to validate form
 
 abstract class Form
 {
@@ -26,6 +26,7 @@ abstract class Form
 
     public abstract function form();
     protected abstract function get_all_fields_name();
+    protected abstract function validate($input);
 
     public function fetch() {
         if(!$this->is_submitted())
@@ -34,11 +35,13 @@ abstract class Form
         $result = array();
 
         foreach($this->fields as $name => $value) {
-            if(!empty($_POST[$name]))
+//            if(!empty($_POST[$name]))
                 $result[$name] = $_POST[$name];
-            else
-                $result[$name] = null;
+//            else
+//                $result[$name] = null;
         }
+
+        $this->validate($result);
 
         return $result;
     }
@@ -78,7 +81,12 @@ class Tenant extends Form implements Record
 
     public function get_associate_db_table()
     {
-        return TrueYouDB::TENANT_TBL;
+        return trueyou\Tenant_tbl::name();
+    }
+
+    protected function validate($input)
+    {
+        // TODO: Implement validate() method.
     }
 }
 
@@ -105,6 +113,14 @@ class Privilege extends Form implements Record
     const COND = trueyou\Priv_tbl::CONDITION;
     const OWNER = trueyou\Priv_tbl::STORE;
     // ------------------------ //
+
+    // members //
+    private $db;
+
+    public function __construct(MySQLDatabase $db, $sticky=false) {
+        parent::__construct($sticky);
+        $this->db = $db;
+    }
 
     private function code() { ?>
         Campaign Code: <input type="text" name="<?php echo self::CAMP_CODE ?>"
@@ -153,6 +169,20 @@ class Privilege extends Form implements Record
                value="<?php echo $black_card ?>"
                <?php echo $this->box_is_checked($black_card)?> >Black Card
         <br />
+
+        Show Card: <br />
+        <select name="<?php echo self::SHOW_CARD; ?>">
+<!--            <option value="No">No</option>-->
+<!--            <option value="Show">Show</option>-->
+<!--            <option value="Required">Required</option>-->
+            <?php
+            $enum = $this->db->get_enum(trueyou\Priv_tbl::name(), trueyou\Priv_tbl::SHOW_CARD);
+            foreach($enum as $value) {
+                $displayTxt = ucfirst(strtolower($value));
+                echo "<option value=\"{$value}\">{$displayTxt}</option>";
+            }
+            ?>
+        </select>
     <?php }
 
     private function date() { ?>
@@ -193,7 +223,7 @@ class Privilege extends Form implements Record
             self::CAMP_CODE, self::USSD, self::SMS,
             self::START_DATE, self::EXPIRE_DATE,
             self::CARD, self::COND,
-//            self::SHOW_CARD,
+            self::SHOW_CARD
 //            self::STORE
             );
     }
@@ -207,7 +237,7 @@ class Privilege extends Form implements Record
 
         // for testing
         $result = parent::fetch();
-        $result[self::SHOW_CARD] = 'NO';
+//        $result[self::SHOW_CARD] = 'NO';
         $result[self::OWNER] = 'test';
         return $result;
     }
@@ -215,6 +245,11 @@ class Privilege extends Form implements Record
     public function get_associate_db_table()
     {
         return trueyou\Priv_tbl::name();
+    }
+
+    protected function validate($input)
+    {
+        // TODO: Implement validate() method.
     }
 }
 
@@ -258,6 +293,12 @@ class Branch extends Form implements Record
     public function get_associate_db_table()
     {
         return trueyou\Branch_tbl::name();
+    }
+
+    protected function validate($input)
+    {
+//        if(empty($input[self::BRANCH]))
+//            $_SESSION['error'][] = 'Branch cannot be empty';
     }
 }
 ?>
