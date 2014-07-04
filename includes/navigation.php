@@ -5,23 +5,32 @@ class Navigation implements Pageable {
 
 	private $main_menu;
 
+    // ID Tag
+    const HOME = 'home';
+    const ADD_CONTENT = 'add_content';
+    const BRANCH = 'branch';
+    const PRIV = 'priv';
+    const TENANT = 'tenant';
+    const BROWSE = 'browse';
+
 	public function __construct() {
 		$this->main_menu = new Menu('');
 
         // -------- Home Page ---------- //
-        $home_page = new Menu('Home', '../public/admin.php');
+        $home_page = new Menu('Home', self::HOME, '../public/admin.php');
 
 		// -------- Add Content -------- //
-		$add_content = new Menu('Add Content');
-		$branch = new Menu('Branch');
-		$priv = new Menu('Privilege');
-		$tenant = new Menu('Tenant');
+		$add_content = new Menu('Add Content', self::ADD_CONTENT);
+		$branch = new Menu('Branch', self::BRANCH);
+		$priv = new Menu('Privilege', self::PRIV);
+		$tenant = new Menu('Tenant', self::TENANT);
 
             // attach link
-        $link = '../public/add_content.php?add=';
-        $branch->link_to($link . $branch->getName());
-        $priv->link_to($link . $priv->getName());
-        $tenant->link_to($link . $tenant->getName());
+        $link = '../public/add_content.php';
+        $to_send = 'add';
+        $branch->link_to($link, array($to_send => self::BRANCH));
+        $priv->link_to($link, array($to_send => self::PRIV));
+        $tenant->link_to($link, array($to_send => self::TENANT));
 
 		$add_content->add_sub_menu($branch);
 		$add_content->add_sub_menu($priv);
@@ -29,7 +38,7 @@ class Navigation implements Pageable {
 		// ---------------------------- //
 
 		// -------- Browse -------- //
-		$browse = new Menu('Browse', '../public/manage_content.php');
+		$browse = new Menu('Browse', self::BROWSE, '../public/manage_content.php');
 		// ------------------------ //
 
         $this->main_menu->add_sub_menu($home_page);
@@ -58,26 +67,35 @@ class Menu implements ArrayAccess
 	private $link = '';
 	private $selected = FALSE;
 
-	public function __construct($name, $link='') {
+    private $parent = null;
+    private $id;
+
+	public function __construct($name, $id=null, $link='') {
 		$this->name = $name;
+        $this->id = $id;
 
 		if(!empty($link))
 			$this->link_to($link);
+
 	}
 
-	public function getName() {
+	public function getTitle() {
 		return $this->name;
 	}
 
 	public function add_sub_menu(Menu $sub_menu) {
-		$this->sub_menu[$sub_menu->getName()] = $sub_menu;
+		$this->sub_menu[$sub_menu->getId()] = $sub_menu;
 	}
+
+    public function getId() {
+        return $this->id;
+    }
 
 	public function display() {
 		if(!empty($this->link))
 			$content = $this->link;
 		else
-			$content = $this->getName();
+			$content = $this->getTitle();
 
 		if($this->has_sub_menu()) {
 			$content .= '<ul>';
@@ -96,14 +114,23 @@ class Menu implements ArrayAccess
 		return count($this->sub_menu) > 0;
 	}
 
-	public function link_to($link) {
-		$this->link = "<a href=\"{$link}\">{$this->getName()}</a>";
+	public function link_to($link, $args=null) {
+
+        if(!is_null($args)) {
+            $link .= '?';
+            foreach($args as $name => $value) {
+                $link .= $name . '=' . $value;
+                $link .= '&';
+            }
+        }
+
+		$this->link = "<a href=\"{$link}\">{$this->getTitle()}</a>";
 		$this->set_selected($this->selected);
 	}
 
 	public function set_selected($is_select) {
 		$this->selected = $is_select;
-		if(!empty($this->link))
+		if(!empty($this->link) && $this->selected)
 			$this->link = str_replace("<a ", "<a class=\"selected\" ", $this->link);
 	}
 

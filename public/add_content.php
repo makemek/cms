@@ -27,22 +27,21 @@ require_once('../includes/form/form_processor.php');
 	<div id="page">
 	<?php
 
-        $add_content = $nav->getMenu()['Add Content'];
         $db = new MySQLDatabase(DB_TRUEYOU);
         $form = null;
 
 		switch ($select) {
-			case $add_content['Tenant']->getName():
+			case Navigation::TENANT:
 				$form = new Tenant(true);
 //                $add_content['Tenant']->set_selected(true);
 				break;
 
-			case $add_content['Privilege']->getName():
+			case Navigation::PRIV:
 				$form = new Privilege($db, true);
 //                $add_content['Privilege']->set_selected(true);
 				break;
 
-			case $add_content['Branch']->getName():
+			case Navigation::BRANCH:
 				$form = new Branch(true);
 //                $add_content['Branch']->set_selected(true);
 				break;
