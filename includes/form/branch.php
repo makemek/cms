@@ -11,7 +11,7 @@ class Branch extends Form implements Record
     const FLOOR2 = trueyou\Branch_tbl::FLOOR2;
 
     public function form() { ?>
-        <form action="../public/add_content.php?add=Branch" method="post">
+        <form action="../public/add_content.php?add=<?php echo Navigation::BRANCH; ?>" method="post">
             Branch: <input type="text" name="<?php echo self::BRANCH ?>"
                            value="<?php echo $this->fields[self::BRANCH] ?>" maxlength="255">
             <br />
