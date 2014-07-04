@@ -1,6 +1,7 @@
 <html>
-	<head lang="en">
-		<link href="../public/stylesheets/public.css" media="all" rel="stylesheet" type="text/css" />
+	<head>
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+        <link href="../public/stylesheets/public.css" media="all" rel="stylesheet" type="text/css" />
 	</head>
 	
 	<body>
