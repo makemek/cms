@@ -33,17 +33,17 @@ require_once('../includes/form/form_processor.php');
 		switch ($select) {
 			case Navigation::TENANT:
 				$form = new Tenant(true);
-//                $add_content['Tenant']->set_selected(true);
+                $nav[Navigation::ADD_CONTENT][Navigation::TENANT]->set_selected(true);
 				break;
 
 			case Navigation::PRIV:
 				$form = new Privilege($db, true);
-//                $add_content['Privilege']->set_selected(true);
+                $nav[Navigation::ADD_CONTENT][Navigation::PRIV]->set_selected(true);
 				break;
 
 			case Navigation::BRANCH:
 				$form = new Branch(true);
-//                $add_content['Branch']->set_selected(true);
+                $nav[Navigation::ADD_CONTENT][Navigation::BRANCH]->set_selected(true);
 				break;
 
             default:
@@ -57,6 +57,7 @@ require_once('../includes/form/form_processor.php');
         $controller->execute();
     }
 
+//    echo navigation($nav);
 
 	?>
 	</div>
