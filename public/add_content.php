@@ -1,4 +1,11 @@
-<title><?php echo "Add New " . $_GET['add']; ?></title>
+<title>
+    <?php
+    if(isset($_GET['add']))
+        echo "Add New {$_GET['add']}";
+    else
+        echo "Add New Content";
+    ?>
+</title>
 
 <?php 
 require_once('../includes/layout/header.php');
