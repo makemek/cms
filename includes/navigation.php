@@ -1,7 +1,7 @@
 <?php 
 require_once('../includes/page.php');
 
-class Navigation implements Pageable {
+class Navigation implements ArrayAccess {
 
 	private $main_menu;
 
@@ -57,9 +57,28 @@ class Navigation implements Pageable {
 		$content .= $this->main_menu->display();
 		return $content;
 	}
+
+    public function offsetExists($offset)
+    {
+        return isset($this->main_menu[$offset]);
+    }
+
+    public function offsetGet($offset)
+    {
+        return $this->main_menu[$offset];
+    }
+
+    public function offsetSet($offset, $value)
+    {
+        $this->main_menu[$offset] = $value;
+    }
+
+    public function offsetUnset($offset)
+    {
+        unset($this->main_menu[$offset]);
+    }
 }
 
-// will use this instead of navigation soon! ...
 class Menu implements ArrayAccess
 {
 	private $sub_menu = array();
@@ -84,6 +103,7 @@ class Menu implements ArrayAccess
 	}
 
 	public function add_sub_menu(Menu $sub_menu) {
+        $sub_menu->parent = $this;
 		$this->sub_menu[$sub_menu->getId()] = $sub_menu;
 	}
 
