@@ -45,7 +45,6 @@ class Privilege extends Form implements Record
 
         SMS: <input type="text" name="<?php echo self::SMS ?>"
                     value="<?php echo $this->fields[self::SMS]; ?>">
-        <br />
 
     <?php }
 
@@ -104,8 +103,20 @@ class Privilege extends Form implements Record
 
         Expire date: <input type="date" name="<?php echo self::EXPIRE_DATE; ?>"
                             value="<?php echo $this->fields[self::EXPIRE_DATE]?>">
-        <br />
 
+    <?php }
+
+    private function store() { ?>
+        <select name="<?php echo self::OWNER; ?>">
+            <?php
+            $col = trueyou\Tenant_tbl::NAME_EN;
+            $query = 'SELECT ' . $col . ' FROM ' . trueyou\Tenant_tbl::name() .
+            ' ORDER BY ' . $col . ' ASC';
+            $result = $this->db->query($query);
+            while($row = $result->fetch(PDO::FETCH_ASSOC))
+                echo "<option value=\"{$row[$col]}\">{$row[$col]}</option>";
+            ?>
+        </select>
     <?php }
 
     public function form() { ?>
@@ -121,10 +132,11 @@ class Privilege extends Form implements Record
                       rows="8" cols="30"><?php echo $this->fields[self::COND]; ?></textarea>
             <br />
 
-            <?php $this->code(); ?>
-            <?php $this->date(); ?>
-            <?php $this->card(); ?>
-            <input type="submit" name="submit" value="submit">
+            <?php $this->code(); ?><br />
+            <?php $this->date(); ?><br />
+            <?php $this->card(); ?><br />
+            <?php $this->store(); ?><br />
+            <?php echo $this->submit_bt('Add new privilege')?>
         </form>
     <?php }
 
@@ -135,23 +147,16 @@ class Privilege extends Form implements Record
             self::CAMP_CODE, self::USSD, self::SMS,
             self::START_DATE, self::EXPIRE_DATE,
             self::CARD, self::COND,
-            self::SHOW_CARD
-//            self::STORE
+            self::SHOW_CARD,
+            self::OWNER
         );
     }
 
     public function fetch() {
         if(!isset($_POST[self::CARD]))
-//            unset($this->fields[self::CARD]);
             $_POST[self::CARD] = null;
 
-//        return parent::fetch();
-
-        // for testing
-        $result = parent::fetch();
-//        $result[self::SHOW_CARD] = 'NO';
-        $result[self::OWNER] = 'test';
-        return $result;
+        return parent::fetch();
     }
 
     public function get_associate_db_table()
