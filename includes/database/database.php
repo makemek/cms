@@ -14,13 +14,16 @@ class MySQLDatabase extends PDO
         }
     }
 
-    public function get_enum($table, $column)
+    public function get_enum($table, $column, $type_set=false)
     {
         $query = 'SHOW COLUMNS FROM ' . $table . ' LIKE ' . "'{$column}'";
         $result = $this->query($query);
         $type = $result->fetch(PDO::FETCH_ASSOC)['Type'];
 
-        preg_match('/^enum\((.*)\)$/', $type, $matches);
+        ($type_set) ? $data = 'set' : $data = 'enum';
+
+        $regex = '/^' . $data . '\((.*)\)$/';
+        preg_match($regex, $type, $matches);
         $enum = array();
         foreach( explode(',', $matches[1]) as $value ) {
             $enum[] = trim( $value, "'" );
