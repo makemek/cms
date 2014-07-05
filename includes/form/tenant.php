@@ -30,25 +30,49 @@ class Tenant extends Form implements Record
 
     public function form() { ?>
         <form action="../public/add_content.php?add=<?php echo Navigation::TENANT; ?>" method="post">
-            Name (TH): <input type="text" name="<?php echo Tenant::NAME_TH ?>" value=""><br />
-            Name (EN): <input type="text" name="<?php echo Tenant::NAME_EN ?>" value=""><br />
+            Name (TH): <input type="text" name="<?php echo self::NAME_TH; ?>"
+                              value="<?php echo $this->fields[self::NAME_TH]; ?>"><br />
+            Name (EN): <input type="text" name="<?php echo self::NAME_EN; ?>"
+                              value="<?php echo $this->fields[self::NAME_EN]; ?>"><br />
 
-            Description: <input type="text" name="description" value=""><br />
-            <input type="submit" name="submit" value="submit">
+            Description:<br />
+            <textarea name="<?php echo self::INFO; ?>"
+                      rows="8" cols="30"><?php echo $this->fields[self::INFO]; ?></textarea><br/>
+            <?php
+            $this->catagory();
+            echo $this->submit_bt('Add New Tenant');
+            ?>
+
         </form>
     <?php }
 
-    private function access_ch() { ?>
-        <select name = <?php echo self::ACCESS_CH; ?> >
-            <?php
-            $enum = $this->db->get_enum(trueyou\Tenant_tbl::name(), trueyou\Tenant_tbl::ACCESS_CH);
-            foreach($enum as $value) {
-                $txt = ucfirst($value);
-                echo "<option value=\"{$txt}\"></option>";
-            }
-            ?>
-        </select>
-    <?php }
+    private function drop_down_menu($list, $name, $multi_select=false) {
+        $format_name = $name;
+        if($multi_select) {
+            $multi_select = "multiple";
+            $format_name .= '[]';
+        }
+
+        $output = "<select name=\"{$format_name}\" {$multi_select}> ";
+
+        $selected = '';
+        foreach($list as $value) {
+            $is_select = $this->menu_is_selected($name, $value);
+            $output .= "<option value=\"{$value}\" {$is_select} >{$value}</option>";
+        }
+        $output .= "</select>";
+        return $output;
+    }
+
+    private function menu_is_selected($field, $menu) {
+        $selection = $this->fields[$field];
+        if(!empty($selection)) {
+            if(is_array($selection) && in_array($menu, $selection) || $selection === $menu)
+                    return "selected";
+        }
+
+        return '';
+    }
 
     protected function get_all_fields_name()
     {
@@ -69,5 +93,27 @@ class Tenant extends Form implements Record
     protected function validate($input)
     {
         // TODO: Implement validate() method.
+    }
+
+    private function catagory()
+    {
+        $tbl = trueyou\Tenant_tbl::name();
+        echo 'Access Channel: ' . '<br/>';
+        echo $this->drop_down_menu(
+                $this->db->get_enum($tbl, trueyou\Tenant_tbl::ACCESS_CH, true),
+                self::ACCESS_CH, true
+            ) . '<br />';
+
+        echo 'Priority: ' . '<br/>';
+        echo $this->drop_down_menu(
+                $this->db->get_enum($tbl, trueyou\Tenant_tbl::PRIORITY),
+                self::PRIORITY
+            ) . '<br />';
+
+        echo 'Categories: ' . '<br/>';
+        echo $this->drop_down_menu(
+                $this->db->get_enum($tbl, trueyou\Tenant_tbl::TUREYOU_CAT),
+                self::TRUEYOU_CAT, true
+            ) . '<br />';
     }
 }
