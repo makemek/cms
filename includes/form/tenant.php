@@ -5,7 +5,7 @@ require_once(__DIR__ . '/../database/table_config.php');
 class Tenant extends Form implements Record
 {
     public function form() { ?>
-        <form action="../public/add_content.php?add=Tenant" method="post">
+        <form action="../public/add_content.php?add=<?php echo Navigation::TENANT; ?>" method="post">
             Title: <input type="text" name="title" value=""><br />
             Description: <input type="text" name="description" value=""><br />
             <input type="submit" name="submit" value="submit">

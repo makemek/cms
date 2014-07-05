@@ -1,4 +1,11 @@
-<title><?php echo "Add New " . $_GET['add']; ?></title>
+<title>
+    <?php
+    if(isset($_GET['add']))
+        echo "Add New {$_GET['add']}";
+    else
+        echo "Add New Content";
+    ?>
+</title>
 
 <?php 
 require_once('../includes/layout/header.php');
@@ -20,24 +27,23 @@ require_once('../includes/form/form_processor.php');
 	<div id="page">
 	<?php
 
-        $add_content = $nav->getMenu()['Add Content'];
         $db = new MySQLDatabase(DB_TRUEYOU);
         $form = null;
 
 		switch ($select) {
-			case $add_content['Tenant']->getName():
+			case Navigation::TENANT:
 				$form = new Tenant(true);
-//                $add_content['Tenant']->set_selected(true);
+                $nav[Navigation::ADD_CONTENT][Navigation::TENANT]->set_selected(true);
 				break;
 
-			case $add_content['Privilege']->getName():
+			case Navigation::PRIV:
 				$form = new Privilege($db, true);
-//                $add_content['Privilege']->set_selected(true);
+                $nav[Navigation::ADD_CONTENT][Navigation::PRIV]->set_selected(true);
 				break;
 
-			case $add_content['Branch']->getName():
+			case Navigation::BRANCH:
 				$form = new Branch(true);
-//                $add_content['Branch']->set_selected(true);
+                $nav[Navigation::ADD_CONTENT][Navigation::BRANCH]->set_selected(true);
 				break;
 
             default:
@@ -51,6 +57,7 @@ require_once('../includes/form/form_processor.php');
         $controller->execute();
     }
 
+//    echo navigation($nav);
 
 	?>
 	</div>
