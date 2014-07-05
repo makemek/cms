@@ -32,7 +32,7 @@ require_once('../includes/form/form_processor.php');
 
 		switch ($select) {
 			case Navigation::TENANT:
-				$form = new Tenant(true);
+				$form = new Tenant($db, true);
                 $nav[Navigation::ADD_CONTENT][Navigation::TENANT]->set_selected(true);
 				break;
 
