@@ -24,18 +24,24 @@ class Tenant extends Form implements Record
     const STATUS = trueyou\Tenant_tbl::STATUS;
 
     private $db;
+    private $thumb = array();
 
     public function __construct(MySQLDatabase $db, $sticky=false) {
         parent::__construct($sticky);
         $this->db = $db;
+        foreach($this->get_thumbnail_const() as $t)
+            $this->thumb[] = new Thumbnail($t);
+    }
+
+    private function get_thumbnail_const() {
+        return array(self::THUMB1, self::THUMB2, self::THUMB3, self::THUMB4, self::THUMB5, self::THUMB_HIGHLIGHT);
     }
 
     public function fetch() {
         $result = parent::fetch();
 
-        $thumbnail = array(self::THUMB1, self::THUMB2, self::THUMB3, self::THUMB4, self::THUMB5, self::THUMB_HIGHLIGHT);
-        foreach($thumbnail as $thumb) {
-                $result[$thumb] = $_FILES[$thumb];
+        foreach($this->thumb as $thumb) {
+                $result[$thumb->getName()] = $thumb->fetch();
         }
 
         return $result;
@@ -49,18 +55,29 @@ class Tenant extends Form implements Record
             Name (EN): <input type="text" name="<?php echo self::NAME_EN; ?>"
                               value="<?php echo $this->fields[self::NAME_EN]; ?>"><br />
 
+            <hr />
+
             Description:<br />
             <textarea name="<?php echo self::INFO; ?>"
                       rows="8" cols="30"><?php echo $this->fields[self::INFO]; ?></textarea><br/>
             WAP:<br />
             <textarea name="<?php echo self::WAP; ?>"
                       rows="8" cols="30"><?php echo $this->fields[self::WAP]; ?></textarea><br/>
+
+            <hr />
+
             <?php
             $this->category();
+            echo '<hr />';
             $this->thumbnail();
+            echo '<hr />';
+
+            echo 'Status: ';
             echo $this->drop_down_menu(
                 $this->db->get_enum(trueyou\Tenant_tbl::name(), trueyou\Tenant_tbl::STATUS),
                 self::STATUS);
+            echo '<br />';
+
             echo $this->submit_bt('Add New Tenant');
             ?>
 
@@ -69,12 +86,14 @@ class Tenant extends Form implements Record
 
     private function thumbnail() { ?>
         <input type="hidden" name="MAX_FILE_SIZE" value="1000000">
-        Thumbnail 1:<input type="file" name="<?php echo self::THUMB1?>"><br />
-        Thumbnail 2:<input type="file" name="<?php echo self::THUMB2?>"><br />
-        Thumbnail 3:<input type="file" name="<?php echo self::THUMB3?>"><br />
-        Thumbnail 4:<input type="file" name="<?php echo self::THUMB4?>"><br />
-        Thumbnail 5:<input type="file" name="<?php echo self::THUMB5?>"><br />
-        Thumbnail Highlight:<input type="file" name="<?php echo self::THUMB_HIGHLIGHT?>"><br />
+        <?php
+        foreach($this->thumb as $t) {
+            echo $t->getName() . ': ';
+            echo $t->upload_form();
+            echo '<br />';
+        }
+
+        ?>
     <?php }
 
     private function status() { ?>
@@ -153,3 +172,43 @@ class Tenant extends Form implements Record
     }
 }
 
+class Thumbnail implements Record
+{
+    private $name;
+
+    public function __construct($name){
+        $this->name = $name;
+    }
+
+    public function get_associate_db_table()
+    {
+        return trueyou\Tenant_tbl::name();
+    }
+
+    public function fetch()
+    {
+        $file = $_FILES[$this->name];
+        if(!isset($file))
+            return null;
+
+        if($file['error'] == 4) // no file is uploaded
+            return null;
+
+        if($file['error'] == 0) // file is uploaded successfully
+        {
+            // move the file
+
+
+            // return path
+        }
+    }
+
+    public function upload_form() {
+        $name = $this->getName();
+        return "<input type=\"file\" name=\"{$name}\" >";
+    }
+
+    public function getName() {
+        return $this->name;
+    }
+}
