@@ -57,6 +57,8 @@ namespace trueyou
         const THUMB5 = 'THUMB5';
         const THUMB_HIGHLIGHT = 'THUMB_HILIGHT';
 
+        const STATUS = 'STATUS';
+
         public static function name() {return 'Tenant';}
     }
 }

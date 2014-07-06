@@ -21,6 +21,8 @@ class Tenant extends Form implements Record
     const THUMB5 = trueyou\Tenant_tbl::THUMB5;
     const THUMB_HIGHLIGHT = trueyou\Tenant_tbl::THUMB_HIGHLIGHT;
 
+    const STATUS = trueyou\Tenant_tbl::STATUS;
+
     private $db;
 
     public function __construct(MySQLDatabase $db, $sticky=false) {
@@ -28,8 +30,20 @@ class Tenant extends Form implements Record
         $this->db = $db;
     }
 
+    public function fetch() {
+        $result = parent::fetch();
+
+        $thumbnail = array(self::THUMB1, self::THUMB2, self::THUMB3, self::THUMB4, self::THUMB5, self::THUMB_HIGHLIGHT);
+        foreach($thumbnail as $thumb) {
+                $result[$thumb] = $_FILES[$thumb];
+        }
+
+        return $result;
+    }
+
     public function form() { ?>
-        <form action="../public/add_content.php?add=<?php echo Navigation::TENANT; ?>" method="post">
+        <form action="../public/add_content.php?add=<?php echo Navigation::TENANT; ?>"
+              enctype="multipart/form-data" method="post">
             Name (TH): <input type="text" name="<?php echo self::NAME_TH; ?>"
                               value="<?php echo $this->fields[self::NAME_TH]; ?>"><br />
             Name (EN): <input type="text" name="<?php echo self::NAME_EN; ?>"
@@ -38,12 +52,33 @@ class Tenant extends Form implements Record
             Description:<br />
             <textarea name="<?php echo self::INFO; ?>"
                       rows="8" cols="30"><?php echo $this->fields[self::INFO]; ?></textarea><br/>
+            WAP:<br />
+            <textarea name="<?php echo self::WAP; ?>"
+                      rows="8" cols="30"><?php echo $this->fields[self::WAP]; ?></textarea><br/>
             <?php
-            $this->catagory();
+            $this->category();
+            $this->thumbnail();
+            echo $this->drop_down_menu(
+                $this->db->get_enum(trueyou\Tenant_tbl::name(), trueyou\Tenant_tbl::STATUS),
+                self::STATUS);
             echo $this->submit_bt('Add New Tenant');
             ?>
 
         </form>
+    <?php }
+
+    private function thumbnail() { ?>
+        <input type="hidden" name="MAX_FILE_SIZE" value="1000000">
+        Thumbnail 1:<input type="file" name="<?php echo self::THUMB1?>"><br />
+        Thumbnail 2:<input type="file" name="<?php echo self::THUMB2?>"><br />
+        Thumbnail 3:<input type="file" name="<?php echo self::THUMB3?>"><br />
+        Thumbnail 4:<input type="file" name="<?php echo self::THUMB4?>"><br />
+        Thumbnail 5:<input type="file" name="<?php echo self::THUMB5?>"><br />
+        Thumbnail Highlight:<input type="file" name="<?php echo self::THUMB_HIGHLIGHT?>"><br />
+    <?php }
+
+    private function status() { ?>
+
     <?php }
 
     private function drop_down_menu($list, $name, $multi_select=false) {
@@ -55,7 +90,6 @@ class Tenant extends Form implements Record
 
         $output = "<select name=\"{$format_name}\" {$multi_select}> ";
 
-        $selected = '';
         foreach($list as $value) {
             $is_select = $this->menu_is_selected($name, $value);
             $output .= "<option value=\"{$value}\" {$is_select} >{$value}</option>";
@@ -80,8 +114,9 @@ class Tenant extends Form implements Record
             self::NAME_TH, self::NAME_EN,
             self::ACCESS_CH, self::PRIORITY, self::TRUEYOU_CAT,
             self::INFO, self::WAP,
-            self::THUMB1, self::THUMB2, self::THUMB3, self::THUMB4, self::THUMB5,
-            self::THUMB_HIGHLIGHT
+            //self::THUMB1, self::THUMB2, self::THUMB3, self::THUMB4, self::THUMB5,
+            //self::THUMB_HIGHLIGHT,
+            self::STATUS
         );
     }
 
@@ -95,7 +130,7 @@ class Tenant extends Form implements Record
         // TODO: Implement validate() method.
     }
 
-    private function catagory()
+    private function category()
     {
         $tbl = trueyou\Tenant_tbl::name();
         echo 'Access Channel: ' . '<br/>';
@@ -117,3 +152,4 @@ class Tenant extends Form implements Record
             ) . '<br />';
     }
 }
+
