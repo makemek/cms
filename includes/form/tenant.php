@@ -73,9 +73,7 @@ class Tenant extends Form implements Record
             echo '<hr />';
 
             echo 'Status: ';
-            echo $this->drop_down_menu(
-                $this->db->get_enum(trueyou\Tenant_tbl::name(), trueyou\Tenant_tbl::STATUS),
-                self::STATUS);
+            $this->status();
             echo '<br />';
 
             echo $this->submit_bt('Add New Tenant');
@@ -85,8 +83,10 @@ class Tenant extends Form implements Record
     <?php }
 
     private function thumbnail() { ?>
-        <input type="hidden" name="MAX_FILE_SIZE" value="1000000">
+<!--        <input type="hidden" name="MAX_FILE_SIZE" value="1000000">
+has some weired problem serv not response when upload image-->
         <?php
+        // note: Uploading image FAIL in PHPStorm IDE (works on WAMP)
         foreach($this->thumb as $t) {
             echo $t->getName() . ': ';
             echo $t->upload_form();
@@ -96,9 +96,11 @@ class Tenant extends Form implements Record
         ?>
     <?php }
 
-    private function status() { ?>
-
-    <?php }
+    private function status() {
+        echo $this->drop_down_menu(
+        $this->db->get_enum(trueyou\Tenant_tbl::name(), trueyou\Tenant_tbl::STATUS),
+        self::STATUS);
+    }
 
     private function drop_down_menu($list, $name, $multi_select=false) {
         $format_name = $name;
@@ -188,24 +190,26 @@ class Thumbnail implements Record
     public function fetch()
     {
         $file = $_FILES[$this->name];
-        if(!isset($file))
-            return null;
+        echo '<pre>'; print_r($file); echo '</pre>';
 
-        if($file['error'] == 4) // no file is uploaded
-            return null;
-
-        if($file['error'] == 0) // file is uploaded successfully
-        {
-            // move the file
-
-
-            // return path
+        switch($file['error']) {
+            case UPLOAD_ERR_NO_FILE:
+            case UPLOAD_ERR_PARTIAL:
+                return '';
+            case UPLOAD_ERR_OK:
+                $success = move_uploaded_file($file['tmp_name'], UPLOAD_DIR . '/' . $file['name']);
+                if($success)
+                    return $file['name'];
+                else
+                    return die('Something wrong!');
+            default:
+                return '';
         }
     }
 
     public function upload_form() {
         $name = $this->getName();
-        return "<input type=\"file\" name=\"{$name}\" >";
+        return "<input type='file' name=\"{$name}\" accept='image/*'>";
     }
 
     public function getName() {
