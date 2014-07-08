@@ -5,7 +5,7 @@ class MySQLDatabase extends PDO
 {
     public function __construct ($db_name) {
         try{
-            parent::__construct('mysql:host=' . DB_HOST . ';dbname=' . $db_name . ';',
+            parent::__construct('mysql:host=' . DB_HOST . ';dbname=' . $db_name . ';' . 'charset=utf8mb4',
                 DB_USER, DB_PASSWORD);
             $this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
