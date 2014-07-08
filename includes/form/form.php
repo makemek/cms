@@ -64,5 +64,9 @@ abstract class Form
 
 interface Record {
     public function get_associate_db_table();
+
+    /*
+     * @return associative array of DB column's name => value associated in that field.
+     */
     public function fetch();
 }
