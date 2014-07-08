@@ -35,16 +35,16 @@ class Privilege extends Form implements Record
     }
 
     private function code() { ?>
-        Campaign Code: <input type="text" name="<?php echo self::CAMP_CODE ?>"
-                              value="<?php echo $this->fields[self::CAMP_CODE]; ?>">
+        *Campaign Code: <input type="text" name="<?php echo self::CAMP_CODE ?>"
+                              value="<?php echo $this->fields[self::CAMP_CODE]; ?>" required="">
         <br />
 
-        USSD: <input type="text" name="<?php echo self::USSD; ?>"
-                     value="<?php echo $this->fields[self::USSD]; ?>">
+        *USSD: <input type="text" name="<?php echo self::USSD; ?>"
+                     value="<?php echo $this->fields[self::USSD]; ?>" required="">
         <br />
 
-        SMS: <input type="text" name="<?php echo self::SMS ?>"
-                    value="<?php echo $this->fields[self::SMS]; ?>">
+        *SMS: <input type="text" name="<?php echo self::SMS ?>"
+                    value="<?php echo $this->fields[self::SMS]; ?>" required="">
 
     <?php }
 
@@ -65,7 +65,6 @@ class Privilege extends Form implements Record
         $black_card = 'BLACK';
 
         ?>
-        Card: <br />
         <input type="checkbox" name="<?php echo self::CARD . '[]'; ?>"
                value="<?php echo $no_card ?>"
             <?php echo $this->box_is_checked($no_card)?> >No Card
@@ -97,12 +96,12 @@ class Privilege extends Form implements Record
     <?php }
 
     private function date() { ?>
-        Start date: <input type="date" name="<?php echo self::START_DATE; ?>"
-                           value="<?php echo $this->fields[self::START_DATE];?>">
+        *Start date: <input type="date" name="<?php echo self::START_DATE; ?>"
+                           value="<?php echo $this->fields[self::START_DATE];?>" required="">
         <br />
 
-        Expire date: <input type="date" name="<?php echo self::EXPIRE_DATE; ?>"
-                            value="<?php echo $this->fields[self::EXPIRE_DATE]?>">
+        *Expire date: <input type="date" name="<?php echo self::EXPIRE_DATE; ?>"
+                            value="<?php echo $this->fields[self::EXPIRE_DATE]?>" required="">
 
     <?php }
 
@@ -134,8 +133,8 @@ class Privilege extends Form implements Record
 
             <?php $this->code(); ?><br />
             <?php $this->date(); ?><br />
-            <?php $this->card(); ?><br />
-            <?php $this->store(); ?><br />
+            Card:<br/> <?php $this->card(); ?><br />
+            Owner: <?php $this->store(); ?><br />
             <?php echo $this->submit_bt('Add new privilege')?>
         </form>
     <?php }

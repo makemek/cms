@@ -51,8 +51,8 @@ class Tenant extends Form implements Record
               enctype="multipart/form-data" method="post">
             Name (TH): <input type="text" name="<?php echo self::NAME_TH; ?>"
                               value="<?php echo $this->fields[self::NAME_TH]; ?>"><br />
-            Name (EN): <input type="text" name="<?php echo self::NAME_EN; ?>"
-                              value="<?php echo $this->fields[self::NAME_EN]; ?>"><br />
+            *Name (EN): <input type="text" name="<?php echo self::NAME_EN; ?>"
+                              value="<?php echo $this->fields[self::NAME_EN]; ?>" required=""><br />
 
             <hr />
 

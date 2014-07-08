@@ -12,7 +12,7 @@ class Branch extends Form implements Record
 
     public function form() { ?>
         <form action="../public/add_content.php?add=<?php echo Navigation::BRANCH; ?>" method="post">
-            Branch: <input type="text" name="<?php echo self::BRANCH ?>"
+            *Branch: <input type="text" name="<?php echo self::BRANCH ?>" required
                            value="<?php echo $this->fields[self::BRANCH] ?>" maxlength="255">
             <br />
 
