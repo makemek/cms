@@ -54,7 +54,7 @@ require_once('../includes/form/form_processor.php');
 
     if($form->is_submitted()) {
         $controller = new FormProcessor($form, $db);
-        $controller->execute();
+        $controller->create();
     }
 
 //    echo navigation($nav);

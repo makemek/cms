@@ -3,7 +3,15 @@
 require_once('form.php');
 require_once(__DIR__ . '/../database/database.php');
 
-class FormProcessor
+interface CRUD {
+    public function create();
+    public function read();
+    public function update();
+    public function delete();
+}
+
+
+class FormProcessor implements CRUD
 {
     private $rec;
     private $db;
@@ -13,7 +21,7 @@ class FormProcessor
         $this->db = $db;
     }
 
-    public function execute() {
+    public function create() {
         $table_name = $this->rec->get_associate_db_table();
 
         $insertVal = $this->rec->fetch();
@@ -25,7 +33,6 @@ class FormProcessor
     }
 
     private function construct_query($table_name, $fields) {
-        //$fields = array_values($fields);
         $col_name = $this->db->get_table_column_name($table_name);
 
         if(count($fields) != count($col_name))
@@ -34,17 +41,13 @@ class FormProcessor
         $col_name_str = implode(',', $col_name);
         $param = $this->create_param_str(count($col_name));
 
-//        echo $col_name . '<br/>';
         echo '<pre>'; print_r($fields); echo '</pre>';
-//        echo $param . '<br/>';
 
         try {
             $query = "INSERT INTO {$table_name} ({$col_name_str}) VALUES({$param})" ;
             echo $query . '<br />';
             $stmt = $this->db->prepare($query);
 
-//            for($i = 1; $i <= count($fields); ++$i)
-//                $stmt->bindValue($i, $fields[$i-1]);
             $i = 1;
             foreach($col_name as $col) {
                 $insert_val = $fields[$col];
@@ -63,8 +66,10 @@ class FormProcessor
         return $stmt;
     }
 
+    /*
+     * Construct ?, ?, ?, ... string
+     */
     private function create_param_str($amount) {
-        // construct ?,?,?, .... string
         $param = '';
         for($i = 0; $i < $amount; ++$i)
             $param .= '?,';
@@ -86,5 +91,20 @@ class FormProcessor
         }
 
         return $query->rowCount();
+    }
+
+    public function read()
+    {
+        // TODO: Implement read() method.
+    }
+
+    public function update()
+    {
+        // TODO: Implement update() method.
+    }
+
+    public function delete()
+    {
+        // TODO: Implement delete() method.
     }
 }
