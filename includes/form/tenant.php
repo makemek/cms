@@ -14,13 +14,6 @@ class Tenant extends Form implements Record
     const INFO = trueyou\Tenant_tbl::INFO;
     const WAP = trueyou\Tenant_tbl::WAP;
 
-    const THUMB1 = trueyou\Tenant_tbl::THUMB1;
-    const THUMB2 = trueyou\Tenant_tbl::THUMB2;
-    const THUMB3 = trueyou\Tenant_tbl::THUMB3;
-    const THUMB4 = trueyou\Tenant_tbl::THUMB4;
-    const THUMB5 = trueyou\Tenant_tbl::THUMB5;
-    const THUMB_HIGHLIGHT = trueyou\Tenant_tbl::THUMB_HIGHLIGHT;
-
     const STATUS = trueyou\Tenant_tbl::STATUS;
 
     private $db;
@@ -34,7 +27,13 @@ class Tenant extends Form implements Record
     }
 
     private function get_thumbnail_const() {
-        return array(self::THUMB1, self::THUMB2, self::THUMB3, self::THUMB4, self::THUMB5, self::THUMB_HIGHLIGHT);
+        return array(
+            trueyou\Tenant_tbl::THUMB1,
+            trueyou\Tenant_tbl::THUMB2,
+            trueyou\Tenant_tbl::THUMB3,
+            trueyou\Tenant_tbl::THUMB4,
+            trueyou\Tenant_tbl::THUMB5,
+            trueyou\Tenant_tbl::THUMB_HIGHLIGHT);
     }
 
     public function fetch() {
