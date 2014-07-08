@@ -1,3 +1,7 @@
+<?php
+require_once('../includes/functions.php');
+?>
+
 <html>
 	<head>
         <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -8,3 +12,10 @@
 		<div id="header">
 		<h1>Makemek</h1>
 		</div>
+
+        <div id="main">
+            <?php
+            $nav = new Navigation();
+            echo navigation($nav);
+
+            ?>

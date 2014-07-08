@@ -9,58 +9,47 @@
 
 <?php 
 require_once('../includes/layout/header.php');
-require_once('../includes/functions.php');
 require_once('../includes/form/form.php');
 require_once('../includes/database/database.php');
 require_once('../includes/form/form_processor.php');
 ?>
 
+<div id="page">
+<?php
+    $select = $_GET['add'];
+    $db = new MySQLDatabase(DB_TRUEYOU);
+    $form = null;
 
+    switch ($select) {
+        case Navigation::TENANT:
+            $form = new Tenant($db, true);
+            $nav[Navigation::ADD_CONTENT][Navigation::TENANT]->set_selected(true);
+            break;
 
-<div id="main">
-	<?php
-        $nav = new Navigation();
-		echo navigation($nav);
-		$select = $_GET['add'];
-	?>
+        case Navigation::PRIV:
+            $form = new Privilege($db, true);
+            $nav[Navigation::ADD_CONTENT][Navigation::PRIV]->set_selected(true);
+            break;
 
-	<div id="page">
-	<?php
+        case Navigation::BRANCH:
+            $form = new Branch(true);
+            $nav[Navigation::ADD_CONTENT][Navigation::BRANCH]->set_selected(true);
+            break;
 
-        $db = new MySQLDatabase(DB_TRUEYOU);
-        $form = null;
-
-		switch ($select) {
-			case Navigation::TENANT:
-				$form = new Tenant($db, true);
-                $nav[Navigation::ADD_CONTENT][Navigation::TENANT]->set_selected(true);
-				break;
-
-			case Navigation::PRIV:
-				$form = new Privilege($db, true);
-                $nav[Navigation::ADD_CONTENT][Navigation::PRIV]->set_selected(true);
-				break;
-
-			case Navigation::BRANCH:
-				$form = new Branch(true);
-                $nav[Navigation::ADD_CONTENT][Navigation::BRANCH]->set_selected(true);
-				break;
-
-            default:
-                die("{$select} did not match any menu");
-		}
-
-    $form->form();
-
-    if($form->is_submitted()) {
-        $controller = new FormProcessor($form, $db);
-        $controller->create();
+        default:
+            die("{$select} did not match any menu");
     }
+
+$form->form();
+
+if($form->is_submitted()) {
+    $controller = new FormProcessor($form, $db);
+    $controller->create();
+}
 
 //    echo navigation($nav);
 
-	?>
-	</div>
+?>
 </div>
 
 <?php include('../includes/layout/footer.php'); ?>

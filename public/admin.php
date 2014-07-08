@@ -1,14 +1,8 @@
 <title>Makemek</title>
 <?php include('../includes/layout/header.php'); ?>
-<?php require_once('../includes/functions.php'); ?>
 
-<div id="main">
-	<?php echo navigation(new Navigation()); ?>
-
-	<div id="page">
-		<p>Welcome to Admin page</p>
-	</div>
+<div id="page">
+    <p>Welcome to Admin page</p>
 </div>
-
 
 <?php include('../includes/layout/footer.php'); ?>
