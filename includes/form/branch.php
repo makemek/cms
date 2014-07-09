@@ -35,6 +35,17 @@ class Branch extends Form implements Record
         </form>
     <?php }
 
+    public function fetch() {
+        $result = parent::fetch();
+
+        $result[self::LAT] = $this->fetch_numeric(self::LAT);
+        $result[self::LONG] = $this->fetch_numeric(self::LONG);
+        $result[self::FLOOR1] = $this->fetch_numeric(self::FLOOR1);
+        $result[self::FLOOR2] = $this->fetch_numeric(self::FLOOR2);
+
+        return $result;
+    }
+
     protected function get_all_fields_name() {
         return array(self::BRANCH, self::LAT, self::LONG, self::FLOOR1, self::FLOOR2);
     }

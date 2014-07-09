@@ -60,6 +60,16 @@ abstract class Form
     public function is_sticky() {
         return $this->sticky;
     }
+
+    /*
+     * if the numeric field is empty -> return null
+     * otherwise return $_POST['field']
+     */
+    protected function fetch_numeric($field) {
+        if(empty($_POST[$field]))
+            return null;
+        return $_POST[$field];
+    }
 }
 
 interface Record {
