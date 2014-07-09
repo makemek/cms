@@ -8,7 +8,7 @@ include_once('branch.php');
 
 abstract class Form
 {
-    protected $fields; // assoc array of name => value
+    protected $fields = array(); // assoc array of name => value
     private $sticky = false;
 
     public function __construct($sticky=false) {
@@ -22,9 +22,14 @@ abstract class Form
 
         if($this->is_submitted() && $this->is_sticky())
             $this->fields = $this->fetch();
+        else {
+            foreach($all_form_elem as $elem)
+                $this->fields[$elem] = '';
+        }
     }
 
     public abstract function form();
+
     protected abstract function get_all_string_fields();
     protected abstract function get_all_numeric_fields();
     protected abstract function validate($input);
