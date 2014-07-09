@@ -7,8 +7,6 @@ class Branch extends Form implements Record
     const BRANCH = trueyou\Branch_tbl::BRANCH;
     const LAT = trueyou\Branch_tbl::LATITUDE;
     const LONG = trueyou\Branch_tbl::LONGITUDE;
-    const FLOOR1 = trueyou\Branch_tbl::FLOOR1;
-    const FLOOR2 = trueyou\Branch_tbl::FLOOR2;
 
     public function form() { ?>
         <form action="../public/add_content.php?add=<?php echo Navigation::BRANCH; ?>" method="post">
@@ -24,13 +22,6 @@ class Branch extends Form implements Record
                               min="0" max="90" step="0.0001">
             <br />
 
-            Floor (if provided): <input type="number" name="<?php echo self::FLOOR1 ?>"
-                                        value="<?php echo $this->fields[self::FLOOR1]?>"
-                                        min="0" max="999">
-            Floor (if provided): <input type="number" name="<?php echo self::FLOOR2 ?>"
-                                        value="<?php echo $this->fields[self::FLOOR2]?>"
-                                        min="0" max="999">
-            <br />
             <?php echo $this->submit_bt('Add New Branch') ?>
         </form>
     <?php }
@@ -52,7 +43,7 @@ class Branch extends Form implements Record
 
     protected function get_all_numeric_fields()
     {
-        return array(self::LAT, self::LONG, self::FLOOR1, self::FLOOR2);
+        return array(self::LAT, self::LONG);
     }
 }
 ?>

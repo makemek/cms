@@ -29,13 +29,14 @@ function table_header(MySQLDatabase $db, $table) {
     foreach($cols as $col)
         $output .= "<th>{$col}</th>";
 
+    $output .= "<th>FLOOR1</th>";
+    $output .= "<th>FLOOR2</th>";
+
     $output .= '</tr>';
     return $output;
 }
 
-if(isset($_GET['table']) && isset($_GET['store'])) {
-
-    $table = $_GET['table'];
+if(isset($_GET['store'])) {
     $store = $_GET['store'];
 
     ?>
@@ -50,24 +51,27 @@ if(isset($_GET['table']) && isset($_GET['store'])) {
     </table>
 <?php }
 
-elseif(isset($_GET['table'])) {
-    $table = $_GET['table'];
+else {
     ?>
 
     <form action="">
         <table style="width:300px">
             <?php
-            echo table_header($db, $table);
+            echo table_header($db, trueyou\Branch_tbl::name());
 
-            $query = "SELECT * FROM ".$table;
+//            $query = "select * FROM branch JOIN tenant_branch AS tb on branch.bname = tb.bname";
+            $query = "SELECT * FROM " . trueyou\Branch_tbl::name();
             $stmt = $db->prepare($query);
             $stmt->execute();
 
+            echo 'Total Result: '.$stmt->rowCount().'<br/>';
             while($row = $stmt->fetch(PDO::FETCH_NUM)) {
                 echo '<tr>';
-                echo "<td><input type=\"checkbox\" value=\"$row[1]\"></td>";
+                echo "<td><input type=\"checkbox\" value=\"$row[0]\"></td>";
                 foreach($row as $col)
                     echo '<td>'.$col.'</td>';
+                echo "<td><input type=\"text\" name=\"floor1[]\"</td>";
+                echo "<td><input type=\"text\" name=\"floor2[]\"</td>";
                 echo '</tr>';
             }
             ?>
