@@ -24,12 +24,14 @@ abstract class Form
             $this->fields = $this->fetch();
         else {
             foreach($all_form_elem as $elem)
-                $this->fields[$elem] = '';
+                $this->set_field($elem, '');
         }
     }
 
     public abstract function form();
-
+    public function set_field($field, $value) {
+        $this->fields[$field] = $value;
+    }
     protected abstract function get_all_string_fields();
     protected abstract function get_all_numeric_fields();
     protected abstract function validate($input);
