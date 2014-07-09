@@ -8,3 +8,9 @@ function navigation($nav)
 	$content .= '</div>';
 	return $content;
 }
+
+function redirect($url)
+{
+    header('Location: '. $url);
+    die();
+}

@@ -12,6 +12,15 @@ require_once('../includes/layout/header.php');
 require_once('../includes/form/form.php');
 require_once('../includes/database/database.php');
 require_once('../includes/form/form_processor.php');
+
+function process_form(Form $form, MySQLDatabase $db) {
+    if($form->is_submitted()) {
+        $controller = new FormProcessor($form, $db);
+        $controller->create();
+    }
+    else
+        $form->form();
+}
 ?>
 
 <div id="page">
@@ -24,11 +33,21 @@ require_once('../includes/form/form_processor.php');
         case Navigation::TENANT:
             $form = new Tenant($db, true);
             $nav[Navigation::ADD_CONTENT][Navigation::TENANT]->set_selected(true);
+
+            if($form->is_submitted()) {
+                process_form($form, $db);
+                redirect('with_branch.php?tenant='.$form->get_field(Tenant::NAME_EN));
+            }
             break;
 
         case Navigation::PRIV:
             $form = new Privilege($db, true);
             $nav[Navigation::ADD_CONTENT][Navigation::PRIV]->set_selected(true);
+
+            if($form->is_submitted()) {
+                process_form($form, $db);
+                redirect('with_branch.php?priv_code='.$form->get_field(Privilege::CAMP_CODE));
+            }
             break;
 
         case Navigation::BRANCH:
@@ -40,14 +59,7 @@ require_once('../includes/form/form_processor.php');
             die("{$select} did not match any menu");
     }
 
-$form->form();
-
-if($form->is_submitted()) {
-    $controller = new FormProcessor($form, $db);
-    $controller->create();
-}
-
-//    echo navigation($nav);
+process_form($form, $db);
 
 ?>
 </div>
