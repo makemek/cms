@@ -32,6 +32,9 @@ abstract class Form
     public function set_field($field, $value) {
         $this->fields[$field] = $value;
     }
+    public function get_field($field) {
+        return $this->fields[$field];
+    }
     protected abstract function get_all_string_fields();
     protected abstract function get_all_numeric_fields();
     protected abstract function validate($input);
