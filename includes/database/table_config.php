@@ -16,8 +16,6 @@ namespace trueyou
         const BRANCH = 'BNAME';
         const LATITUDE = 'LATITUDE';
         const LONGITUDE = 'LONGITUDE';
-        const FLOOR1 = 'FLOOR1';
-        const FLOOR2 = 'FLOOR2';
 
         public static function name() {return 'Branch';}
     }
@@ -60,5 +58,26 @@ namespace trueyou
         const STATUS = 'STATUS';
 
         public static function name() {return 'Tenant';}
+    }
+
+    class Priv_branch_tbl implements Table
+    {
+        const CAMP_CODE = 'CAMP_CODE';
+        const BNAME = 'BNAME';
+
+        public static function name()
+        {
+            return 'priv_branch';
+        }
+    }
+
+    class Tenant_branch_tbl implements Table
+    {
+        const BNAME = 'bname';
+        const TENANT_NAME = 'tenant_name';
+        const FLOOR1 = 'floor1';
+        const FLOOR2 = 'floor2';
+
+        public static function name() {return 'tenant_branch';}
     }
 }
