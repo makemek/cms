@@ -13,22 +13,20 @@ abstract class Form
 
     public function __construct($sticky=false) {
         $this->sticky = $sticky;
-        $all_form_elem = $this->get_all_fields_name();
+        $all_form_elem = array_merge($this->get_all_string_fields(), $this->get_all_numeric_fields());
+
         if(!$all_form_elem) {
             echo "<strong>Warning: Please define field's name for this form.</strong>";
             return;
         }
-        foreach($all_form_elem as $elem_name) {
-            if($this->is_submitted() && $this->is_sticky() && isset($_POST[$elem_name])) {
-                $this->fields[$elem_name] = $_POST[$elem_name];
-            }
-            else
-                $this->fields[$elem_name] = '';
-        }
+
+        if($this->is_submitted() && $this->is_sticky())
+            $this->fields = $this->fetch();
     }
 
     public abstract function form();
-    protected abstract function get_all_fields_name();
+    protected abstract function get_all_string_fields();
+    protected abstract function get_all_numeric_fields();
     protected abstract function validate($input);
 
     public function fetch() {
@@ -37,11 +35,19 @@ abstract class Form
 
         $result = array();
 
-        foreach($this->fields as $name => $value) {
-//            if(!empty($_POST[$name]))
-                $result[$name] = $_POST[$name];
-//            else
-//                $result[$name] = null;
+        $string_fields = $this->get_all_string_fields();
+        $numeric_fields = $this->get_all_numeric_fields();
+
+        if(is_array($string_fields)) {
+            foreach($string_fields as $str_field) {
+                    $result[$str_field] = $_POST[$str_field];
+            }
+        }
+
+        if(is_array($numeric_fields)) {
+            foreach($numeric_fields as $num_field) {
+                $result[$num_field] = $this->fetch_numeric($num_field);
+            }
         }
 
         $this->validate($result);
@@ -65,7 +71,7 @@ abstract class Form
      * if the numeric field is empty -> return null
      * otherwise return $_POST['field']
      */
-    protected function fetch_numeric($field) {
+    private function fetch_numeric($field) {
         if(empty($_POST[$field]))
             return null;
         return $_POST[$field];

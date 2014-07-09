@@ -128,7 +128,7 @@ has some weired problem serv not response when upload image-->
         return '';
     }
 
-    protected function get_all_fields_name()
+    protected function get_all_string_fields()
     {
         return array(
             self::NAME_TH, self::NAME_EN,
@@ -170,6 +170,11 @@ has some weired problem serv not response when upload image-->
                 $this->db->get_enum($tbl, trueyou\Tenant_tbl::TUREYOU_CAT),
                 self::TRUEYOU_CAT, true
             ) . '<br />';
+    }
+
+    protected function get_all_numeric_fields()
+    {
+        return array();
     }
 }
 

@@ -139,7 +139,7 @@ class Privilege extends Form implements Record
         </form>
     <?php }
 
-    protected function get_all_fields_name()
+    protected function get_all_string_fields()
     {
         return array(
             self::INFO,
@@ -166,5 +166,10 @@ class Privilege extends Form implements Record
     protected function validate($input)
     {
         // TODO: Implement validate() method.
+    }
+
+    protected function get_all_numeric_fields()
+    {
+        return array();
     }
 }
