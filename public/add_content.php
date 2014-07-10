@@ -34,20 +34,20 @@ function process_form(Form $form, MySQLDatabase $db) {
             $form = new Tenant($db, true);
             $nav[Navigation::ADD_CONTENT][Navigation::TENANT]->set_selected(true);
 
-            if($form->is_submitted()) {
-                process_form($form, $db);
-                redirect('with_branch.php?tenant='.$form->get_field(Tenant::NAME_EN));
-            }
+//            if($form->is_submitted()) {
+//                process_form($form, $db);
+//                redirect('with_branch.php?tenant='.$form->get_field(Tenant::NAME_EN));
+//            }
             break;
 
         case Navigation::PRIV:
             $form = new Privilege($db, true);
             $nav[Navigation::ADD_CONTENT][Navigation::PRIV]->set_selected(true);
 
-            if($form->is_submitted()) {
-                process_form($form, $db);
-                redirect('with_branch.php?priv_code='.$form->get_field(Privilege::CAMP_CODE));
-            }
+//            if($form->is_submitted()) {
+//                process_form($form, $db);
+//                redirect('with_branch.php?priv_code='.$form->get_field(Privilege::CAMP_CODE));
+//            }
             break;
 
         case Navigation::BRANCH:
@@ -58,6 +58,7 @@ function process_form(Form $form, MySQLDatabase $db) {
         default:
             die("{$select} did not match any menu");
     }
+
 
 process_form($form, $db);
 

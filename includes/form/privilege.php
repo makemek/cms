@@ -120,7 +120,12 @@ class Privilege extends Form implements Record
 
     public function form() { ?>
 
-        <form action="../public/add_content.php?add=<?php echo Navigation::PRIV; ?>" method="post">
+        <form action="../public/with_branch.php" method="post">
+
+            <!-- Args to send to with_branch.php -->
+            <input type="hidden" name="type" value="priv" />
+            <!------------------------------------->
+
             Privilege Information:<br />
             <textarea name="<?php echo self::INFO; ?>"
                       rows="8" cols="30"><?php echo $this->fields[self::INFO]; ?></textarea>

@@ -47,8 +47,13 @@ class Tenant extends Form implements Record
     }
 
     public function form() { ?>
-        <form action="../public/add_content.php?add=<?php echo Navigation::TENANT; ?>"
+        <form action="../public/with_branch.php"
               enctype="multipart/form-data" method="post">
+
+            <!-- Args to send to with_branch.php -->
+            <input type="hidden" name="type" value="tenant" />
+            <!------------------------------------->
+
             Name (TH): <input type="text" name="<?php echo self::NAME_TH; ?>"
                               value="<?php echo $this->fields[self::NAME_TH]; ?>"><br />
             *Name (EN): <input type="text" name="<?php echo self::NAME_EN; ?>"
