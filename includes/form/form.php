@@ -50,13 +50,19 @@ abstract class Form
 
         if(is_array($string_fields)) {
             foreach($string_fields as $str_field) {
+                if(isset($_POST[$str_field]))
                     $result[$str_field] = $_POST[$str_field];
+                else
+                    $result[$str_field] = ''; // default value
             }
         }
 
         if(is_array($numeric_fields)) {
             foreach($numeric_fields as $num_field) {
-                $result[$num_field] = $this->fetch_numeric($num_field);
+                if(isset($_POST[$num_field]))
+                    $result[$num_field] = $this->fetch_numeric($num_field);
+                else
+                    $result[$num_field] = null; // default value
             }
         }
 
