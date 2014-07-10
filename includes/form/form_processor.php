@@ -10,8 +10,7 @@ interface CRUD {
     public function delete();
 }
 
-
-class FormProcessor implements CRUD
+abstract class FormProcessor implements CRUD
 {
     private $rec;
     private $db;
@@ -21,6 +20,7 @@ class FormProcessor implements CRUD
         $this->db = $db;
     }
 
+    // Universal insert
     public function create() {
         $table_name = $this->rec->get_associate_db_table();
 
@@ -92,7 +92,89 @@ class FormProcessor implements CRUD
 
         return $query->rowCount();
     }
+}
 
+class Branch_form_controller extends FormProcessor
+{
+    private $branch;
+    private $db;
+
+    public function __construct(Branch $branch, MySQLDatabase $db) {
+        parent::__construct($branch, $db);
+        $this->branch = $branch;
+        $this->db = $db;
+    }
+
+    public function read()
+    {
+        return $this->branch;
+    }
+
+    public function update()
+    {
+        // TODO: Implement update() method.
+    }
+
+    public function delete()
+    {
+        // TODO: Implement delete() method.
+    }
+}
+
+class Priv_form_controller extends FormProcessor
+{
+    private $priv;
+    private $db;
+
+    public function __construct(Privilege $priv, MySQLDatabase $db) {
+        $this->priv = $priv;
+        $this->db = $db;
+
+        $this->setup_default_fields();
+    }
+
+    private function setup_default_fields() {
+        $this->card_type();
+        $this->show_card();
+        $this->owner();
+    }
+
+    private function show_card() {
+        $show_card = $this->db->get_enum(\trueyou\Priv_tbl::name(), \trueyou\Priv_tbl::SHOW_CARD);
+        $this->priv->set_field(Privilege::SHOW_CARD, $show_card);
+
+    }
+
+    private function card_type() {
+        $set = $this->db->get_enum(trueyou\Priv_tbl::name(), trueyou\Priv_tbl::CARD, true);
+        $this->priv->set_field(Privilege::CARD, $set);
+    }
+
+    private function owner() {
+        $name_en_col = trueyou\Tenant_tbl::NAME_EN;
+        $owner = $this->db->query("SELECT " . $name_en_col . " FROM ". \trueyou\Tenant_tbl::name() .
+            " ORDER BY " . $name_en_col . " ASC");
+        $this->priv->set_field(Privilege::OWNER, $owner->fetchAll(PDO::FETCH_COLUMN));
+    }
+
+    public function read()
+    {
+        return $this->priv;
+    }
+
+    public function update()
+    {
+        // TODO: Implement update() method.
+    }
+
+    public function delete()
+    {
+        // TODO: Implement delete() method.
+    }
+}
+
+class Tenant_form_controller extends FormProcessor
+{
     public function read()
     {
         // TODO: Implement read() method.

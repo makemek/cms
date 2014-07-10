@@ -26,14 +26,6 @@ class Privilege extends Form implements Record
     const OWNER = trueyou\Priv_tbl::STORE;
     // ------------------------ //
 
-    // members //
-    private $db;
-
-    public function __construct(MySQLDatabase $db, $sticky=false) {
-        parent::__construct($sticky);
-        $this->db = $db;
-    }
-
     private function code() { ?>
         *Campaign Code: <input type="text" name="<?php echo self::CAMP_CODE ?>"
                               value="<?php echo $this->fields[self::CAMP_CODE]; ?>" required="">
@@ -59,35 +51,18 @@ class Privilege extends Form implements Record
 
     private function card() { ?>
         <?php
-        // value must match what is defined in a db's table
-        $no_card = 'NO CARD';
-        $red_card = 'RED';
-        $black_card = 'BLACK';
+        foreach($this->fields[self::CARD] as $opt) { ?>
+            <input type="checkbox" name="<?php echo self::CARD . '[]'; ?>"
+                   value="<?php echo $opt; ?>">
+                <?php echo ucfirst(strtolower($opt)); ?>
+            <br />
+        <?php }
 
         ?>
-        <input type="checkbox" name="<?php echo self::CARD . '[]'; ?>"
-               value="<?php echo $no_card ?>"
-            <?php echo $this->box_is_checked($no_card)?> >No Card
-        <br />
-
-        <input type="checkbox" name="<?php echo self::CARD . '[]'; ?>"
-               value="<?php echo $red_card ?>"
-            <?php echo $this->box_is_checked($red_card)?> >Red Card
-        <br />
-
-        <input type="checkbox" name="<?php echo self::CARD . '[]'; ?>"
-               value="<?php echo $black_card ?>"
-            <?php echo $this->box_is_checked($black_card)?> >Black Card
-        <br />
-
         Show Card: <br />
         <select name="<?php echo self::SHOW_CARD; ?>">
-            <!--            <option value="No">No</option>-->
-            <!--            <option value="Show">Show</option>-->
-            <!--            <option value="Required">Required</option>-->
             <?php
-            $enum = $this->db->get_enum(trueyou\Priv_tbl::name(), trueyou\Priv_tbl::SHOW_CARD);
-            foreach($enum as $value) {
+            foreach($this->fields[self::SHOW_CARD] as $value) {
                 $displayTxt = ucfirst(strtolower($value));
                 echo "<option value=\"{$value}\">{$displayTxt}</option>";
             }
@@ -108,12 +83,8 @@ class Privilege extends Form implements Record
     private function store() { ?>
         <select name="<?php echo self::OWNER; ?>">
             <?php
-            $col = trueyou\Tenant_tbl::NAME_EN;
-            $query = 'SELECT ' . $col . ' FROM ' . trueyou\Tenant_tbl::name() .
-            ' ORDER BY ' . $col . ' ASC';
-            $result = $this->db->query($query);
-            while($row = $result->fetch(PDO::FETCH_ASSOC))
-                echo "<option value=\"{$row[$col]}\">{$row[$col]}</option>";
+            foreach($this->fields[self::OWNER] as $opt)
+                echo "<option value=\"{$opt}\" >{$opt}</option>";
             ?>
         </select>
     <?php }
