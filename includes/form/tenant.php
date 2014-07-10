@@ -132,7 +132,7 @@ has some weired problem serv not response when upload image-->
     {
         return array(
             self::NAME_TH, self::NAME_EN,
-            self::ACCESS_CH, self::PRIORITY, self::TRUEYOU_CAT,
+            self::PRIORITY,
             self::INFO, self::WAP,
             //self::THUMB1, self::THUMB2, self::THUMB3, self::THUMB4, self::THUMB5,
             //self::THUMB_HIGHLIGHT,
@@ -174,7 +174,7 @@ has some weired problem serv not response when upload image-->
 
     protected function get_all_numeric_fields()
     {
-        return array();
+        return array(self::ACCESS_CH, self::TRUEYOU_CAT);
     }
 }
 
