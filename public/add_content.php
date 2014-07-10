@@ -12,38 +12,41 @@ require_once('../includes/layout/header.php');
 require_once('../includes/form/form.php');
 require_once('../includes/database/database.php');
 require_once('../includes/form/form_processor.php');
-
-
 ?>
 
 <div id="page">
 <?php
-    $select = $_GET['add'];
-    $db = new MySQLDatabase(DB_TRUEYOU);
-    $form = null;
+$select = isset($_GET['add']) ? $_GET['add'] : null;
+$db = new MySQLDatabase(DB_TRUEYOU);
+$form = null;
+$controller = null;
 
-    switch ($select) {
-        case Navigation::TENANT:
-            $form = new Tenant($db);
-            $nav[Navigation::ADD_CONTENT][Navigation::TENANT]->set_selected(true);
-            break;
+switch ($select) {
+    case Navigation::TENANT:
+        $nav[Navigation::ADD_CONTENT][Navigation::TENANT]->set_selected(true);
+        $form = new Tenant($db);
+        $controller = new Tenant_form_controller($form, $db);
+        break;
 
-        case Navigation::PRIV:
-            $form = new Privilege($db);
-            $nav[Navigation::ADD_CONTENT][Navigation::PRIV]->set_selected(true);
-            $form = Priv_form_controller::setup_default_fields($form, $db);
-            break;
+    case Navigation::PRIV:
+        $nav[Navigation::ADD_CONTENT][Navigation::PRIV]->set_selected(true);
+        $form = new Privilege($db);
+        $form = Priv_form_controller::setup_default_fields($form, $db);
+        break;
 
-        case Navigation::BRANCH:
-            $form = new Branch(true);
-            $nav[Navigation::ADD_CONTENT][Navigation::BRANCH]->set_selected(true);
-            break;
+    case Navigation::BRANCH:
+        $nav[Navigation::ADD_CONTENT][Navigation::BRANCH]->set_selected(true);
+        $form = new Branch(true);
+        $controller = new Branch_form_controller($form, $db);
+        break;
 
-        default:
-            die("{$select} did not match any menu");
-    }
+    default:
+        redirect('admin.php');
+}
 
 $form->form();
+if($form->is_submitted() && !is_null($controller))
+    $controller->create();
 ?>
 </div>
 
