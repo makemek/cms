@@ -26,17 +26,12 @@ require_once('../includes/form/form_processor.php');
         case Navigation::TENANT:
             $form = new Tenant($db);
             $nav[Navigation::ADD_CONTENT][Navigation::TENANT]->set_selected(true);
-
-//            if($form->is_submitted()) {
-//                process_form($form, $db);
-//                redirect('with_branch.php?tenant='.$form->get_field(Tenant::NAME_EN));
-//            }
             break;
 
         case Navigation::PRIV:
             $form = new Privilege($db);
             $nav[Navigation::ADD_CONTENT][Navigation::PRIV]->set_selected(true);
-            $controller = new Priv_form_controller($form, $db);
+            $form = Priv_form_controller::setup_default_fields($form, $db);
             break;
 
         case Navigation::BRANCH:

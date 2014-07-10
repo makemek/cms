@@ -107,7 +107,7 @@ class Branch_form_controller extends FormProcessor
 
     public function read()
     {
-        return $this->branch;
+
     }
 
     public function update()
@@ -129,32 +129,31 @@ class Priv_form_controller extends FormProcessor
     public function __construct(Privilege $priv, MySQLDatabase $db) {
         $this->priv = $priv;
         $this->db = $db;
-
-        $this->setup_default_fields();
     }
 
-    private function setup_default_fields() {
-        $this->card_type();
-        $this->show_card();
-        $this->owner();
+    public static function setup_default_fields(Privilege $priv, MySQLDatabase $db) {
+        self::card_type($priv, $db);
+        self::show_card($priv, $db);
+        self::owner($priv, $db);
+        return $priv;
     }
 
-    private function show_card() {
-        $show_card = $this->db->get_enum(\trueyou\Priv_tbl::name(), \trueyou\Priv_tbl::SHOW_CARD);
-        $this->priv->set_field(Privilege::SHOW_CARD, $show_card);
+    private static function show_card(Privilege $priv, MySQLDatabase $db) {
+        $show_card = $db->get_enum(\trueyou\Priv_tbl::name(), \trueyou\Priv_tbl::SHOW_CARD);
+        $priv->set_field(Privilege::SHOW_CARD, $show_card);
 
     }
 
-    private function card_type() {
-        $set = $this->db->get_enum(trueyou\Priv_tbl::name(), trueyou\Priv_tbl::CARD, true);
-        $this->priv->set_field(Privilege::CARD, $set);
+    private static function card_type(Privilege $priv, MySQLDatabase $db) {
+        $set = $db->get_enum(trueyou\Priv_tbl::name(), trueyou\Priv_tbl::CARD, true);
+        $priv->set_field(Privilege::CARD, $set);
     }
 
-    private function owner() {
+    private static function owner(Privilege $priv, MySQLDatabase $db) {
         $name_en_col = trueyou\Tenant_tbl::NAME_EN;
-        $owner = $this->db->query("SELECT " . $name_en_col . " FROM ". \trueyou\Tenant_tbl::name() .
+        $owner = $db->query("SELECT " . $name_en_col . " FROM ". \trueyou\Tenant_tbl::name() .
             " ORDER BY " . $name_en_col . " ASC");
-        $this->priv->set_field(Privilege::OWNER, $owner->fetchAll(PDO::FETCH_COLUMN));
+        $priv->set_field(Privilege::OWNER, $owner->fetchAll(PDO::FETCH_COLUMN));
     }
 
     public function read()
@@ -173,8 +172,17 @@ class Priv_form_controller extends FormProcessor
     }
 }
 
+//TODO Decouple this
 class Tenant_form_controller extends FormProcessor
 {
+    private $db;
+    private $tenant;
+
+    public function __construct(Tenant $tenant, MySQLDatabase $db) {
+        $this->tenant = $tenant;
+        $this->db = $db;
+    }
+
     public function read()
     {
         // TODO: Implement read() method.
