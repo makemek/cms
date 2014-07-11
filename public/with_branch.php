@@ -11,13 +11,15 @@ include_once('../includes/layout/header.php');
 $db = new MySQLDatabase(DB_TRUEYOU);
 
 $table = new Table();
-$table->display();
 $controller = new Priv_branch_controller($table, $db);
 $table = $controller->read();
-echo '<form action="with_branch.php" method="get" >';
+
+echo '<form action="with_branch.php" method="post" >';
 $table->display();
 echo '<input type="submit" name="submit" value="ADD" />';
 echo '</form>';
+
+echo '<pre>'; var_dump($_POST); echo '</pre>';
 ?>
 
 <?php

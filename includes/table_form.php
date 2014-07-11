@@ -21,13 +21,7 @@ class Table {
 
     public function fetch()
     {
-        $result = array();
-        foreach($this->field_name as $name) {
-            if(isset($_POST[$name]))
-                $result[$name] = $_POST[$name];
-        }
-
-        return $result;
+        return $_POST;
     }
 
     private function style() { ?>
@@ -72,6 +66,34 @@ class Table {
 
     public function add_row($row) {
         $this->row[] = $row;
+
+        foreach($row as $col) {
+            $name = $this->get_html_attribute($col, 'input', 'name');
+            foreach($name as $item) {
+                if(!in_array($item, $this->field_name))
+                    $this->field_name[] = $item;
+            }
+        }
+    }
+
+    public static function get_html_attribute($html, $tag, $attrib)
+    {
+        $dom = new DOMDocument();
+        @$dom->loadHTML($html);
+        $tag = $dom->getElementsByTagName($tag);
+
+        $name_attrib = array();
+
+        foreach($tag as $item) {
+
+            if(is_object($item) && $item->hasAttributes()) {
+                $name = $item->getAttribute($attrib);
+                $name = str_replace('[]', '', $name);
+                $name_attrib[] = $name;
+            }
+        }
+
+        return $name_attrib;
     }
 }
 
@@ -79,23 +101,7 @@ abstract class Table_controller implements CRUD
 {
     protected $assoc_table;
 
-    public static function get_html_attribute($html, $attrib, $tag)
-    {
-        $dom = new DOMDocument();
-        @$dom->loadHTML($html);
-        $tag = $dom->getElementsByTagName($attrib);
 
-        $item = $tag->item(0);
-        if(is_object($item) && $item->hasAttributes()) {
-            $name = $item->getAttribute($tag);
-
-            $name = str_replace('[]', '', $name);
-
-            return $name;
-        }
-
-        return null;
-    }
 }
 
 use trueyou\Branch_tbl as branch_tbl;
@@ -120,15 +126,20 @@ class Priv_branch_controller extends Table_controller
         // table header
         $this->tb->setHeader(array('Add', 'Branch', 'Floor1', 'Floor2'));
 
-        $add_cb = '<input type="checkbox" name="add[]" />';
-        $f1 = '<input type="number" name="floor1" min="0" max="9999" />';
-        $f2 = '<input type="number" name="floor2" min="0" max="9999" />';
+
+        $f2 = '<input type="number" name="add[][floor2]" min="0" max="9999" />';
 
         $query = "SELECT * FROM " . branch_tbl::name() . " ORDER BY " . branch_tbl::BRANCH . " ASC";
         $result = $this->db->query($query);
         echo "Total Result: " . $result->rowCount() . '<br />';
         while($row = $result->fetch(PDO::FETCH_ASSOC)) {
-            $this->tb->add_row(array($add_cb, $row[branch_tbl::BRANCH], $f1, $f2));
+            $branch_name = $row[branch_tbl::BRANCH];
+
+            $add_cb = "<input type=\"checkbox\" name=\"{$branch_name}[select]\" />";
+            $f1 = "<input type=\"number\" name=\"{$branch_name}[]\" min=\"0\" max=\"9999\" />";
+            $f2 = "<input type=\"number\" name=\"{$branch_name}[]\" min=\"0\" max=\"9999\" />";
+
+            $this->tb->add_row(array($add_cb, $branch_name, $f1, $f2));
         }
 
         return $this->tb;
