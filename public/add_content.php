@@ -1,3 +1,5 @@
+<?php session_start(); ?>
+
 <title>
     <?php
     if(isset($_GET['add']))
@@ -30,7 +32,7 @@ switch ($select) {
 
     case Navigation::PRIV:
         $nav[Navigation::ADD_CONTENT][Navigation::PRIV]->set_selected(true);
-        $form = new Privilege($db);
+        $form = new Privilege();
         $form = Priv_form_controller::setup_default_fields($form, $db);
         break;
 
@@ -43,6 +45,8 @@ switch ($select) {
     default:
         die();
 }
+
+$_SESSION['form'] = $form;
 
 $form->form();
 if($form->is_submitted() && !is_null($controller))
