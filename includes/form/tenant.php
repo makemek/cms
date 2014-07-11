@@ -16,12 +16,10 @@ class Tenant extends Form implements Record
 
     const STATUS = trueyou\Tenant_tbl::STATUS;
 
-    private $db;
     private $thumb = array();
 
-    public function __construct(MySQLDatabase $db, $sticky=false) {
+    public function __construct($sticky=false) {
         parent::__construct($sticky);
-        $this->db = $db;
         foreach($this->get_thumbnail_const() as $t)
             $this->thumb[] = new Thumbnail($t);
     }
@@ -71,13 +69,13 @@ class Tenant extends Form implements Record
             <hr />
 
             <?php
-            $this->category();
-            echo '<hr />';
             $this->thumbnail();
+            echo '<hr />';
+            $this->category();
             echo '<hr />';
 
             echo 'Status: ';
-            $this->status();
+            echo $this->drop_down_menu($this->fields[self::STATUS], self::STATUS);
             echo '<br />';
 
             echo $this->submit_bt('Add New Tenant');
@@ -100,12 +98,6 @@ has some weired problem serv not response when upload image-->
         ?>
     <?php }
 
-    private function status() {
-        echo $this->drop_down_menu(
-        $this->db->get_enum(trueyou\Tenant_tbl::name(), trueyou\Tenant_tbl::STATUS),
-        self::STATUS);
-    }
-
     private function drop_down_menu($list, $name, $multi_select=false) {
         $format_name = $name;
         if($multi_select) {
@@ -116,8 +108,8 @@ has some weired problem serv not response when upload image-->
         $output = "<select name=\"{$format_name}\" {$multi_select}> ";
 
         foreach($list as $value) {
-            $is_select = $this->menu_is_selected($name, $value);
-            $output .= "<option value=\"{$value}\" {$is_select} >{$value}</option>";
+            //$is_select = $this->menu_is_selected($name, $value);
+            $output .= "<option value=\"{$value}\" >{$value}</option>";
         }
         $output .= "</select>";
         return $output;
@@ -157,24 +149,15 @@ has some weired problem serv not response when upload image-->
 
     private function category()
     {
-        $tbl = trueyou\Tenant_tbl::name();
-        echo 'Access Channel: ' . '<br/>';
-        echo $this->drop_down_menu(
-                $this->db->get_enum($tbl, trueyou\Tenant_tbl::ACCESS_CH, true),
-                self::ACCESS_CH, true
-            ) . '<br />';
+        echo "Access Channel <br />";
+        echo $this->drop_down_menu($this->fields[self::ACCESS_CH], self::ACCESS_CH, true) . '<br />';
 
-        echo 'Priority: ' . '<br/>';
-        echo $this->drop_down_menu(
-                $this->db->get_enum($tbl, trueyou\Tenant_tbl::PRIORITY),
-                self::PRIORITY
-            ) . '<br />';
+        echo 'Catagory <br />';
+        echo $this->drop_down_menu($this->fields[self::TRUEYOU_CAT], self::TRUEYOU_CAT, true) . '<br />';
 
-        echo 'Categories: ' . '<br/>';
-        echo $this->drop_down_menu(
-                $this->db->get_enum($tbl, trueyou\Tenant_tbl::TUREYOU_CAT),
-                self::TRUEYOU_CAT, true
-            ) . '<br />';
+        echo 'Priority <br />';
+        echo $this->drop_down_menu($this->fields[self::PRIORITY], self::PRIORITY, false) . '<br />';
+
     }
 
     protected function get_all_numeric_fields()

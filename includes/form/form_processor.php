@@ -172,7 +172,6 @@ class Priv_form_controller extends FormProcessor
     }
 }
 
-//TODO Decouple this
 class Tenant_form_controller extends FormProcessor
 {
     private $db;
@@ -181,6 +180,28 @@ class Tenant_form_controller extends FormProcessor
     public function __construct(Tenant $tenant, MySQLDatabase $db) {
         $this->tenant = $tenant;
         $this->db = $db;
+    }
+
+    public static function setup_default_fields(Tenant $tenant, MySQLDatabase $db) {
+        $table_name = trueyou\Tenant_tbl::name();
+
+        //----- Access Channel ------- //
+        $access_ch = $db->get_enum($table_name, trueyou\Tenant_tbl::ACCESS_CH, true);
+        $tenant->set_field(Tenant::ACCESS_CH, $access_ch);
+
+        // ---- Priority ------ //
+        $priority = $db->get_enum($table_name, trueyou\Tenant_tbl::PRIORITY);
+        $tenant->set_field(Tenant::PRIORITY, $priority);
+
+        // ---- Categories ----- //
+        $categories = $db->get_enum($table_name, trueyou\Tenant_tbl::TUREYOU_CAT, true);
+        $tenant->set_field(Tenant::TRUEYOU_CAT, $categories);
+
+        // ---- Status ----- //
+        $status = $db->get_enum($table_name, trueyou\Tenant_tbl::STATUS);
+        $tenant->set_field(Tenant::STATUS, $status);
+
+        return $tenant;
     }
 
     public function read()

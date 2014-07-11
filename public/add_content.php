@@ -24,8 +24,8 @@ $controller = null;
 switch ($select) {
     case Navigation::TENANT:
         $nav[Navigation::ADD_CONTENT][Navigation::TENANT]->set_selected(true);
-        $form = new Tenant($db);
-        $controller = new Tenant_form_controller($form, $db);
+        $form = new Tenant();
+        $form = Tenant_form_controller::setup_default_fields($form, $db);
         break;
 
     case Navigation::PRIV:
@@ -41,7 +41,7 @@ switch ($select) {
         break;
 
     default:
-        redirect('admin.php');
+        die();
 }
 
 $form->form();
