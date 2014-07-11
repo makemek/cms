@@ -1,6 +1,7 @@
 <?php
 require_once('form.php');
 require_once(__DIR__ . '/../database/table_config.php');
+require_once(__DIR__ . '/../element_factory.php');
 
 class Tenant extends Form implements Record
 {
@@ -75,7 +76,7 @@ class Tenant extends Form implements Record
             echo '<hr />';
 
             echo 'Status: ';
-            echo $this->drop_down_menu($this->fields[self::STATUS], self::STATUS);
+            echo ElementFactory::drop_down_menu($this->fields[self::STATUS], self::STATUS, 0);
             echo '<br />';
 
             echo $this->submit_bt('Add New Tenant');
@@ -97,33 +98,6 @@ has some weired problem serv not response when upload image-->
 
         ?>
     <?php }
-
-    private function drop_down_menu($list, $name, $multi_select=false) {
-        $format_name = $name;
-        if($multi_select) {
-            $multi_select = "multiple";
-            $format_name .= '[]';
-        }
-
-        $output = "<select name=\"{$format_name}\" {$multi_select}> ";
-
-        foreach($list as $value) {
-            //$is_select = $this->menu_is_selected($name, $value);
-            $output .= "<option value=\"{$value}\" >{$value}</option>";
-        }
-        $output .= "</select>";
-        return $output;
-    }
-
-    private function menu_is_selected($field, $menu) {
-        $selection = $this->fields[$field];
-        if(!empty($selection)) {
-            if(is_array($selection) && in_array($menu, $selection) || $selection === $menu)
-                    return "selected";
-        }
-
-        return '';
-    }
 
     protected function get_all_string_fields()
     {
@@ -150,13 +124,13 @@ has some weired problem serv not response when upload image-->
     private function category()
     {
         echo "Access Channel <br />";
-        echo $this->drop_down_menu($this->fields[self::ACCESS_CH], self::ACCESS_CH, true) . '<br />';
+        echo ElementFactory::drop_down_menu($this->fields[self::ACCESS_CH], self::ACCESS_CH, 5, true) . '<br />';
 
         echo 'Catagory <br />';
-        echo $this->drop_down_menu($this->fields[self::TRUEYOU_CAT], self::TRUEYOU_CAT, true) . '<br />';
+        echo ElementFactory::drop_down_menu($this->fields[self::TRUEYOU_CAT], self::TRUEYOU_CAT, 0, true) . '<br />';
 
         echo 'Priority <br />';
-        echo $this->drop_down_menu($this->fields[self::PRIORITY], self::PRIORITY, false) . '<br />';
+        echo ElementFactory::drop_down_menu($this->fields[self::PRIORITY], self::PRIORITY, 0) . '<br />';
 
     }
 
