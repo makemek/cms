@@ -2,11 +2,7 @@
 session_start();
 require_once('../includes/database/database.php');
 require_once('../includes/database/table_config.php');
-require_once('../includes/form/form.php');
-require_once('../includes/form/form_processor.php');
-require_once('../includes/table_form.php');
 include_once('../includes/layout/header.php');
-
 $db = new MySQLDatabase(DB_TRUEYOU);
 ?>
 <style>
@@ -45,7 +41,7 @@ $db = new MySQLDatabase(DB_TRUEYOU);
 
 <hr />
 
-<form id="form" action="with_branch.php" method="POST">
+<form id="form" action="new_content.php" method="POST">
     <table id="table">
         <thead>
         <tr>
@@ -69,10 +65,5 @@ $db = new MySQLDatabase(DB_TRUEYOU);
 <script src="javascript/selector.js" ></script>
 
 <?php
-
-if(isset($_POST['submit'])) {
-    $controller = new Tenant_branch_controller();
-    $controller->create();
-}
 
 include_once('../includes/layout/footer.php');
