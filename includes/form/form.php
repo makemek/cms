@@ -29,6 +29,11 @@ abstract class Form implements Record
     public function get_field($field) {
         return $this->fields[$field];
     }
+
+    public function get_all_fields() {
+        return $this->fields;
+    }
+
     protected abstract function get_all_string_fields();
     protected abstract function get_all_numeric_fields();
     protected abstract function validate($input);

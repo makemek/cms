@@ -12,19 +12,19 @@ interface CRUD {
 
 abstract class FormProcessor implements CRUD
 {
-    private $rec;
+    private $form;
     private $db;
 
-    public function __construct(Record $rec, MySQLDatabase $db) {
-        $this->rec = $rec;
+    public function __construct(Form $rec, MySQLDatabase $db) {
+        $this->form = $rec;
         $this->db = $db;
     }
 
     // Universal insert
     public function create() {
-        $table_name = $this->rec->get_associate_db_table();
+        $table_name = $this->form->get_associate_db_table();
 
-        $insertVal = $this->rec->fetch();
+        $insertVal = $this->form->get_all_fields();
         print_r($insertVal);
 
         $query = $this->construct_query($table_name, $insertVal);
@@ -127,6 +127,7 @@ class Priv_form_controller extends FormProcessor
     private $db;
 
     public function __construct(Privilege $priv, MySQLDatabase $db) {
+        parent::__construct($priv, $db);
         $this->priv = $priv;
         $this->db = $db;
     }
@@ -178,6 +179,7 @@ class Tenant_form_controller extends FormProcessor
     private $tenant;
 
     public function __construct(Tenant $tenant, MySQLDatabase $db) {
+        parent::__construct($tenant, $db);
         $this->tenant = $tenant;
         $this->db = $db;
     }

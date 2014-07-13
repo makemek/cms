@@ -38,9 +38,11 @@ class Tenant_branch_controller implements CRUD
 {
 
     private $db;
+    private $form;
 
-    public function __construct(MySQLDatabase $db) {
+    public function __construct(Tenant $form, MySQLDatabase $db) {
         $this->db = $db;
+        $this->form = $form;
     }
 
     /**
@@ -66,15 +68,16 @@ class Tenant_branch_controller implements CRUD
     public function create()
     {
         $input = $this->fetchInput();
-        $query = "INSERT INTO " . \trueyou\Tenant_branch_tbl::name() . " VALUES(:bName, :floor1, :floor2)";
+        var_dump($input);
+        $query = "INSERT INTO " . \trueyou\Tenant_branch_tbl::name() . " VALUES(:bName, :tenant, :floor1, :floor2)";
         $stmt = $this->db->prepare($query);
         foreach($input as $bName => $floor) {
-            $stmt->bindParam('bName', $bName);
-            $stmt->bindParam('floor1', $floor[0]);
-            $stmt->bindParam('floor2', $floor[1]);
+            $stmt->bindValue('bName', $bName);
+            $stmt->bindValue('tenant', $this->form->get_field(Tenant::NAME_EN));
+            $stmt->bindValue('floor1', $floor[0]);
+            $stmt->bindValue('floor2', $floor[1]);
+            $stmt->execute();
         }
-
-        $stmt->execute();
 
         return $stmt->rowCount();
     }

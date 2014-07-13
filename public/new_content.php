@@ -12,8 +12,10 @@ session_start();
 if(!isset($_SESSION['form']) || !isset($_POST['submit']))
     redirect('admin.php');
 
+unset($_POST['submit']); // acknowledge submit
+
 /**
- * @var $crud FormProcessor
+ * @var $form_controller FormProcessor
  * @var $controller CRUD
  */
 
@@ -21,18 +23,18 @@ $form = unserialize($_SESSION['form']);
 var_dump($form);
 $db = new MySQLDatabase(DB_TRUEYOU);
 
-$crud = null;
+$form_controller = null;
 $controller = null;
 
 // find out what type of form is submitted
 switch($form->get_associate_db_table()) {
     case trueyou\Tenant_tbl::name():
-        $crud = new Tenant_form_controller($form, $db);
-        $controller = new Tenant_branch_controller($db);
+        $form_controller = new Tenant_form_controller($form, $db);
+        $controller = new Tenant_branch_controller($form, $db);
         break;
 
     case trueyou\Priv_tbl::name():
-        $crud = new Priv_form_controller($form, $db);
+        $form_controller = new Priv_form_controller($form, $db);
         $controller = new Priv_branch_controller($db);
         break;
 
@@ -40,7 +42,7 @@ switch($form->get_associate_db_table()) {
         die($form->get_associate_db_table() . ' not found in table configuration');
 }
 
-$crud->create();
+$form_controller->create();
 $controller->create();
 
 
