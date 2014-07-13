@@ -83,6 +83,8 @@ var destElement = new DropDownMenu("target");
 var addBt = document.getElementById("add");
 var removeBt = document.getElementById("remove");
 
+var submitBt = document.getElementById("submit");
+
 // ----------------------------------------- //
 
 // --------- Event handlers ---------- //
@@ -92,6 +94,13 @@ addBt.onclick = function() {
 
     var tbody = document.getElementById("tableBody");
     refreshTable(tbody);
+
+    // Show/hide submit button
+    if(destElement.element.options.length > 0) {
+        submitBt.style.display = "block";
+    }
+    else
+        submitBt.style.display = "none";
 };
 
 removeBt.onclick = function() {
@@ -100,6 +109,13 @@ removeBt.onclick = function() {
 
     var tbody = document.getElementById("tableBody");
     refreshTable(tbody);
+
+    // Show/hide submit button
+    if(destElement.element.options.length > 0) {
+        submitBt.style.display = "block";
+    }
+    else
+        submitBt.style.display = "none";
 };
 
 srcElement.element.onfocus = function() {
@@ -108,6 +124,10 @@ srcElement.element.onfocus = function() {
 
 destElement.element.onfocus = function() {
     srcElement.deselectAll();
+};
+
+window.onload = function() {
+    submitBt.style.display = "none";
 };
 // ------------------------------------------ //
 
