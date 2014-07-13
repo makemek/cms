@@ -1,8 +1,15 @@
 <?php
-session_start();
 require_once('../includes/database/database.php');
 require_once('../includes/database/table_config.php');
+require_once('../includes/form/tenant.php');
+require_once('../includes/form/privilege.php');
 include_once('../includes/layout/header.php');
+session_start();
+
+$form = unserialize($_SESSION['form']);
+$form->fetch();
+$_SESSION['form'] = serialize($form);
+
 $db = new MySQLDatabase(DB_TRUEYOU);
 ?>
 <style>
@@ -16,7 +23,7 @@ $db = new MySQLDatabase(DB_TRUEYOU);
         padding:5px;
     }
 </style>
-<select size="20" name="source" id="source" width="300" style="width: 200px"  multiple>
+<select size="20" name="source" id="source" style="width: 200px"  multiple>
     <?php
     $branch_attrib = trueyou\Branch_tbl::BRANCH;
     $branch_tbl = trueyou\Branch_tbl::name();

@@ -1,4 +1,13 @@
-<?php session_start(); ?>
+<?php
+require_once('../includes/layout/header.php');
+require_once('../includes/form/form.php');
+require_once('../includes/form/privilege.php');
+require_once('../includes/form/tenant.php');
+require_once('../includes/form/branch.php');
+require_once('../includes/database/database.php');
+require_once('../includes/form/form_processor.php');
+session_start()
+?>
 
 <title>
     <?php
@@ -9,12 +18,7 @@
     ?>
 </title>
 
-<?php 
-require_once('../includes/layout/header.php');
-require_once('../includes/form/form.php');
-require_once('../includes/database/database.php');
-require_once('../includes/form/form_processor.php');
-?>
+
 
 <div id="page">
 <?php
@@ -46,11 +50,13 @@ switch ($select) {
         die();
 }
 
-$_SESSION['form'] = $form;
-
-$form->form();
 if($form->is_submitted() && !is_null($controller))
     $controller->create();
+else {
+    $form->form();
+    $_SESSION['form'] = serialize($form);
+}
+
 ?>
 </div>
 

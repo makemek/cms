@@ -6,6 +6,8 @@ require_once('../includes/form/form.php');
 require_once('../includes/form/tenant.php');
 require_once('../includes/form/privilege.php');
 require_once('../includes/functions.php');
+require_once('../includes/table_form.php');
+session_start();
 
 if(!isset($_SESSION['form']) || !isset($_POST['submit']))
     redirect('admin.php');
@@ -15,7 +17,8 @@ if(!isset($_SESSION['form']) || !isset($_POST['submit']))
  * @var $controller CRUD
  */
 
-$form = $_SESSION['form'];
+$form = unserialize($_SESSION['form']);
+var_dump($form);
 $db = new MySQLDatabase(DB_TRUEYOU);
 
 $crud = null;

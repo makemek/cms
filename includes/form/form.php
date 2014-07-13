@@ -62,6 +62,8 @@ abstract class Form implements Record
 
         $this->validate($result);
 
+        $this->fields = $result;
+
         return $result;
     }
 

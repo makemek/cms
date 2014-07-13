@@ -156,7 +156,7 @@ class Thumbnail implements Record
     public function fetch()
     {
         $file = $_FILES[$this->name];
-        echo '<pre>'; print_r($file); echo '</pre>';
+        //echo '<pre>'; print_r($file); echo '</pre>';
 
         switch($file['error']) {
             case UPLOAD_ERR_NO_FILE:
