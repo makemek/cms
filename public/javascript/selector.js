@@ -8,6 +8,43 @@ function move(fromOpt, toOpt) {
     }
 }
 
+function createForm(bName) {
+    var row = document.createElement("tr");
+
+    var branch = document.createElement("td");
+    branch.name = bName + "[]";
+    branch.innerHTML = bName;
+
+    var input = document.createElement("input");
+    input.name = bName + "[]";
+    input.min = 0;
+    input.max = 9999;
+
+    var floor1 = document.createElement("td");
+    floor1.innerHTML = input;
+
+    var floor2 = floor1.cloneNode(true);
+
+    row.appendChild(branch);
+    row.appendChild(floor1);
+    row.appendChild(floor2);
+
+    return row;
+}
+
+function refreshTable(tbody) {
+    var new_tbody = document.createElement("tbody");
+    new_tbody.id = "tableBody";
+
+    for(var item = 0; item < destElement.element.options.length; ++item) {
+        var row = createForm(destElement.element.options[item].innerHTML);
+        new_tbody.appendChild(row);
+    }
+
+    var old_tbody = document.getElementById("tableBody");
+    old_tbody.parentNode.replaceChild(new_tbody, tbody);
+}
+
 // ---------------- Class ------------------- //
 function DropDownMenu(id) {
     this.element = document.getElementById(id);
@@ -16,7 +53,9 @@ function DropDownMenu(id) {
 DropDownMenu.prototype.sort = function() {
     $("#" + this.element.id).html(
         $("#" + this.element.id + " option").sort(function (a, b) {
-            return a.text == b.text ? 0 : a.text < b.text ? -1 : 1
+            var a_lowerCase = a.text.toLowerCase();
+            var b_lowerCase = b.text.toLowerCase();
+            return a_lowerCase == b_lowerCase ? 0 : a_lowerCase < b_lowerCase ? -1 : 1
         }));
 };
 
@@ -33,6 +72,8 @@ DropDownMenu.prototype.deselectAll = function() {
     for(var item = 0; item < this.element.options.length; ++item)
         this.element.options[item].selected = false;
 };
+
+
 // ------------------------------------------ //
 
 // --------- Declaration --------------------- //
@@ -42,7 +83,6 @@ var destElement = new DropDownMenu("target");
 var addBt = document.getElementById("add");
 var removeBt = document.getElementById("remove");
 
-var table = document.getElementById("table");
 // ----------------------------------------- //
 
 // --------- Event handlers ---------- //
@@ -50,27 +90,16 @@ addBt.onclick = function() {
     move(srcElement, destElement);
     destElement.sort();
 
-    var new_tbody = document.createElement("tbody");
-    new_tbody.id = "tableBody";
-
-    for(var item = 0; item < destElement.element.options.length; ++item) {
-        var row = document.createElement("tr");
-        var cell1 = row.insertCell(0);
-        var cell2 = row.insertCell(1);
-
-        cell1.innerHTML = destElement.element.options[item].innerHTML;
-        cell2.innerHTML = "CELL2";
-
-        new_tbody.appendChild(row);
-    }
-
-    var old_tbody = document.getElementById("tableBody");
-    old_tbody.parentNode.replaceChild(new_tbody, old_tbody);
+    var tbody = document.getElementById("tableBody");
+    refreshTable(tbody);
 };
 
 removeBt.onclick = function() {
     move(destElement, srcElement);
     srcElement.sort();
+
+    var tbody = document.getElementById("tableBody");
+    refreshTable(tbody);
 };
 
 srcElement.element.onfocus = function() {
