@@ -43,6 +43,11 @@ class Tenant_branch_controller implements CRUD
         $this->db = $db;
     }
 
+    /**
+     * Fetch input according to following format
+     * Branch_name => array(Floor1, Floor2)
+     * @return array filtered input from $_POST
+     */
     private function fetchInput() {
         $result = array();
         foreach($_POST as $branch_name => $floor) {
@@ -61,8 +66,17 @@ class Tenant_branch_controller implements CRUD
     public function create()
     {
         $input = $this->fetchInput();
+        $query = "INSERT INTO " . \trueyou\Tenant_branch_tbl::name() . " VALUES(:bName, :floor1, :floor2)";
+        $stmt = $this->db->prepare($query);
+        foreach($input as $bName => $floor) {
+            $stmt->bindParam('bName', $bName);
+            $stmt->bindParam('floor1', $floor[0]);
+            $stmt->bindParam('floor2', $floor[1]);
+        }
 
-        var_dump($this->fetchInput());
+        $stmt->execute();
+
+        return $stmt->rowCount();
     }
 
     public function read()
