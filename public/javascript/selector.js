@@ -16,12 +16,12 @@ function createForm(bName) {
     branch.innerHTML = bName;
 
     var input = document.createElement("input");
-    input.name = bName + "[]";
-    input.min = 0;
-    input.max = 9999;
+    input.setAttribute("type", "number");
+    input.setAttribute("min", "1");
+    input.setAttribute("max", "9999");
 
     var floor1 = document.createElement("td");
-    floor1.innerHTML = input;
+    floor1.appendChild(input);
 
     var floor2 = floor1.cloneNode(true);
 
