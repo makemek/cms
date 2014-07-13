@@ -22,8 +22,14 @@ $db = new MySQLDatabase(DB_TRUEYOU);
 </style>
 <select size="20" name="source" id="source" width="300" style="width: 200px"  multiple>
     <?php
-    $query = "SELECT " . trueyou\Branch_tbl::BRANCH . " FROM " . trueyou\Branch_tbl::name() .
-        " ORDER BY " . trueyou\Branch_tbl::BRANCH . " ASC";
+    $branch_attrib = trueyou\Branch_tbl::BRANCH;
+    $branch_tbl = trueyou\Branch_tbl::name();
+
+    $query = "SELECT $branch_attrib FROM $branch_tbl ";
+    $query .= "WHERE $branch_attrib NOT IN (";
+    $query .= "SELECT $branch_attrib FROM ". trueyou\Tenant_branch_tbl::name();
+    $query .= ")";
+
     $result = $db->query($query);
     while($row = $result->fetch(PDO::FETCH_NUM))
         echo "<option value={$row[0]}>$row[0]</option>";
@@ -55,7 +61,7 @@ $db = new MySQLDatabase(DB_TRUEYOU);
         </tbody>
     </table>
 
-    <input id="submit" type="submit" value="submit" />
+    <input id="submit" type="submit" name="submit" value="submit" />
 
 </form>
 
@@ -63,24 +69,10 @@ $db = new MySQLDatabase(DB_TRUEYOU);
 <script src="javascript/selector.js" ></script>
 
 <?php
-var_dump($_POST);
-////get from URL $_GET['store'] and $_GET['table']
-//
-//function table_header(MySQLDatabase $db, $table) {
-//    $cols = $db->get_table_column_name($table);
-//
-//    $output = '<tr>';
-//    $output .= "<th>Add</th>"; // checkbox column
-//    foreach($cols as $col)
-//        $output .= "<th>{$col}</th>";
-//
-//    $output .= "<th>FLOOR1</th>";
-//    $output .= "<th>FLOOR2</th>";
-//
-//    $output .= '</tr>';
-//    return $output;
-//}
-//
-//
+
+if(isset($_POST['submit'])) {
+    $controller = new Tenant_branch_controller();
+    $controller->create();
+}
 
 include_once('../includes/layout/footer.php');
