@@ -26,26 +26,17 @@ class Privilege extends Form implements Record
     const OWNER = trueyou\Priv_tbl::STORE;
     // ------------------------ //
 
-    // members //
-    private $db;
-
-    public function __construct(MySQLDatabase $db, $sticky=false) {
-        parent::__construct($sticky);
-        $this->db = $db;
-    }
-
     private function code() { ?>
-        Campaign Code: <input type="text" name="<?php echo self::CAMP_CODE ?>"
-                              value="<?php echo $this->fields[self::CAMP_CODE]; ?>">
+        *Campaign Code: <input type="text" name="<?php echo self::CAMP_CODE ?>"
+                              value="<?php echo $this->fields[self::CAMP_CODE]; ?>" required="">
         <br />
 
-        USSD: <input type="text" name="<?php echo self::USSD; ?>"
-                     value="<?php echo $this->fields[self::USSD]; ?>">
+        *USSD: <input type="text" name="<?php echo self::USSD; ?>"
+                     value="<?php echo $this->fields[self::USSD]; ?>" required="">
         <br />
 
-        SMS: <input type="text" name="<?php echo self::SMS ?>"
-                    value="<?php echo $this->fields[self::SMS]; ?>">
-        <br />
+        *SMS: <input type="text" name="<?php echo self::SMS ?>"
+                    value="<?php echo $this->fields[self::SMS]; ?>" required="">
 
     <?php }
 
@@ -60,36 +51,18 @@ class Privilege extends Form implements Record
 
     private function card() { ?>
         <?php
-        // value must match what is defined in a db's table
-        $no_card = 'NO CARD';
-        $red_card = 'RED';
-        $black_card = 'BLACK';
+        foreach($this->fields[self::CARD] as $opt) { ?>
+            <input type="checkbox" name="<?php echo self::CARD . '[]'; ?>"
+                   value="<?php echo $opt; ?>">
+                <?php echo ucfirst(strtolower($opt)); ?>
+            <br />
+        <?php }
 
         ?>
-        Card: <br />
-        <input type="checkbox" name="<?php echo self::CARD . '[]'; ?>"
-               value="<?php echo $no_card ?>"
-            <?php echo $this->box_is_checked($no_card)?> >No Card
-        <br />
-
-        <input type="checkbox" name="<?php echo self::CARD . '[]'; ?>"
-               value="<?php echo $red_card ?>"
-            <?php echo $this->box_is_checked($red_card)?> >Red Card
-        <br />
-
-        <input type="checkbox" name="<?php echo self::CARD . '[]'; ?>"
-               value="<?php echo $black_card ?>"
-            <?php echo $this->box_is_checked($black_card)?> >Black Card
-        <br />
-
         Show Card: <br />
         <select name="<?php echo self::SHOW_CARD; ?>">
-            <!--            <option value="No">No</option>-->
-            <!--            <option value="Show">Show</option>-->
-            <!--            <option value="Required">Required</option>-->
             <?php
-            $enum = $this->db->get_enum(trueyou\Priv_tbl::name(), trueyou\Priv_tbl::SHOW_CARD);
-            foreach($enum as $value) {
+            foreach($this->fields[self::SHOW_CARD] as $value) {
                 $displayTxt = ucfirst(strtolower($value));
                 echo "<option value=\"{$value}\">{$displayTxt}</option>";
             }
@@ -98,19 +71,32 @@ class Privilege extends Form implements Record
     <?php }
 
     private function date() { ?>
-        Start date: <input type="date" name="<?php echo self::START_DATE; ?>"
-                           value="<?php echo $this->fields[self::START_DATE];?>">
+        *Start date: <input type="date" name="<?php echo self::START_DATE; ?>"
+                           value="<?php echo $this->fields[self::START_DATE];?>" required="">
         <br />
 
-        Expire date: <input type="date" name="<?php echo self::EXPIRE_DATE; ?>"
-                            value="<?php echo $this->fields[self::EXPIRE_DATE]?>">
-        <br />
+        *Expire date: <input type="date" name="<?php echo self::EXPIRE_DATE; ?>"
+                            value="<?php echo $this->fields[self::EXPIRE_DATE]?>" required="">
 
+    <?php }
+
+    private function store() { ?>
+        <select name="<?php echo self::OWNER; ?>">
+            <?php
+            foreach($this->fields[self::OWNER] as $opt)
+                echo "<option value=\"{$opt}\" >{$opt}</option>";
+            ?>
+        </select>
     <?php }
 
     public function form() { ?>
 
-        <form action="../public/add_content.php?add=<?php echo Navigation::PRIV; ?>" method="post">
+        <form action="../public/with_branch.php" method="post">
+
+            <!-- Args to send to with_branch.php -->
+            <input type="hidden" name="type" value="priv" />
+            <!------------------------------------->
+
             Privilege Information:<br />
             <textarea name="<?php echo self::INFO; ?>"
                       rows="8" cols="30"><?php echo $this->fields[self::INFO]; ?></textarea>
@@ -121,37 +107,31 @@ class Privilege extends Form implements Record
                       rows="8" cols="30"><?php echo $this->fields[self::COND]; ?></textarea>
             <br />
 
-            <?php $this->code(); ?>
-            <?php $this->date(); ?>
-            <?php $this->card(); ?>
-            <input type="submit" name="submit" value="submit">
+            <?php $this->code(); ?><br />
+            <?php $this->date(); ?><br />
+            Card:<br/> <?php $this->card(); ?><br />
+            Owner: <?php $this->store(); ?><br />
+            <?php echo $this->submit_bt('Add new privilege')?>
         </form>
     <?php }
 
-    protected function get_all_fields_name()
+    protected function get_all_string_fields()
     {
         return array(
             self::INFO,
             self::CAMP_CODE, self::USSD, self::SMS,
             self::START_DATE, self::EXPIRE_DATE,
             self::CARD, self::COND,
-            self::SHOW_CARD
-//            self::STORE
+            self::SHOW_CARD,
+            self::OWNER
         );
     }
 
     public function fetch() {
         if(!isset($_POST[self::CARD]))
-//            unset($this->fields[self::CARD]);
             $_POST[self::CARD] = null;
 
-//        return parent::fetch();
-
-        // for testing
-        $result = parent::fetch();
-//        $result[self::SHOW_CARD] = 'NO';
-        $result[self::OWNER] = 'test';
-        return $result;
+        return parent::fetch();
     }
 
     public function get_associate_db_table()
@@ -162,5 +142,10 @@ class Privilege extends Form implements Record
     protected function validate($input)
     {
         // TODO: Implement validate() method.
+    }
+
+    protected function get_all_numeric_fields()
+    {
+        return array();
     }
 }

@@ -5,7 +5,7 @@ class MySQLDatabase extends PDO
 {
     public function __construct ($db_name) {
         try{
-            parent::__construct('mysql:host=' . DB_HOST . ';dbname=' . $db_name . ';',
+            parent::__construct('mysql:host=' . DB_HOST . ';dbname=' . $db_name . ';' . 'charset=utf8mb4',
                 DB_USER, DB_PASSWORD);
             $this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
@@ -14,13 +14,16 @@ class MySQLDatabase extends PDO
         }
     }
 
-    public function get_enum($table, $column)
+    public function get_enum($table, $column, $type_set=false)
     {
         $query = 'SHOW COLUMNS FROM ' . $table . ' LIKE ' . "'{$column}'";
         $result = $this->query($query);
         $type = $result->fetch(PDO::FETCH_ASSOC)['Type'];
 
-        preg_match('/^enum\((.*)\)$/', $type, $matches);
+        ($type_set) ? $data = 'set' : $data = 'enum';
+
+        $regex = '/^' . $data . '\((.*)\)$/';
+        preg_match($regex, $type, $matches);
         $enum = array();
         foreach( explode(',', $matches[1]) as $value ) {
             $enum[] = trim( $value, "'" );

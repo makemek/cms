@@ -1,3 +1,14 @@
+<?php
+require_once('../includes/layout/header.php');
+require_once('../includes/form/form.php');
+require_once('../includes/form/privilege.php');
+require_once('../includes/form/tenant.php');
+require_once('../includes/form/branch.php');
+require_once('../includes/database/database.php');
+require_once('../includes/form/form_processor.php');
+session_start()
+?>
+
 <title>
     <?php
     if(isset($_GET['add']))
@@ -7,60 +18,46 @@
     ?>
 </title>
 
-<?php 
-require_once('../includes/layout/header.php');
-require_once('../includes/functions.php');
-require_once('../includes/form/form.php');
-require_once('../includes/database/database.php');
-require_once('../includes/form/form_processor.php');
-?>
 
 
+<div id="page">
+<?php
+$select = isset($_GET['add']) ? $_GET['add'] : null;
+$db = new MySQLDatabase(DB_TRUEYOU);
+$form = null;
+$controller = null;
 
-<div id="main">
-	<?php
-        $nav = new Navigation();
-		echo navigation($nav);
-		$select = $_GET['add'];
-	?>
+switch ($select) {
+    case Navigation::TENANT:
+        $nav[Navigation::ADD_CONTENT][Navigation::TENANT]->set_selected(true);
+        $form = new Tenant();
+        $form = Tenant_form_controller::setup_default_fields($form, $db);
+        break;
 
-	<div id="page">
-	<?php
+    case Navigation::PRIV:
+        $nav[Navigation::ADD_CONTENT][Navigation::PRIV]->set_selected(true);
+        $form = new Privilege();
+        $form = Priv_form_controller::setup_default_fields($form, $db);
+        break;
 
-        $db = new MySQLDatabase(DB_TRUEYOU);
-        $form = null;
+    case Navigation::BRANCH:
+        $nav[Navigation::ADD_CONTENT][Navigation::BRANCH]->set_selected(true);
+        $form = new Branch(true);
+        $controller = new Branch_form_controller($form, $db);
+        break;
 
-		switch ($select) {
-			case Navigation::TENANT:
-				$form = new Tenant(true);
-                $nav[Navigation::ADD_CONTENT][Navigation::TENANT]->set_selected(true);
-				break;
+    default:
+        die();
+}
 
-			case Navigation::PRIV:
-				$form = new Privilege($db, true);
-                $nav[Navigation::ADD_CONTENT][Navigation::PRIV]->set_selected(true);
-				break;
-
-			case Navigation::BRANCH:
-				$form = new Branch(true);
-                $nav[Navigation::ADD_CONTENT][Navigation::BRANCH]->set_selected(true);
-				break;
-
-            default:
-                die("{$select} did not match any menu");
-		}
-
+if($form->is_submitted() && !is_null($controller))
+    $controller->create();
+else {
     $form->form();
+    $_SESSION['form'] = serialize($form);
+}
 
-    if($form->is_submitted()) {
-        $controller = new FormProcessor($form, $db);
-        $controller->execute();
-    }
-
-//    echo navigation($nav);
-
-	?>
-	</div>
+?>
 </div>
 
 <?php include('../includes/layout/footer.php'); ?>
