@@ -1,11 +1,5 @@
 <?php
 
-include_once('tenant.php');
-include_once('privilege.php');
-include_once('branch.php');
-
-//TODO Add session to validate form
-
 abstract class Form implements Record
 {
     protected $fields = array(); // assoc array of name => value
