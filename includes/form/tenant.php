@@ -42,6 +42,8 @@ class Tenant extends Form implements Record
                 $result[$thumb->getName()] = $thumb->fetch();
         }
 
+        $this->fields = $result;
+
         return $result;
     }
 
