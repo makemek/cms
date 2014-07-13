@@ -39,7 +39,7 @@ $db = new MySQLDatabase(DB_TRUEYOU);
 
 <hr />
 
-<form id="form" action="process.php" method="POST">
+<form id="form" action="with_branch.php" method="POST">
     <table id="table">
         <thead>
         <tr>
@@ -49,12 +49,13 @@ $db = new MySQLDatabase(DB_TRUEYOU);
         </tr>
         </thead>
 
+
         <tbody id="tableBody">
 
         </tbody>
     </table>
 
-    <input id="submit" type="submit" name="submit" value="submit">
+    <input id="submit" type="submit" value="submit" />
 
 </form>
 
@@ -62,6 +63,7 @@ $db = new MySQLDatabase(DB_TRUEYOU);
 <script src="javascript/selector.js" ></script>
 
 <?php
+var_dump($_POST);
 ////get from URL $_GET['store'] and $_GET['table']
 //
 //function table_header(MySQLDatabase $db, $table) {

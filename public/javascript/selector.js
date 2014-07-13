@@ -12,13 +12,13 @@ function createForm(bName) {
     var row = document.createElement("tr");
 
     var branch = document.createElement("td");
-    branch.name = bName + "[]";
     branch.innerHTML = bName;
 
     var input = document.createElement("input");
     input.setAttribute("type", "number");
     input.setAttribute("min", "1");
     input.setAttribute("max", "9999");
+    input.setAttribute("name", bName + "[]");
 
     var floor1 = document.createElement("td");
     floor1.appendChild(input);
