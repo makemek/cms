@@ -6,7 +6,7 @@ include_once('branch.php');
 
 //TODO Add session to validate form
 
-abstract class Form
+abstract class Form implements Record
 {
     protected $fields = array(); // assoc array of name => value
     private $sticky = false;
