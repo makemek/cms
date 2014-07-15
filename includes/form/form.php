@@ -108,4 +108,9 @@ interface Record {
      * @return int
      */
     public function is_exists($db);
+
+    /**
+     * @return string that use to identify a particular record.
+     */
+    public function get_identifier();
 }

@@ -50,5 +50,13 @@ class Branch extends Form implements Record
     {
         // TODO: Implement is_exists() method.
     }
+
+    /**
+     * @return string that use to identify a particular record.
+     */
+    public function get_identifier()
+    {
+        return $this->get_field(Branch::BRANCH);
+    }
 }
 ?>

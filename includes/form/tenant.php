@@ -150,6 +150,14 @@ has some weired problem serv not response when upload image-->
 
         return $result->rowCount();
     }
+
+    /**
+     * @return string that use to identify a particular record.
+     */
+    public function get_identifier()
+    {
+        return $this->get_field(Tenant::NAME_EN);
+    }
 }
 
 class Thumbnail implements Record
@@ -197,5 +205,13 @@ class Thumbnail implements Record
     public function is_exists($db)
     {
         // TODO: Implement is_exists() method.
+    }
+
+    /**
+     * @return string that use to identify a particular record.
+     */
+    public function get_identifier()
+    {
+        // TODO: Implement get_identifier() method.
     }
 }

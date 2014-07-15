@@ -6,11 +6,20 @@ require_once('../includes/form/privilege.php');
 include_once('../includes/layout/header.php');
 session_start();
 
-$form = unserialize($_SESSION['form']);
-$form->fetch();
-$_SESSION['form'] = serialize($form);
 
 $db = new MySQLDatabase(DB_TRUEYOU);
+
+$form = unserialize($_SESSION['form']);
+$form->fetch();
+if($form->is_exists($db)) {
+    $_SESSION['error'] = $form->get_identifier() . " already exists.";
+    redirect($_SESSION['link']);
+}
+
+
+$_SESSION['form'] = serialize($form);
+
+
 ?>
 <style>
     table,th,td
