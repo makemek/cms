@@ -1,4 +1,4 @@
 <?php
-define('ADD', 'add');
 define('LINK', 'link');
 define('ERROR', 'error');
+define('FORM', 'form');

@@ -6,6 +6,7 @@ require_once('../includes/form/tenant.php');
 require_once('../includes/form/branch.php');
 require_once('../includes/database/database.php');
 require_once('../includes/form/form_processor.php');
+require_once('../includes/session_config.php');
 session_start();
 
 function displayError($errors) {
@@ -29,18 +30,18 @@ function displayError($errors) {
 
 <div id="page">
 <?php
-$_SESSION['link'] = 'public/add_content.php?add=';
-if(isset($_SESSION['error'])) {
-    displayError($_SESSION['error']);
+$_SESSION[LINK] = 'public/add_content.php?add=';
+if(isset($_SESSION[ERROR])) {
+    displayError($_SESSION[ERROR]);
 
     echo '<hr />';
-    unset($_SESSION['error']); // acknowledge error(s)
+    unset($_SESSION[ERROR]); // acknowledge error(s)
 }
 
 $select = null;
 if(isset($_GET['add'])) {
     $select = $_GET['add'];
-    $_SESSION['link'] .= $select;
+    $_SESSION[LINK] .= $select;
 }
 
 $db = new MySQLDatabase(DB_TRUEYOU);
@@ -76,9 +77,9 @@ if($form->is_submitted() && !is_null($controller)) {
     $errors = $form->validate($db);
 
     if(count($errors) > 0) {
-        $_SESSION['error'] = $errors;
+        $_SESSION[ERROR] = $errors;
         displayError($errors);
-        unset($_SESSION['error']);
+        unset($_SESSION[ERROR]);
     }
 
     else
@@ -86,7 +87,7 @@ if($form->is_submitted() && !is_null($controller)) {
 }
 else {
     $form->form();
-    $_SESSION['form'] = serialize($form);
+    $_SESSION[FORM] = serialize($form);
 }
 
 ?>

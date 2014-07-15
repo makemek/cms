@@ -3,6 +3,7 @@ require_once('../includes/database/database.php');
 require_once('../includes/database/table_config.php');
 require_once('../includes/form/tenant.php');
 require_once('../includes/form/privilege.php');
+require_once('../includes/session_config.php');
 include_once('../includes/layout/header.php');
 session_start();
 
@@ -11,16 +12,16 @@ $db = new MySQLDatabase(DB_TRUEYOU);
 /**
  * @var $form Form
  **/
-$form = unserialize($_SESSION['form']);
+$form = unserialize($_SESSION[FORM]);
 $form->fetch();
 $errors = $form->validate($db);
 if(count($errors) > 0) {
-    $_SESSION['error'] = $errors;
-    $url = $_SESSION['link'];
+    $_SESSION[ERROR] = $errors;
+    $url = $_SESSION[LINK];
     redirect('../' . $url); // back to previous
 }
 
-$_SESSION['form'] = serialize($form);
+$_SESSION[FORM] = serialize($form);
 
 
 ?>

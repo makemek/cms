@@ -9,7 +9,7 @@ require_once('../includes/functions.php');
 require_once('../includes/table_form.php');
 session_start();
 
-if(!isset($_SESSION['form']) || !isset($_POST['submit']))
+if(!isset($_SESSION[FORM]) || !isset($_POST['submit']))
     redirect('admin.php');
 
 unset($_POST['submit']); // acknowledge submit
@@ -19,7 +19,7 @@ unset($_POST['submit']); // acknowledge submit
  * @var $controller CRUD
  */
 
-$form = unserialize($_SESSION['form']);
+$form = unserialize($_SESSION[FORM]);
 var_dump($form);
 $db = new MySQLDatabase(DB_TRUEYOU);
 
