@@ -101,8 +101,6 @@ abstract class FormProcessor implements CRUD
     public function get_form() {
         return $this->form;
     }
-
-    public abstract function is_exists();
 }
 
 class Branch_form_controller extends FormProcessor
@@ -124,11 +122,6 @@ class Branch_form_controller extends FormProcessor
     public function delete()
     {
         // TODO: Implement delete() method.
-    }
-
-    public function is_exists()
-    {
-        // TODO: Implement is_exists() method.
     }
 }
 
@@ -177,11 +170,6 @@ class Priv_form_controller extends FormProcessor
     {
         // TODO: Implement delete() method.
     }
-
-    public function is_exists()
-    {
-        // TODO: Implement is_exists() method.
-    }
 }
 
 class Tenant_form_controller extends FormProcessor
@@ -226,15 +214,5 @@ class Tenant_form_controller extends FormProcessor
     public function delete()
     {
         // TODO: Implement delete() method.
-    }
-
-    public function is_exists()
-    {
-        $query = "SELECT " . trueyou\Tenant_tbl::NAME_EN . " FROM " . trueyou\Tenant_tbl::name() .
-            " WHERE " . trueyou\Tenant_tbl::NAME_EN . " = " . $this->form->get_field(Tenant::NAME_EN);
-
-        $result = $this->db->query($query);
-
-        return $result->rowCount();
     }
 }

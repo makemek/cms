@@ -45,5 +45,10 @@ class Branch extends Form implements Record
     {
         return array(self::LAT, self::LONG);
     }
+
+    public function is_exists($db)
+    {
+        // TODO: Implement is_exists() method.
+    }
 }
 ?>

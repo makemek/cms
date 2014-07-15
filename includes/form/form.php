@@ -102,4 +102,6 @@ interface Record {
      * @return associative array of DB column's name => value associated in that field.
      */
     public function fetch();
+
+    public function is_exists($db);
 }

@@ -140,6 +140,11 @@ has some weired problem serv not response when upload image-->
     {
         return array(self::ACCESS_CH, self::TRUEYOU_CAT);
     }
+
+    public function is_exists($db)
+    {
+        // TODO: Implement is_exists() method.
+    }
 }
 
 class Thumbnail implements Record
@@ -182,5 +187,10 @@ class Thumbnail implements Record
 
     public function getName() {
         return $this->name;
+    }
+
+    public function is_exists($db)
+    {
+        // TODO: Implement is_exists() method.
     }
 }
