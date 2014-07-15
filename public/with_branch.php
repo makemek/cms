@@ -6,14 +6,17 @@ require_once('../includes/form/privilege.php');
 include_once('../includes/layout/header.php');
 session_start();
 
-
 $db = new MySQLDatabase(DB_TRUEYOU);
 
+/**
+ * @var $form Form
+ **/
 $form = unserialize($_SESSION['form']);
 $form->fetch();
 if($form->is_exists($db)) {
     $_SESSION['error'] = $form->get_identifier() . " already exists.";
-    redirect($_SESSION['link']);
+    $url = $_SESSION['link'];
+    redirect('../' . $url); // back to previous
 }
 
 

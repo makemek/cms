@@ -143,8 +143,9 @@ has some weired problem serv not response when upload image-->
 
     public function is_exists($db)
     {
+        $nameField = $this->get_field(Tenant::NAME_EN);
         $query = "SELECT " . trueyou\Tenant_tbl::NAME_EN . " FROM " . trueyou\Tenant_tbl::name() .
-            " WHERE " . trueyou\Tenant_tbl::NAME_EN . " = " . $this->get_field(Tenant::NAME_EN);
+            " WHERE " . trueyou\Tenant_tbl::NAME_EN . " = " . "'$nameField'";
 
         $result = $db->query($query);
 

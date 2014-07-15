@@ -6,13 +6,27 @@ require_once('../includes/form/tenant.php');
 require_once('../includes/form/branch.php');
 require_once('../includes/database/database.php');
 require_once('../includes/form/form_processor.php');
-session_start()
+session_start();
+
+$_SESSION['link'] = 'public/add_content.php?add=';
+if(isset($_SESSION['error'])) {
+    $error_msg = $_SESSION['error'];
+    echo "<strong><span style=\"color:red\">{$error_msg}</span></strong>";
+    echo '<hr />';
+    unset($_SESSION['error']);
+}
+
+$select = null;
+if(isset($_GET['add'])) {
+    $select = $_GET['add'];
+    $_SESSION['link'] .= $select;
+}
 ?>
 
 <title>
     <?php
-    if(isset($_GET['add']))
-        echo "Add New {$_GET['add']}";
+    if(isset($select))
+        echo "Add New {$select}";
     else
         echo "Add New Content";
     ?>
@@ -22,7 +36,6 @@ session_start()
 
 <div id="page">
 <?php
-$select = isset($_GET['add']) ? $_GET['add'] : null;
 $db = new MySQLDatabase(DB_TRUEYOU);
 $form = null;
 $controller = null;
@@ -30,13 +43,13 @@ $controller = null;
 switch ($select) {
     case Navigation::TENANT:
         $nav[Navigation::ADD_CONTENT][Navigation::TENANT]->set_selected(true);
-        $form = new Tenant();
+        $form = new Tenant(true);
         $form = Tenant_form_controller::setup_default_fields($form, $db);
         break;
 
     case Navigation::PRIV:
         $nav[Navigation::ADD_CONTENT][Navigation::PRIV]->set_selected(true);
-        $form = new Privilege();
+        $form = new Privilege(true);
         $form = Priv_form_controller::setup_default_fields($form, $db);
         break;
 
@@ -47,6 +60,7 @@ switch ($select) {
         break;
 
     default:
+        session_destroy();
         die();
 }
 
