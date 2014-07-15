@@ -28,9 +28,11 @@ $db = new MySQLDatabase(DB_TRUEYOU);
     $branch_attrib = trueyou\Branch_tbl::BRANCH;
     $branch_tbl = trueyou\Branch_tbl::name();
 
+    // get branches that are not already add by tenant
     $query = "SELECT $branch_attrib FROM $branch_tbl ";
-    $query .= "WHERE $branch_attrib NOT IN (";
-    $query .= "SELECT $branch_attrib FROM ". trueyou\Tenant_branch_tbl::name();
+    $query .= "WHERE " . trueyou\Branch_tbl::BRANCH . " IN (";
+    $query .= "SELECT " . trueyou\Tenant_branch_tbl::BNAME . " FROM ". trueyou\Tenant_branch_tbl::name();
+    $query .= " WHERE " . trueyou\Tenant_branch_tbl::TENANT_NAME . " <> " . "'{$form->get_field(Tenant::NAME_EN)}'";
     $query .= ")";
 
     $result = $db->query($query);
@@ -42,6 +44,7 @@ $db = new MySQLDatabase(DB_TRUEYOU);
 <input type="button" id="add" value=">>">
 <input type="button" id="remove" value="<<">
 
+<!--TODO: Dynamically insert form here-->
 <select size="20" name="target" id="target" width="300" style="width: 200px" multiple>
 
 </select>
