@@ -13,12 +13,12 @@ $db = new MySQLDatabase(DB_TRUEYOU);
  **/
 $form = unserialize($_SESSION['form']);
 $form->fetch();
-if($form->is_exists($db, $form->get_field($form->get_identifier()))) {
-    $_SESSION['error'] = $form->get_field($form->get_identifier()) . " already exists.";
+$errors = $form->validate($db);
+if(count($errors) > 0) {
+    $_SESSION['error'] = $errors;
     $url = $_SESSION['link'];
     redirect('../' . $url); // back to previous
 }
-
 
 $_SESSION['form'] = serialize($form);
 

@@ -139,29 +139,23 @@ class Privilege extends Form implements Record
         return trueyou\Priv_tbl::name();
     }
 
-    protected function validate($input)
+    public function validate(MySQLDatabase $db)
     {
-        // TODO: Implement validate() method.
+        $errors = array();
+        if($this->is_exists($db, $this->get_associate_db_table(),
+            trueyou\Priv_tbl::CAMP_CODE, $this->get_field(Privilege::CAMP_CODE)) > 0)
+            $errors[] = $this->get_field(Privilege::CAMP_CODE) . " already exists!";
+
+        if($this->get_field(self::CARD) == 0)
+            $errors[] = "Please select at least one card type";
+
+        // TODO Implement the rest
+
+        return $errors;
     }
 
     protected function get_all_numeric_fields()
     {
         return array();
-    }
-
-    public static function is_exists($db, $identifier_val)
-    {
-        $query = "SELECT " . trueyou\Priv_tbl::CAMP_CODE . " FROM " . trueyou\Priv_tbl::name();
-        $query .= " WHERE " . trueyou\Priv_tbl::CAMP_CODE . " = " . "'$identifier_val'";
-
-        return $db->query($query)->rowCount();
-    }
-
-    /**
-     * @return string that use to identify a particular record.
-     */
-    public static function get_identifier()
-    {
-        return Privilege::CAMP_CODE;
     }
 }

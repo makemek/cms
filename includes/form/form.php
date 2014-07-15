@@ -36,7 +36,19 @@ abstract class Form implements Record
 
     protected abstract function get_all_string_fields();
     protected abstract function get_all_numeric_fields();
-    protected abstract function validate($input);
+
+    /**
+     * @param MySQLDatabase $db
+     * @return array of errors
+     */
+    public abstract function validate(MySQLDatabase $db);
+
+    protected function is_exists(MySQLDatabase $db, $table_name, $column, $value) {
+        $query = "SELECT " . $column . " FROM " . $table_name;
+        $query .= " WHERE " . $column . " = " . "'{$value}'";
+
+        return $db->query($query)->rowCount();
+    }
 
     public function fetch() {
         if(!$this->is_submitted())
@@ -65,9 +77,7 @@ abstract class Form implements Record
             }
         }
 
-        $this->validate($result);
-
-        $this->fields = $result;
+        $this->fields = $result; // assigns to present fields
 
         return $result;
     }
@@ -102,15 +112,4 @@ interface Record {
      * @return  array associative array of DB column's name => value associated in that field.
      */
     public function fetch();
-
-    /**
-     * @param $db PDO
-     * @return int
-     */
-    public static function is_exists($db, $identifier_val);
-
-    /**
-     * @return string that use to identify a particular record.
-     */
-    public static function get_identifier();
 }

@@ -8,18 +8,13 @@ require_once('../includes/database/database.php');
 require_once('../includes/form/form_processor.php');
 session_start();
 
-$_SESSION['link'] = 'public/add_content.php?add=';
-if(isset($_SESSION['error'])) {
-    $error_msg = $_SESSION['error'];
-    echo "<strong><span style=\"color:red\">{$error_msg}</span></strong>";
-    echo '<hr />';
-    unset($_SESSION['error']);
-}
+function displayError($errors) {
+    echo '<ul>';
+    foreach($errors as $msg) {
+        echo "<li><strong><span style=\"color:red\">{$msg}</span></strong></li>";
+    }
+    echo '</ul>';
 
-$select = null;
-if(isset($_GET['add'])) {
-    $select = $_GET['add'];
-    $_SESSION['link'] .= $select;
 }
 ?>
 
@@ -32,10 +27,22 @@ if(isset($_GET['add'])) {
     ?>
 </title>
 
-
-
 <div id="page">
 <?php
+$_SESSION['link'] = 'public/add_content.php?add=';
+if(isset($_SESSION['error'])) {
+    displayError($_SESSION['error']);
+
+    echo '<hr />';
+    unset($_SESSION['error']); // acknowledge error(s)
+}
+
+$select = null;
+if(isset($_GET['add'])) {
+    $select = $_GET['add'];
+    $_SESSION['link'] .= $select;
+}
+
 $db = new MySQLDatabase(DB_TRUEYOU);
 $form = null;
 $controller = null;
@@ -64,8 +71,19 @@ switch ($select) {
         die();
 }
 
-if($form->is_submitted() && !is_null($controller))
-    $controller->create();
+if($form->is_submitted() && !is_null($controller)) {
+    $form->fetch();
+    $errors = $form->validate($db);
+
+    if(count($errors) > 0) {
+        $_SESSION['error'] = $errors;
+        displayError($errors);
+        unset($_SESSION['error']);
+    }
+
+    else
+        $controller->create();
+}
 else {
     $form->form();
     $_SESSION['form'] = serialize($form);

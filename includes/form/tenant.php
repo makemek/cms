@@ -118,9 +118,16 @@ has some weired problem serv not response when upload image-->
         return trueyou\Tenant_tbl::name();
     }
 
-    protected function validate($input)
+    public function validate(MySQLDatabase $db)
     {
-        // TODO: Implement validate() method.
+        $errors = array();
+        if($this->is_exists($db, $this->get_associate_db_table(),
+        trueyou\Tenant_tbl::NAME_EN, $this->get_field(self::NAME_EN)))
+            $errors[] = $this->get_field(self::NAME_EN) . " already exists!";
+
+        // TODO Implement the rest
+
+        return $errors;
     }
 
     private function category()
@@ -139,16 +146,6 @@ has some weired problem serv not response when upload image-->
     protected function get_all_numeric_fields()
     {
         return array(self::ACCESS_CH, self::TRUEYOU_CAT);
-    }
-
-    public static function is_exists($db, $identifier_val)
-    {
-        $query = "SELECT " . trueyou\Tenant_tbl::NAME_EN . " FROM " . trueyou\Tenant_tbl::name() .
-            " WHERE " . trueyou\Tenant_tbl::NAME_EN . " = " . "'$identifier_val'";
-
-        $result = $db->query($query);
-
-        return $result->rowCount();
     }
 
     /**
@@ -200,18 +197,5 @@ class Thumbnail implements Record
 
     public function getName() {
         return $this->name;
-    }
-
-    public static function is_exists($db, $identifier_val)
-    {
-        // TODO: Implement is_exists() method.
-    }
-
-    /**
-     * @return string that use to identify a particular record.
-     */
-    public static function get_identifier()
-    {
-        // TODO: Implement get_identifier() method.
     }
 }

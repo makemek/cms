@@ -35,28 +35,21 @@ class Branch extends Form implements Record
         return trueyou\Branch_tbl::name();
     }
 
-    protected function validate($input)
+    public function validate(MySQLDatabase $db)
     {
-//        if(empty($input[self::BRANCH]))
-//            $_SESSION['error'][] = 'Branch cannot be empty';
+        $errors = array();
+
+        if($this->is_exists($db, $this->get_associate_db_table(),
+            trueyou\Branch_tbl::BRANCH, $this->get_field(self::BRANCH)) > 0) {
+            $errors[] = $this->get_field(self::BRANCH) . " already exist!";
+        }
+
+        return $errors;
     }
 
     protected function get_all_numeric_fields()
     {
         return array(self::LAT, self::LONG);
-    }
-
-    public static function is_exists($db, $identifier_val)
-    {
-        // TODO: Implement is_exists() method.
-    }
-
-    /**
-     * @return string that use to identify a particular record.
-     */
-    public static function get_identifier()
-    {
-        return Branch::BRANCH;
     }
 }
 ?>
