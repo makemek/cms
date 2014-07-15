@@ -17,7 +17,7 @@ class Priv_branch_controller implements CRUD
         // TODO: Implement create() method.
     }
 
-    public function read()
+    public function read($identifier)
     {
 
     }
@@ -82,8 +82,13 @@ class Tenant_branch_controller implements CRUD
         return $stmt->rowCount();
     }
 
-    public function read()
+    /**
+     * @param $identifier string
+     * @return boolean indicate whether identifier is found or not. If found, it will put content into the form
+     */
+    public function read($identifier)
     {
+
         // TODO: Implement read() method.
     }
 

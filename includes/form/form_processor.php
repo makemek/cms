@@ -5,15 +5,15 @@ require_once(__DIR__ . '/../database/database.php');
 
 interface CRUD {
     public function create();
-    public function read();
+    public function read($identifier);
     public function update();
     public function delete();
 }
 
 abstract class FormProcessor implements CRUD
 {
-    private $form;
-    private $db;
+    protected $form;
+    protected $db;
 
     public function __construct(Form $rec, MySQLDatabase $db) {
         $this->form = $rec;
@@ -27,9 +27,14 @@ abstract class FormProcessor implements CRUD
         $insertVal = $this->form->get_all_fields();
         print_r($insertVal);
 
-        $query = $this->construct_query($table_name, $insertVal);
-        $row_affected = $this->issue($query);
-        return $row_affected;
+        try {
+            $query = $this->construct_query($table_name, $insertVal);
+            $this->issue($query);
+        } catch (PDOException $e) {
+            echo "Insertion Failed: " . $e->getMessage();
+            return false;
+        }
+        return true;
     }
 
     private function construct_query($table_name, $fields) {
@@ -92,20 +97,21 @@ abstract class FormProcessor implements CRUD
 
         return $query->rowCount();
     }
+
+    public function get_form() {
+        return $this->form;
+    }
+
+    public abstract function is_exists();
 }
 
 class Branch_form_controller extends FormProcessor
 {
-    private $branch;
-    private $db;
-
     public function __construct(Branch $branch, MySQLDatabase $db) {
         parent::__construct($branch, $db);
-        $this->branch = $branch;
-        $this->db = $db;
     }
 
-    public function read()
+    public function read($identifier)
     {
 
     }
@@ -119,17 +125,17 @@ class Branch_form_controller extends FormProcessor
     {
         // TODO: Implement delete() method.
     }
+
+    public function is_exists()
+    {
+        // TODO: Implement is_exists() method.
+    }
 }
 
 class Priv_form_controller extends FormProcessor
 {
-    private $priv;
-    private $db;
-
     public function __construct(Privilege $priv, MySQLDatabase $db) {
         parent::__construct($priv, $db);
-        $this->priv = $priv;
-        $this->db = $db;
     }
 
     public static function setup_default_fields(Privilege $priv, MySQLDatabase $db) {
@@ -157,9 +163,9 @@ class Priv_form_controller extends FormProcessor
         $priv->set_field(Privilege::OWNER, $owner->fetchAll(PDO::FETCH_COLUMN));
     }
 
-    public function read()
+    public function read($identifier)
     {
-        return $this->priv;
+
     }
 
     public function update()
@@ -171,17 +177,18 @@ class Priv_form_controller extends FormProcessor
     {
         // TODO: Implement delete() method.
     }
+
+    public function is_exists()
+    {
+        // TODO: Implement is_exists() method.
+    }
 }
 
 class Tenant_form_controller extends FormProcessor
 {
-    private $db;
-    private $tenant;
 
     public function __construct(Tenant $tenant, MySQLDatabase $db) {
         parent::__construct($tenant, $db);
-        $this->tenant = $tenant;
-        $this->db = $db;
     }
 
     public static function setup_default_fields(Tenant $tenant, MySQLDatabase $db) {
@@ -206,9 +213,9 @@ class Tenant_form_controller extends FormProcessor
         return $tenant;
     }
 
-    public function read()
+    public function read($identifier)
     {
-        // TODO: Implement read() method.
+
     }
 
     public function update()
@@ -219,5 +226,15 @@ class Tenant_form_controller extends FormProcessor
     public function delete()
     {
         // TODO: Implement delete() method.
+    }
+
+    public function is_exists()
+    {
+        $query = "SELECT " . trueyou\Tenant_tbl::NAME_EN . " FROM " . trueyou\Tenant_tbl::name() .
+            " WHERE " . trueyou\Tenant_tbl::NAME_EN . " = " . $this->form->get_field(Tenant::NAME_EN);
+
+        $result = $this->db->query($query);
+
+        return $result->rowCount();
     }
 }
