@@ -143,7 +143,12 @@ has some weired problem serv not response when upload image-->
 
     public function is_exists($db)
     {
-        // TODO: Implement is_exists() method.
+        $query = "SELECT " . trueyou\Tenant_tbl::NAME_EN . " FROM " . trueyou\Tenant_tbl::name() .
+            " WHERE " . trueyou\Tenant_tbl::NAME_EN . " = " . $this->get_field(Tenant::NAME_EN);
+
+        $result = $db->query($query);
+
+        return $result->rowCount();
     }
 }
 

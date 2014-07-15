@@ -98,10 +98,14 @@ abstract class Form implements Record
 interface Record {
     public function get_associate_db_table();
 
-    /*
-     * @return associative array of DB column's name => value associated in that field.
+    /**
+     * @return  array associative array of DB column's name => value associated in that field.
      */
     public function fetch();
 
+    /**
+     * @param $db PDO
+     * @return int
+     */
     public function is_exists($db);
 }
