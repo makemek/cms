@@ -152,9 +152,9 @@ class Privilege extends Form implements Record
     public static function is_exists($db, $identifier_val)
     {
         $query = "SELECT " . trueyou\Priv_tbl::CAMP_CODE . " FROM " . trueyou\Priv_tbl::name();
-        $query .= " WHERE " . trueyou\Priv_tbl::CAMP_CODE . " = " . $identifier_val;
+        $query .= " WHERE " . trueyou\Priv_tbl::CAMP_CODE . " = " . "'$identifier_val'";
 
-        return 0;
+        return $db->query($query)->rowCount();
     }
 
     /**
