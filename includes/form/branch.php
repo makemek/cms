@@ -46,7 +46,7 @@ class Branch extends Form implements Record
         return array(self::LAT, self::LONG);
     }
 
-    public function is_exists($db)
+    public static function is_exists($db, $identifier_val)
     {
         // TODO: Implement is_exists() method.
     }
@@ -54,9 +54,9 @@ class Branch extends Form implements Record
     /**
      * @return string that use to identify a particular record.
      */
-    public function get_identifier()
+    public static function get_identifier()
     {
-        return $this->get_field(Branch::BRANCH);
+        return Branch::BRANCH;
     }
 }
 ?>

@@ -107,10 +107,10 @@ interface Record {
      * @param $db PDO
      * @return int
      */
-    public function is_exists($db);
+    public static function is_exists($db, $identifier_val);
 
     /**
      * @return string that use to identify a particular record.
      */
-    public function get_identifier();
+    public static function get_identifier();
 }

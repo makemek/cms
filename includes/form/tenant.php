@@ -141,11 +141,10 @@ has some weired problem serv not response when upload image-->
         return array(self::ACCESS_CH, self::TRUEYOU_CAT);
     }
 
-    public function is_exists($db)
+    public static function is_exists($db, $identifier_val)
     {
-        $nameField = $this->get_field(Tenant::NAME_EN);
         $query = "SELECT " . trueyou\Tenant_tbl::NAME_EN . " FROM " . trueyou\Tenant_tbl::name() .
-            " WHERE " . trueyou\Tenant_tbl::NAME_EN . " = " . "'$nameField'";
+            " WHERE " . trueyou\Tenant_tbl::NAME_EN . " = " . "'$identifier_val'";
 
         $result = $db->query($query);
 
@@ -155,9 +154,9 @@ has some weired problem serv not response when upload image-->
     /**
      * @return string that use to identify a particular record.
      */
-    public function get_identifier()
+    public static function get_identifier()
     {
-        return $this->get_field(Tenant::NAME_EN);
+        return Tenant::NAME_EN;
     }
 }
 
@@ -203,7 +202,7 @@ class Thumbnail implements Record
         return $this->name;
     }
 
-    public function is_exists($db)
+    public static function is_exists($db, $identifier_val)
     {
         // TODO: Implement is_exists() method.
     }
@@ -211,7 +210,7 @@ class Thumbnail implements Record
     /**
      * @return string that use to identify a particular record.
      */
-    public function get_identifier()
+    public static function get_identifier()
     {
         // TODO: Implement get_identifier() method.
     }

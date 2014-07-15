@@ -149,16 +149,19 @@ class Privilege extends Form implements Record
         return array();
     }
 
-    public function is_exists($db)
+    public static function is_exists($db, $identifier_val)
     {
-        // TODO: Implement is_exists() method.
+        $query = "SELECT " . trueyou\Priv_tbl::CAMP_CODE . " FROM " . trueyou\Priv_tbl::name();
+        $query .= " WHERE " . trueyou\Priv_tbl::CAMP_CODE . " = " . $identifier_val;
+
+        return 0;
     }
 
     /**
      * @return string that use to identify a particular record.
      */
-    public function get_identifier()
+    public static function get_identifier()
     {
-        return $this->get_field(Privilege::CAMP_CODE);
+        return Privilege::CAMP_CODE;
     }
 }
