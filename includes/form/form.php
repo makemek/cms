@@ -3,10 +3,8 @@
 abstract class Form implements Record
 {
     protected $fields = array(); // assoc array of name => value
-    private $sticky = false;
 
-    public function __construct($sticky=false) {
-        $this->sticky = $sticky;
+    public function __construct() {
         $all_form_elem = array_merge($this->get_all_string_fields(), $this->get_all_numeric_fields());
 
         if(!$all_form_elem) {
@@ -14,12 +12,8 @@ abstract class Form implements Record
             return;
         }
 
-        if($this->is_submitted() && $this->is_sticky())
-            $this->fields = $this->fetch();
-        else {
-            foreach($all_form_elem as $elem)
-                $this->set_field($elem, '');
-        }
+        foreach($all_form_elem as $elem)
+            $this->set_field($elem, '');
     }
 
     public abstract function form();
@@ -88,10 +82,6 @@ abstract class Form implements Record
 
     public function is_submitted() {
         return isset($_POST['submit']);
-    }
-
-    public function is_sticky() {
-        return $this->sticky;
     }
 
     /*

@@ -19,8 +19,8 @@ class Tenant extends Form implements Record
 
     private $thumb = array();
 
-    public function __construct($sticky=false) {
-        parent::__construct($sticky);
+    public function __construct() {
+        parent::__construct();
         foreach($this->get_thumbnail_const() as $t)
             $this->thumb[] = new Thumbnail($t);
     }

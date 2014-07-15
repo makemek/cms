@@ -40,15 +40,6 @@ class Privilege extends Form implements Record
 
     <?php }
 
-    private function box_is_checked($checkbox) {
-        $card = $this->fields[self::CARD];
-        if(isset($card) && !empty($card))
-            if(in_array($checkbox, $this->fields[self::CARD]))
-                return "checked=\"checked\"";
-
-        return '';
-    }
-
     private function card() { ?>
         <?php
         foreach($this->fields[self::CARD] as $opt) { ?>
