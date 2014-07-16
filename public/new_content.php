@@ -7,10 +7,12 @@ require_once('../includes/form/tenant.php');
 require_once('../includes/form/privilege.php');
 require_once('../includes/functions.php');
 require_once('../includes/table_form.php');
+require_once('../includes/session_config.php');
 session_start();
 
-if(!isset($_SESSION[FORM]) || !isset($_POST['submit']))
+if(!isset($_SESSION[FORM]) || !isset($_POST['submit'])) {
     redirect('admin.php');
+}
 
 unset($_POST['submit']); // acknowledge submit
 
