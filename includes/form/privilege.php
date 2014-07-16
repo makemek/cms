@@ -137,7 +137,7 @@ class Privilege extends Form implements Record
             trueyou\Priv_tbl::CAMP_CODE, $this->get_field(Privilege::CAMP_CODE)) > 0)
             $errors[] = $this->get_field(Privilege::CAMP_CODE) . " already exists!";
 
-        if($this->get_field(self::CARD) == 0)
+        if(count($this->get_field(self::CARD)) == 0)
             $errors[] = "Please select at least one card type";
 
         // TODO Implement the rest
