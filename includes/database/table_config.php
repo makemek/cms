@@ -23,7 +23,7 @@ namespace trueyou
 
     class Priv_tbl implements Table
     {
-        const TITLE = 'TITLE';
+        const INFO = 'INFO';
         const CAMP_CODE = 'CAMP_CODE';
         const USSD = 'USSD';
         const SMS = 'SMS';
