@@ -7,14 +7,33 @@ use trueyou\Branch_tbl as branch_tbl;
 class Priv_branch_controller implements CRUD
 {
     private $db;
+    private $form;
 
-    public function __construct(MySQLDatabase $db) {
+    public function __construct(Form $form, MySQLDatabase $db) {
         $this->db = $db;
+        $this->form = $form;
+    }
+
+    private function fetchInput() {
+        return $_POST['target'];
     }
 
     public function create()
     {
-        // TODO: Implement create() method.
+        $input = $this->fetchInput();
+
+        $query = "INSERT INTO " . trueyou\Priv_branch_tbl::name() . " VALUES(:camp_code, :bname)";
+
+        $stmt = $this->db->prepare($query);
+
+        foreach($input as $branch) {
+            $stmt->bindValue('camp_code', $this->form->get_field(Privilege::CAMP_CODE));
+            $stmt->bindValue('bname', $branch);
+            $stmt->execute();
+        }
+
+        return $stmt->rowCount();
+
     }
 
     public function read($identifier)
@@ -68,7 +87,6 @@ class Tenant_branch_controller implements CRUD
     public function create()
     {
         $input = $this->fetchInput();
-        var_dump($input);
         $query = "INSERT INTO " . \trueyou\Tenant_branch_tbl::name() . " VALUES(:bName, :tenant, :floor1, :floor2)";
         $stmt = $this->db->prepare($query);
         foreach($input as $bName => $floor) {

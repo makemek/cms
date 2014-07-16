@@ -7,11 +7,35 @@ require_once('../includes/session_config.php');
 include_once('../includes/layout/header.php');
 session_start();
 
+function generateQuery($type, Form $form) {
+    $query = '';
+    switch($type) {
+        case trueyou\Tenant_tbl::name():
+            $query = "SELECT " . trueyou\Branch_tbl::BRANCH . " FROM " . trueyou\Branch_tbl::name();
+            $query .= " WHERE " . trueyou\Branch_tbl::BRANCH . " NOT IN (";
+            $query .= "SELECT " . trueyou\Tenant_branch_tbl::BNAME . " FROM ". trueyou\Tenant_branch_tbl::name();
+            $query .= " WHERE " . trueyou\Tenant_branch_tbl::TENANT_NAME . " = " . "'{$form->get_field(Tenant::NAME_EN)}'";
+            $query .= ")";
+            break;
+
+        case trueyou\Priv_tbl::name():
+            $query = "SELECT " . trueyou\Branch_tbl::BRANCH . " FROM " . trueyou\Branch_tbl::name();
+            $query .= " WHERE " . trueyou\Branch_tbl::BRANCH . " NOT IN (";
+            $query .= "SELECT " . trueyou\Priv_branch_tbl::BNAME . " FROM ". trueyou\Priv_branch_tbl::name();
+            $query .= " WHERE " . trueyou\Priv_branch_tbl::CAMP_CODE . " = " . "'{$form->get_field(Privilege::CAMP_CODE)}'";
+            $query .= ")";
+            break;
+    }
+
+    return $query;
+}
+
 $db = new MySQLDatabase(DB_TRUEYOU);
 
 /**
  * @var $form Form
  **/
+
 $form = unserialize($_SESSION[FORM]);
 $form->fetch();
 $errors = $form->validate($db);
@@ -36,31 +60,32 @@ $_SESSION[FORM] = serialize($form);
         padding:5px;
     }
 </style>
-<select size="20" name="source" id="source" style="width: 200px"  multiple>
-    <?php
-    $branch_attrib = trueyou\Branch_tbl::BRANCH;
-    $branch_tbl = trueyou\Branch_tbl::name();
 
-    // get branches that are not already add by tenant
-    $query = "SELECT $branch_attrib FROM $branch_tbl ";
-    $query .= "WHERE " . trueyou\Branch_tbl::BRANCH . " IN (";
-    $query .= "SELECT " . trueyou\Tenant_branch_tbl::BNAME . " FROM ". trueyou\Tenant_branch_tbl::name();
-    $query .= " WHERE " . trueyou\Tenant_branch_tbl::TENANT_NAME . " <> " . "'{$form->get_field(Tenant::NAME_EN)}'";
-    $query .= ")";
+<form id="branch_form" action="new_content.php" method="POST">
+    <select size="20" id="source" style="width: 200px"  multiple>
+        <?php
 
-    $result = $db->query($query);
-    while($row = $result->fetch(PDO::FETCH_NUM))
-        echo "<option value={$row[0]}>$row[0]</option>";
-    ?>
-</select>
+        // get branches that are not already add
+        $query = generateQuery($form->get_associate_db_table(), $form);
+        echo $query;
+        $result = $db->query($query);
+        while($row = $result->fetch(PDO::FETCH_NUM)) {
+            echo "<option value=\"{$row[0]}\">$row[0]</option>";
+        }
 
-<input type="button" id="add" value=">>">
-<input type="button" id="remove" value="<<">
+        ?>
+    </select>
 
-<!--TODO: Dynamically insert form here-->
-<select size="20" name="target" id="target" width="300" style="width: 200px" multiple>
+    <input type="button" id="add" value=">>">
+    <input type="button" id="remove" value="<<">
 
-</select>
+    <!--TODO: Dynamically insert form here-->
+    <select size="20" name="target[]" id="target" style="width: 200px" multiple>
+
+    </select>
+
+    <input type="submit" name="submit" id="priv_submit" value="submit" />
+</form>
 
 <hr />
 

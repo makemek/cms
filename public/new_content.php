@@ -37,7 +37,7 @@ switch($form->get_associate_db_table()) {
 
     case trueyou\Priv_tbl::name():
         $form_controller = new Priv_form_controller($form, $db);
-        $controller = new Priv_branch_controller($db);
+        $controller = new Priv_branch_controller($form, $db);
         break;
 
     default:
