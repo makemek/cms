@@ -12,6 +12,8 @@ class Navigation implements ArrayAccess {
     const PRIV = 'priv';
     const TENANT = 'tenant';
     const BROWSE = 'browse';
+    const IMPORT = 'import';
+    const EXPORT = 'export';
 
 	public function __construct() {
 		$this->main_menu = new Menu('');
@@ -24,6 +26,8 @@ class Navigation implements ArrayAccess {
 		$branch = new Menu('Branch', self::BRANCH);
 		$priv = new Menu('Privilege', self::PRIV);
 		$tenant = new Menu('Tenant', self::TENANT);
+        $import = new Menu('Import', self::IMPORT);
+        $export = new Menu('Export', self::EXPORT);
 
             // attach link
         $link = '../public/add_content.php';
@@ -31,6 +35,8 @@ class Navigation implements ArrayAccess {
         $branch->link_to($link, array($to_send => self::BRANCH));
         $priv->link_to($link, array($to_send => self::PRIV));
         $tenant->link_to($link, array($to_send => self::TENANT));
+        $import->link_to('../public/import.php');
+        $export->link_to('../public/export.php');
 
 		$add_content->add_sub_menu($branch);
 		$add_content->add_sub_menu($priv);
@@ -44,6 +50,8 @@ class Navigation implements ArrayAccess {
         $this->main_menu->add_sub_menu($home_page);
 		$this->main_menu->add_sub_menu($add_content);
 		$this->main_menu->add_sub_menu($browse);
+        $this->main_menu->add_sub_menu($import);
+        $this->main_menu->add_sub_menu($export);
 	}
 
     public function getMenu() {
