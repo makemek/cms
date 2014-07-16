@@ -78,7 +78,7 @@ DropDownMenu.prototype.deselectAll = function() {
 
 // --------- Declaration --------------------- //
 var srcElement = new DropDownMenu("source");
-var destElement = new DropDownMenu("target[]");
+var destElement = new DropDownMenu("target");
 
 var addBt = document.getElementById("add");
 var removeBt = document.getElementById("remove");

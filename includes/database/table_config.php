@@ -13,7 +13,8 @@ namespace trueyou
 
     class Branch_tbl implements Table
     {
-        const BRANCH = 'BNAME';
+        const BRANCH_EN = 'BNAME_EN';
+        const BRANCH_TH = 'BNAME_TH';
         const LATITUDE = 'LATITUDE';
         const LONGITUDE = 'LONGITUDE';
 
@@ -31,7 +32,7 @@ namespace trueyou
         const CARD = 'CARD';
         const CONDITION = 'COND';
         const SHOW_CARD = 'SHOW_CARD';
-        const STORE = 'STORE';
+        const OWNER = 'OWNER';
 
         public static function name() {return 'Priv';}
     }
@@ -63,7 +64,7 @@ namespace trueyou
     class Priv_branch_tbl implements Table
     {
         const CAMP_CODE = 'CAMP_CODE';
-        const BNAME = 'BNAME';
+        const BNAME = 'BNAME_TH';
 
         public static function name()
         {
@@ -73,8 +74,8 @@ namespace trueyou
 
     class Tenant_branch_tbl implements Table
     {
-        const BNAME = 'bname';
-        const TENANT_NAME = 'tenant_name';
+        const BNAME = 'BNAME_TH';
+        const TENANT = 'TENANT';
         const FLOOR1 = 'floor1';
         const FLOOR2 = 'floor2';
 
