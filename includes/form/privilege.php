@@ -21,9 +21,9 @@ class Privilege extends Form implements Record
     // ------------------- //
 
     // --- Privilege Region --- //
-    const INFO = trueyou\Priv_tbl::TITLE;
+    const INFO = trueyou\Priv_tbl::INFO;
     const COND = trueyou\Priv_tbl::CONDITION;
-    const OWNER = trueyou\Priv_tbl::STORE;
+    const OWNER = trueyou\Priv_tbl::OWNER;
     // ------------------------ //
 
     private function code() { ?>

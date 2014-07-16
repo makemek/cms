@@ -4,14 +4,18 @@ require_once(__DIR__ . '/../database/table_config.php');
 
 class Branch extends Form implements Record
 {
-    const BRANCH = trueyou\Branch_tbl::BRANCH;
+    const BRANCH_EN = trueyou\Branch_tbl::BRANCH_EN;
+    const BRANCH_TH = trueyou\Branch_tbl::BRANCH_TH;
     const LAT = trueyou\Branch_tbl::LATITUDE;
     const LONG = trueyou\Branch_tbl::LONGITUDE;
 
     public function form() { ?>
         <form action="../public/add_content.php?add=<?php echo Navigation::BRANCH; ?>" method="post">
-            *Branch: <input type="text" name="<?php echo self::BRANCH ?>" required
-                           value="<?php echo $this->fields[self::BRANCH] ?>" maxlength="255">
+            *Branch TH: <input type="text" name="<?php echo self::BRANCH_TH ?>" required
+                           value="<?php echo $this->fields[self::BRANCH_TH] ?>" maxlength="255"><br />
+
+            Branch EN: <input type="text" name="<?php echo self::BRANCH_EN ?>" required
+                               value="<?php echo $this->fields[self::BRANCH_EN] ?>" maxlength="255">
             <br />
 
             Latitude: <input type="number" name="<?php echo self::LAT ?>"
@@ -27,7 +31,7 @@ class Branch extends Form implements Record
     <?php }
 
     protected function get_all_string_fields() {
-        return array(self::BRANCH);
+        return array(self::BRANCH_TH, self::BRANCH_EN);
     }
 
     public function get_associate_db_table()
@@ -40,8 +44,8 @@ class Branch extends Form implements Record
         $errors = array();
 
         if($this->is_exists($db, $this->get_associate_db_table(),
-            trueyou\Branch_tbl::BRANCH, $this->get_field(self::BRANCH)) > 0) {
-            $errors[] = $this->get_field(self::BRANCH) . " already exist!";
+            trueyou\Branch_tbl::BRANCH_TH, $this->get_field(self::BRANCH_TH)) > 0) {
+            $errors[] = $this->get_field(self::BRANCH_TH) . " already exist!";
         }
 
         return $errors;

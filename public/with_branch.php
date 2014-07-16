@@ -11,16 +11,16 @@ function generateQuery($type, Form $form) {
     $query = '';
     switch($type) {
         case trueyou\Tenant_tbl::name():
-            $query = "SELECT " . trueyou\Branch_tbl::BRANCH . " FROM " . trueyou\Branch_tbl::name();
-            $query .= " WHERE " . trueyou\Branch_tbl::BRANCH . " NOT IN (";
+            $query = "SELECT " . trueyou\Branch_tbl::BRANCH_TH . " FROM " . trueyou\Branch_tbl::name();
+            $query .= " WHERE " . trueyou\Branch_tbl::BRANCH_TH . " NOT IN (";
             $query .= "SELECT " . trueyou\Tenant_branch_tbl::BNAME . " FROM ". trueyou\Tenant_branch_tbl::name();
-            $query .= " WHERE " . trueyou\Tenant_branch_tbl::TENANT_NAME . " = " . "'{$form->get_field(Tenant::NAME_EN)}'";
+            $query .= " WHERE " . trueyou\Tenant_branch_tbl::TENANT . " = " . "'{$form->get_field(Tenant::NAME_EN)}'";
             $query .= ")";
             break;
 
         case trueyou\Priv_tbl::name():
-            $query = "SELECT " . trueyou\Branch_tbl::BRANCH . " FROM " . trueyou\Branch_tbl::name();
-            $query .= " WHERE " . trueyou\Branch_tbl::BRANCH . " NOT IN (";
+            $query = "SELECT " . trueyou\Branch_tbl::BRANCH_TH . " FROM " . trueyou\Branch_tbl::name();
+            $query .= " WHERE " . trueyou\Branch_tbl::BRANCH_TH . " NOT IN (";
             $query .= "SELECT " . trueyou\Priv_branch_tbl::BNAME . " FROM ". trueyou\Priv_branch_tbl::name();
             $query .= " WHERE " . trueyou\Priv_branch_tbl::CAMP_CODE . " = " . "'{$form->get_field(Privilege::CAMP_CODE)}'";
             $query .= ")";
