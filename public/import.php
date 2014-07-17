@@ -4,8 +4,6 @@ require_once('../includes/database/database.php');
 include_once('../includes/layout/header.php');
 
 define('CSV', 'application/vnd.ms-excel');
-define('SKIP_LINE', 'skip_line');
-define('COLUMN', 'col');
 
 $db = new MySQLDatabase(DB_TRUEYOU);
 ?>
@@ -64,24 +62,11 @@ $db = new MySQLDatabase(DB_TRUEYOU);
         if(!$success)
             die('File is not successfully uploaded');
 
-        $query = "LOAD DATA LOCAL INFILE '" . $target . "' INTO TABLE {$table} ";
-        $query .= "FIELDS TERMINATED BY ',' ";
-        $query .= "ENCLOSED BY '\"' ";
-        $query .= "LINES TERMINATED BY '\n' ";
-        $query .= "IGNORE {$_POST[$table]['line']} LINES ";
-        $query .= "(";
-        foreach($_POST[$table]['col'] as $field)
-            $query .= $field . ',';
-        $query = rtrim($query, ',');
-        $query .= ") ";
-
-        $stmt = $db->prepare($query);
-
         try{
-            $stmt->execute();
+            $rowcount = $db->import_csv($target, $table, $_POST[$table]['line'], $_POST[$table]['col']);
 
             echo "Table: " . $table . '<br />';
-            echo "Rows affacted: " . $stmt->rowCount() . '<br />';
+            echo "Rows affacted: " . $rowcount . '<br />';
 
         } catch (PDOException $e) {
             echo "<strong><span style='color:red'>CSV Import Failure</span></strong><br/>";

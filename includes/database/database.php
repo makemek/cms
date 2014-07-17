@@ -34,6 +34,26 @@ class MySQLDatabase extends PDO
         return $enum;
     }
 
+    public function import_csv($file_path, $table, $ignore_line=0, $column=array()) {
+        $query = "LOAD DATA LOCAL INFILE '" . $file_path . "' INTO TABLE {$table} ";
+        $query .= "FIELDS TERMINATED BY ',' ";
+        $query .= "ENCLOSED BY '\"' ";
+        $query .= "LINES TERMINATED BY '\r\n' "; // windows use \r\n
+        $query .= "IGNORE {$ignore_line} LINES ";
+        $query .= "(";
+        foreach($column as $field)
+            $query .= $field . ',';
+        $query = rtrim($query, ',');
+        $query .= ") ";
+
+        try {
+            $stmt = $this->prepare($query);
+            $stmt->execute();
+            return $stmt->rowCount();
+        } catch(PDOException $e) {
+            throw $e;
+        }
+    }
 
     public function get_table_column_name($table) {
         $query = "DESCRIBE " . $table;
