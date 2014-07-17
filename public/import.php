@@ -20,12 +20,13 @@ $db = new MySQLDatabase(DB_TRUEYOU);
         "Tenant's branch" => trueyou\Tenant_branch_tbl::name()
     ); ?>
 
-    <form action="import.php" enctype="multipart/form-data" method="POST">
+
 
         <?php
         foreach($tbl as $name => $table) { ?>
+            <form action="import.php" enctype="multipart/form-data" method="POST">
             <fieldset>
-                <legend><?php echo $name; ?></legend>
+                    <legend><?php echo $name; ?></legend>
 
                 <input type="file" name="<?php echo $table ?>" accept=".csv" />
                 Ignore First: <input type="number" min="0" name="<?php echo $table;?>[line]" value="0" /> Lines
@@ -37,12 +38,14 @@ $db = new MySQLDatabase(DB_TRUEYOU);
                     echo "<input type=\"checkbox\" name=\"{$table}[col][]\" value=\"{$c}\"/>" . $c;
             ?>
             </fieldset>
+
+            <input type="submit" name="submit" value="Upload" />
+            <input type="reset" name="reset" value="Reset" />
+            </form>
             <br />
         <?php } ?>
 
-        <input type="submit" name="submit" value="Upload" />
-        <input type="reset" name="reset" value="Reset" />
-    </form>
+
 
     <hr/>
 
