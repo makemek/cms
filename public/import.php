@@ -10,9 +10,9 @@ define('CSV', 'application/vnd.ms-excel');
     <h2>Import From CSV File</h2>
     <form action="import.php" enctype="multipart/form-data" method="POST">
         Branch: <input name="<?php echo trueyou\Branch_tbl::name(); ?>" type="file" accept=".csv" /><br />
-<!--        Privilege: <input name="--><?php //echo trueyou\Priv_tbl::name(); ?><!--" type="file" accept=".csv" /><br />-->
-<!--        Privilege's Branch: <input name="--><?php //echo \trueyou\Priv_branch_tbl::name(); ?><!--" type="file" accept=".csv" /><br />-->
-<!--        Tenant's Branch: <input name="--><?php //echo \trueyou\Tenant_branch_tbl::name(); ?><!--" type="file" accept=".csv" /><br />-->
+        Privilege: <input name="<?php echo trueyou\Priv_tbl::name(); ?>" type="file" accept=".csv" /><br />
+        Privilege's Branch: <input name="<?php echo \trueyou\Priv_branch_tbl::name(); ?>" type="file" accept=".csv" /><br />
+        Tenant's Branch: <input name="<?php echo \trueyou\Tenant_branch_tbl::name(); ?>" type="file" accept=".csv" /><br />
         <input type="submit" name="submit" value="Upload" />
         <input type="reset" name="reset" value="Reset" />
     </form>
@@ -25,27 +25,35 @@ define('CSV', 'application/vnd.ms-excel');
 
     $db = new MySQLDatabase(DB_TRUEYOU);
 
-
-
-
-
     foreach($_FILES as $table => $file) {
-        if($file['error'] != UPLOAD_ERR_OK || $file['type'] !== CSV)
-            break;
+        if($file['error'] != UPLOAD_ERR_OK || $file['type'] !== CSV) {
+            @unlink($_FILES['tmp_name']);
+            continue;
+        }
 
-        $query = "LOAD DATA LOCAL INFILE '?' INTO TABLE {$table} ";
+        $target = UPLOAD_DIR . $file['name'];
+        $success = move_uploaded_file($file['tmp_name'], $target);
+        if(!$success)
+            die('File is not successfully uploaded');
+
+        $query = "LOAD DATA LOCAL INFILE '" . $target . "' INTO TABLE {$table} ";
         $query .= "FIELDS TERMINATED BY ',' ";
         $query .= "ENCLOSED BY '\"' ";
-        $query .= "LINES TERMINATED BY '\n'";
+        $query .= "LINES TERMINATED BY '\n' ";
+
 
         $stmt = $db->prepare($query);
-        $stmt->bindValue(1, $file['name']);
 
         try{
             $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_NUM);
-            echo $stmt->rowCount() . '<br />';
+
+            echo "Table: " . $table . '<br />';
+            echo "Rows affacted: " . $stmt->rowCount() . '<br />';
+
+            unlink(UPLOAD_DIR . $file['name']);
+
         } catch (PDOException $e) {
+            echo "<strong><span style='color:red'>CSV Import Failure</span></strong><br/>";
             die($e->getMessage());
         }
     }

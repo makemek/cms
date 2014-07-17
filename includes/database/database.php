@@ -6,9 +6,12 @@ class MySQLDatabase extends PDO
     public function __construct ($db_name) {
         try{
             parent::__construct('mysql:host=' . DB_HOST . ';dbname=' . $db_name . ';' . 'charset=utf8mb4',
-                DB_USER, DB_PASSWORD);
+                DB_USER, DB_PASSWORD,
+                array(PDO::ATTR_EMULATE_PREPARES => true,
+                    PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
+                    PDO::MYSQL_ATTR_LOCAL_INFILE => true));
             $this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $this->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+//            $this->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
         } catch (PDOException $e) {
             die($e->getMessage());
         }
